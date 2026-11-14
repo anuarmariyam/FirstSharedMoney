@@ -5,16 +5,15 @@
 A web planning product for couples beginning their first shared financial life.
 
 Current delivery: **Phase 4A — Backend Foundation & Secure Session Management**.
-The source is implemented locally. The existing Supabase project's public
-connection and anonymous-sign-in settings have been checked. The CLI is linked;
-read-only inventory and migration dry-run succeeded. The corrected database
-password and verified TLS connection now work. **Cloud-write confirmation is
-pending; no migration is applied and no real Auth/RLS integration test has run.**
-See [preflight status](docs/SUPABASE_PREFLIGHT.md).
+**Phase 4A is verified in the approved FSM test project.** All four migrations
+are applied, fsm-api is active with JWT verification, and real security/live tests
+passed. See [the verification record](docs/PHASE4A_VERIFICATION.md). Financial
+persistence and engines remain future work; Phase 4B has not started.
 
 ## Start here
 
-- [Create and configure the actual Supabase test project](docs/SUPABASE_SETUP.md)
+- [Existing Supabase test project setup reference](docs/SUPABASE_SETUP.md)
+- [Phase 4A real test results](docs/PHASE4A_VERIFICATION.md)
 - [Phase 4A implementation, security boundaries, and verification status](docs/PHASE4A_BACKEND.md)
 - [Full architecture and API design](docs/ARCHITECTURE.md)
 - [Database schema](docs/DATABASE_SCHEMA.md)
@@ -67,7 +66,7 @@ After actual project setup, the integrated code calls real Supabase APIs for:
 - B redeeming an invitation under a separate Auth identity.
 - Loading authorized session membership and refreshing status.
 
-These paths are implemented but **not verified against a cloud database yet**.
+These paths passed real cloud security and isolated-browser integration checks.
 With no configuration, Create/Join remain disabled instead of simulating success.
 No local state is treated as a verified identity, membership, or approval.
 
@@ -176,6 +175,7 @@ Phase 3 is preserved on main at local commit 590a234. Phase 4A is saved in
 backend/fsm-core at checkpoint 9a9ddeb, followed by collaboration documentation.
 The frontend/fsm-ux branch starts at stable main and adds only collaboration
 instructions. See [the two-developer workflow](docs/COLLABORATION.md).
-No Git push, Vercel deployment, cloud project creation,
-migration application, or Edge deployment has been performed. Phase 4B has not
-started.
+main and frontend/fsm-ux were published earlier with owner approval. The backend
+branch has not been pushed. The four migrations and one test Edge Function were
+applied/deployed after separate explicit approval. No Vercel website deployment
+or merge was performed. Phase 4B has not started.

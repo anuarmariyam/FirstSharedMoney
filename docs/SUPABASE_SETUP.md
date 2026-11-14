@@ -1,12 +1,10 @@
 # Supabase Test Project Setup
 
-The existing FSM project's public URL/key pairing and enabled anonymous sign-ins
-have been checked using the read-only Auth settings endpoint. Ignored local
-configuration files are prepared. No migration or Edge deployment has been
-performed. CLI account login, linking, read-only inventory, and migration dry-run
-have succeeded. The corrected database password and verified TLS connection
-have also passed a READ ONLY check. Cloud-write approval is pending; see
-SUPABASE_PREFLIGHT.md. Do not apply migrations or run mutating tests before approval.
+The existing FSM test project is configured and verified. The owner approved the
+four migrations, single fsm-api deployment, and targeted security/live tests;
+all completed successfully. See PHASE4A_VERIFICATION.md for results. The commands
+below are a setup reference, not instructions to recreate the project, overwrite
+configured environment files, or repeat applied migrations unnecessarily.
 Do not send database passwords, personal access tokens,
 server secrets, or service_role keys through chat.
 
@@ -102,8 +100,8 @@ Deployment via --use-api does not require Docker; see the official
 [Edge quickstart](https://supabase.com/docs/guides/functions/quickstart).
 The function's deno.json pins the same SDK release as the frontend.
 
-This test-function deployment is separate from publishing the website. Codex
-has not deployed the function or a Vercel site during this phase.
+This test-function deployment is separate from publishing the website. Only
+fsm-api was deployed in this phase; no Vercel site was published.
 
 ## 4. Connect the local frontend
 

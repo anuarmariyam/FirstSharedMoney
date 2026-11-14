@@ -1,14 +1,14 @@
 # FirstSharedMoney: Database Schema
 
-Status: logical PostgreSQL design for later Supabase migrations. Nothing in this
-document has been applied to a database or verified against a live instance.
-The schema, policies, and transaction functions must ship together; table DDL
-alone is not a working or secure backend.
+Status: the full logical design extends beyond the implemented Phase 4A slice.
+The session tables, policies, indexes, and RPCs have been applied together and
+verified against the approved test project. Remaining financial/approval tables
+are planned. Table DDL alone is not a working or secure backend.
 
-Phase 4A prepares the couples/partners/session_invitations slice in four local
-migrations. No migration is applied. Other tables remain future work. The head
+Phase 4A applies the couples/partners/session_invitations slice in four verified
+migrations. Other tables remain future work. The head
 pointer is restricted to NULL until agreement_versions and its composite FK
-are implemented. See [PHASE4A_BACKEND.md](PHASE4A_BACKEND.md).
+are implemented. See [PHASE4A_VERIFICATION.md](PHASE4A_VERIFICATION.md).
 
 ## 1. Conventions and relationships
 

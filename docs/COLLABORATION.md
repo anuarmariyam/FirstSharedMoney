@@ -13,7 +13,8 @@ application behavior and does not claim that Supabase security has passed.
 | frontend/fsm-ux | Second developer | Starts at stable main; initially adds only collaboration instructions. |
 
 The repository remote is https://github.com/anuarmariyam/FirstSharedMoney.git.
-Adding origin is local configuration. No branch has been pushed by Codex.
+main and frontend/fsm-ux were pushed with explicit owner approval. The backend
+branch remains local; no additional push is authorized by Phase 4A completion.
 Do not use git push --all: backend work has separate publication authorization.
 Do not force-push or merge either work branch automatically.
 
@@ -78,8 +79,8 @@ A private repository does not make checked-in secrets safe to share.
 
 ## Current backend boundary
 
-The existing Supabase project is linked; verified TLS, database authentication,
-read-only inventory, and migration dry-run passed. The owner explicitly selected
-read-only access. No migration application, Edge deployment, or database-mutating
-test is authorized. Do not interpret branch setup as cloud-write permission.
-Phase 4B, production deployment, and Git push remain unauthorized.
+The existing Supabase test project is linked. After read-only setup, the owner
+explicitly authorized Phase 4A migrations, fsm-api, and targeted security/live
+tests in lgboxbtxutgggvluhhqt. These completed successfully with test-data cleanup;
+see PHASE4A_VERIFICATION.md. This authorization does not cover another project,
+Phase 4B, production website deployment, or an additional Git push/merge.

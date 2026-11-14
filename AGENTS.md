@@ -31,9 +31,11 @@ push, or remote publication. Git push requires the owner's explicit approval.
 Never commit local .env files, credentials, build output, test artifacts, or
 Supabase CLI caches. Only blank environment examples belong in Git.
 
-The current authorization permits only read-only cloud checks. Applying
-migrations, deploying fsm-api, or running database-mutating tests requires new
-explicit owner approval. Never disable JWT verification, RLS, or TLS verification.
+The owner authorized Phase 4A's four migrations, single fsm-api deployment, and
+test-owned fixture creation/cleanup only in lgboxbtxutgggvluhhqt. These completed
+successfully; see docs/PHASE4A_VERIFICATION.md. Additional cloud work must remain
+within explicit owner authorization; Phase 4B is not authorized.
+Never disable JWT verification, RLS, or TLS verification.
 Do not collect real financial data before security verification is complete.
 
 Do not move active VS Code/Codex storage or alter system PATH/TEMP/TMP. Keep

@@ -1,7 +1,8 @@
 # Supabase Preflight Record
 
-Recorded on 2026-11-14. No migration application or database-mutating integration
-test has been authorized yet.
+Historical read-only setup record from 2026-11-14, before cloud-write approval.
+The owner later authorized the four migrations, fsm-api deployment, and targeted
+tests. All are now complete; see PHASE4A_VERIFICATION.md for current results.
 
 ## Confirmed target
 
@@ -52,7 +53,7 @@ empty application/Auth/Storage inventory and was rolled back. The frontend URL,
 security-test URL, local CLI link, and database target all match the existing
 project reference. No password or full connection URL was printed.
 
-## Required next steps
+## Next steps identified at preflight (subsequently completed)
 
 1. Completed: owner corrected the database password locally.
 2. Completed: verified-TLS connection and READ ONLY check succeeded.

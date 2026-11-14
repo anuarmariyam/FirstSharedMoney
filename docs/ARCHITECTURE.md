@@ -1,8 +1,8 @@
 # FirstSharedMoney: System Architecture
 
-Status: Phase 2 architecture accepted on 2026-11-14. Phase 4A adds the local
-session foundation described in PHASE4A_BACKEND.md. No cloud project is configured
-or verified; the broader financial and agreement backend remains planned.
+Status: Phase 2 architecture accepted on 2026-11-14. Phase 4A's session foundation
+is deployed and verified in the approved test project; see PHASE4A_VERIFICATION.md.
+The broader financial and agreement backend remains planned. Phase 4B has not started.
 
 ## 1. Existing project and boundaries
 

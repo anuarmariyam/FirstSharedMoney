@@ -1,15 +1,12 @@
 # Phase 4A: Backend Foundation
 
-Status: the owner has created the FSM cloud project. Its public URL/key pairing,
-enabled anonymous sign-ins, and allowed signups were verified by a read-only
-Auth settings request. Local Edge/test configuration is populated without
-logging keys. CLI 3.1.0 is available through npx on D and linked to the existing
-project. Read-only inventory found no application objects or Auth/Storage data;
-the four-migration dry-run passed. After the owner corrected the password,
-the direct PostgreSQL connection authenticated with verified TLS using the
-official CA and completed a READ ONLY transaction. Cloud-write approval is pending.
-See SUPABASE_PREFLIGHT.md. No SQL migration, Supabase Auth workflow, hosted Edge
-runtime, or RLS rule has been verified on the test database yet.
+Status: completed in the explicitly approved test project lgboxbtxutgggvluhhqt.
+All four migrations were applied and catalog-checked; fsm-api version 1 is ACTIVE
+with verify_jwt=true. Real security checks passed 15/15, live browser integration
+passed 1/1, unit tests passed 12/12, and offline UI checks passed 27/27. Typecheck,
+lint, and build passed. Final read-only counts confirmed complete test cleanup.
+See [PHASE4A_VERIFICATION.md](PHASE4A_VERIFICATION.md) for the current evidence;
+SUPABASE_PREFLIGHT.md records the earlier read-only setup stage.
 
 ## Baseline and source scope
 
@@ -77,9 +74,9 @@ reuse a consumed invitation. No operation accepts a client-selected actor ID.
   It is not an access capability; every restored page still requests server
   authorization. Raw questionnaires remain fictional/demo-only in Phase 4A.
 
-These are implemented rules requiring real integration verification, not a claim
-that deployed database security has passed. Shared preference/budget consents
-and financial privacy policies are not implemented against live data yet.
+The session-management rules above passed the real integration checks recorded
+in PHASE4A_VERIFICATION.md. Shared preference/budget consents and financial
+answer privacy policies are not implemented against live financial data yet.
 
 ## Tests and what they prove
 
@@ -105,7 +102,7 @@ session reads; direct row insert/update and forged RPC/body identities; private
 hash-table access; concurrent redemption; active JWT with expired membership;
 and identity restoration after browser reload.
 
-### Local verification recorded for this phase
+### Historical local verification before cloud authorization
 
 - Typecheck, lint, and production build completed successfully.
 - All 12 configuration/transport unit tests passed. Their backend dependencies
@@ -128,12 +125,13 @@ and identity restoration after browser reload.
 
 ## Remaining boundaries
 
-The existing cloud project is linked but has not been migrated or deployed by Codex.
+The existing test project is linked, all four migrations are applied, and the
+single fsm-api function is deployed. Real Auth/RLS/Edge/live verification passed.
 Supabase CLI 3.1.0 was obtained via npx without a global installation. Docker,
 Deno, and a local PostgreSQL server were not installed. The pg dependency is
 only a Node test client for the remote test database. Direct database credentials
-and TLS are now verified. The owner must
-approve the first migration application and single test-function deployment.
+and TLS are verified. The owner explicitly authorized only this test project,
+the four migrations, one function, and test-owned fixture creation/cleanup.
 
 See DEVELOPMENT_STORAGE.md for the targeted C/D storage audit. The prepared
 pre_migration_inventory.sql reads object names and aggregate Auth/Storage counts
