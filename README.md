@@ -172,7 +172,10 @@ Runtime addition: @supabase/supabase-js. Development additions: pg and @types/pg
 which are remote database clients/types, not a PostgreSQL server. Docker, local
 PostgreSQL, Deno CLI, .NET, and Python ML libraries were not installed.
 
-Phase 3 is preserved in local commit 590a234. Phase 4A changes are local and
-uncommitted for review. No Git push, Vercel deployment, cloud project creation,
+Phase 3 is preserved on main at local commit 590a234. Phase 4A is saved in
+backend/fsm-core at checkpoint 9a9ddeb, followed by collaboration documentation.
+The frontend/fsm-ux branch starts at stable main and adds only collaboration
+instructions. See [the two-developer workflow](docs/COLLABORATION.md).
+No Git push, Vercel deployment, cloud project creation,
 migration application, or Edge deployment has been performed. Phase 4B has not
 started.

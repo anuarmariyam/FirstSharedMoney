@@ -121,8 +121,10 @@ and identity restoration after browser reload.
 - git diff --check reported no whitespace errors. A filename/credential-format
   scan covered 85 tracked and untracked candidate files with no matches; this
   is a limited scan, not a guarantee that every possible secret format is covered.
-- Ignored local environment paths were checked. Phase 4A remains uncommitted;
-  the latest local commit is the Phase 3 baseline, 590a234. No push occurred.
+- Ignored local environment paths were checked. Phase 4A has since been preserved
+  in backend/fsm-core at checkpoint 9a9ddeb. main remains at the Phase 3 baseline
+  590a234; frontend/fsm-ux adds only collaboration documents to that baseline.
+  Local environment files were verified unchanged across branch setup. No push occurred.
 
 ## Remaining boundaries
 
