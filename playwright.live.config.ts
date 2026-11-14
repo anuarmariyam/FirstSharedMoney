@@ -8,7 +8,7 @@ process.env.VITE_SUPABASE_PUBLISHABLE_KEY = env.key;
 
 export default defineConfig({
   testDir: "./tests/live",
-  testMatch: "session.spec.ts",
+  testMatch: ["session.spec.ts", "questionnaire.spec.ts"],
   workers: 1,
   retries: 0,
   outputDir: "./artifacts/live-test-results",

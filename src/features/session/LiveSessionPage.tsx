@@ -210,14 +210,14 @@ export function LiveSessionPage() {
       <div className="next-step-banner">
         <div>
           <p className="eyebrow">THE NEXT PART OF THE CONVERSATION</p>
-          <h2>Questionnaires come next.</h2>
+          <h2>Your perspective comes first.</h2>
           <p>
-            Live financial input is not enabled in Phase 4A. The separate demo
-            still uses fictional, unsaved data.
+            Save your answers privately, then choose what may be used in your
+            shared plan.
           </p>
         </div>
-        <ButtonLink to="/sessions/demo">
-          Explore the fictional preview <Icon name="arrow" />
+        <ButtonLink to={`/sessions/${session.id}/questionnaire`}>
+          My questionnaire
         </ButtonLink>
       </div>
     </>

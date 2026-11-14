@@ -1,14 +1,18 @@
 # FirstSharedMoney: Database Schema
 
-Status: the full logical design extends beyond the implemented Phase 4A slice.
-The session tables, policies, indexes, and RPCs have been applied together and
-verified against the approved test project. Remaining financial/approval tables
+Status: the full logical design extends beyond the implemented Phase 4B slice.
+The session and questionnaire tables, policies, indexes, and RPCs have been applied
+and verified against the approved test project. Remaining financial/approval tables
 are planned. Table DDL alone is not a working or secure backend.
 
 Phase 4A applies the couples/partners/session_invitations slice in four verified
 migrations. Other tables remain future work. The head
 pointer is restricted to NULL until agreement_versions and its composite FK
 are implemented. See [PHASE4A_VERIFICATION.md](PHASE4A_VERIFICATION.md).
+
+Phase 4B adds questions/answers and five owner-scoped questionnaire/privacy RPCs
+in migrations 00500–00700. The immutable catalog contains 15 questions, 14 required.
+Raw answers remain owner-readable even after consent. See PHASE4B_VERIFICATION.md.
 
 ## 1. Conventions and relationships
 

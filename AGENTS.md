@@ -7,8 +7,8 @@ English; explanations to the project owner are Russian.
 
 - main contains the accepted Phase 3 baseline. Do not put unfinished backend
   work or frontend redesign into main. Use reviewable pull requests.
-- backend/fsm-core belongs to the backend owner. Phase 4A is the current scope;
-  Phase 4B is not authorized.
+- backend/fsm-core belongs to the backend owner. Phase 4A and Phase 4B are verified.
+  Phase 5 is not authorized.
 - frontend/fsm-ux starts from the stable main baseline and belongs to the UI/UX
   developer. Improve presentation, navigation, accessibility, responsive styles,
   and visualization of supplied results.
@@ -34,7 +34,10 @@ Supabase CLI caches. Only blank environment examples belong in Git.
 The owner authorized Phase 4A's four migrations, single fsm-api deployment, and
 test-owned fixture creation/cleanup only in lgboxbtxutgggvluhhqt. These completed
 successfully; see docs/PHASE4A_VERIFICATION.md. Additional cloud work must remain
-within explicit owner authorization; Phase 4B is not authorized.
+within explicit owner authorization. The owner separately approved Phase 4B's
+three migrations, fsm-api update, and test-owned fixture creation/cleanup in that
+same project; these passed. See docs/PHASE4B_VERIFICATION.md.
+Do not start Phase 5.
 Never disable JWT verification, RLS, or TLS verification.
 Do not collect real financial data before security verification is complete.
 

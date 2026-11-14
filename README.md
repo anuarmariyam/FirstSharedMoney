@@ -4,16 +4,18 @@
 
 A web planning product for couples beginning their first shared financial life.
 
-Current delivery: **Phase 4A — Backend Foundation & Secure Session Management**.
-**Phase 4A is verified in the approved FSM test project.** All four migrations
-are applied, fsm-api is active with JWT verification, and real security/live tests
-passed. See [the verification record](docs/PHASE4A_VERIFICATION.md). Financial
-persistence and engines remain future work; Phase 4B has not started.
+Current delivery: **Phase 4B — Real Questionnaire Persistence & Privacy**.
+Private questionnaire persistence, submission/reopening, and two independent
+consents are verified in the approved FSM test project. Seven migrations are
+applied and fsm-api version 2 is active with JWT verification. See
+[Phase 4B verification](docs/PHASE4B_VERIFICATION.md) and the earlier
+[Phase 4A baseline](docs/PHASE4A_VERIFICATION.md). Phase 5 has not started.
 
 ## Start here
 
 - [Existing Supabase test project setup reference](docs/SUPABASE_SETUP.md)
 - [Phase 4A real test results](docs/PHASE4A_VERIFICATION.md)
+- [Phase 4B implementation and test results](docs/PHASE4B_VERIFICATION.md)
 - [Phase 4A implementation, security boundaries, and verification status](docs/PHASE4A_BACKEND.md)
 - [Full architecture and API design](docs/ARCHITECTURE.md)
 - [Database schema](docs/DATABASE_SCHEMA.md)
@@ -80,6 +82,19 @@ Issuance returns the raw token once; SQL stores only its digest. Refreshing A's
 page loses that in-memory raw invitation, so A can issue a replacement. Losing
 the browser's Auth session has no automatic account recovery.
 
+## Private questionnaire persistence
+
+The 15-question live flow saves valid answers privately and restores completed
+saves after refresh. Next/Submit flush pending writes. Loading, unsaved changes,
+network retry, incomplete answers, and stale revisions have explicit states.
+Conflicting tabs preserve unsaved input and require a review before another write.
+
+Submission allows either or both sharing permissions to remain off. Raw answers
+and notes are never exposed to the other partner, even with consent. Editing
+submitted answers requires reopening, which clears both permissions and retains
+the answers as a draft. Sharing permissions can also be changed independently.
+The original in-memory Demo and visual design remain intact.
+
 ## Routes
 
 | Route                                 | Behavior                                                               |
@@ -88,6 +103,9 @@ the browser's Auth session has no automatic account recovery.
 | /create                               | Actual create flow when configured; honest unavailable state otherwise |
 | /join#token=...                       | In-memory invitation capture and explicit join                         |
 | /sessions/:coupleId                   | Authorized real session status when configured                         |
+| /sessions/:coupleId/questionnaire     | Owner-only persisted questions and answers                             |
+| /sessions/:coupleId/questionnaire/consent | Submit or update independent sharing choices                         |
+| /sessions/:coupleId/questionnaire/complete | Persisted submission status; reopen for editing                     |
 | /sessions/demo                        | Separate fictional workspace                                           |
 | /sessions/demo/questionnaire?step=1   | Sequential 15-question preview                                         |
 | /sessions/demo/questionnaire/consent  | Preview sharing choices                                                |
@@ -97,7 +115,7 @@ the browser's Auth session has no automatic account recovery.
 | /sessions/demo/agreement              | Local draft rules                                                      |
 | /sessions/demo/agreement/preview      | Unapproved document                                                    |
 
-Live financial routes remain unavailable in Phase 4A. A session UUID is only a
+Live shared financial routes remain unavailable in Phase 4B. A session UUID is only a
 locator; it cannot grant access. Anonymous Auth persists in the browser profile.
 Do not switch A's identity to fill B: use a separate profile or device.
 
@@ -117,7 +135,7 @@ Do not switch A's identity to fill B: use a separate profile or device.
 - tests/ui: offline frontend regression tests.
 - tests/live and scripts/test-session-security.ts: actual cloud verification.
 
-No questionnaire persistence, conflict/financial engine, agreement engine,
+No conflict/financial engine, agreement engine,
 independent approval, payment, PDF export, cleanup job, or public deployment is
 implemented. Target architecture beyond the session slice remains future work.
 
@@ -154,15 +172,17 @@ acknowledge targeted test mutations:
 
 ```powershell
 npm.cmd run test:security
+npm.cmd run test:questionnaire
 npm.cmd run test:live
 ```
 
-The security suite exercises real A/B/C Auth identities, PostgREST/RPC, Edge,
+The security suites exercise real A/B/C Auth identities, PostgREST/RPC, Edge,
 expiry, revocation, replay, direct-write denials, identity forgery, concurrent
 join, and expired membership. The live browser test checks separate identities
-and persistence after reload on isolated port 5175.
+and persistence after reload, owner-only answers, conflict/network recovery,
+independent consents, and reopening on isolated port 5175.
 
-Both commands fail preflight if the actual test project is missing. Such a result
+All three commands fail preflight if the actual test project is missing. Such a result
 means **cloud tests did not run**, not that security passed. Tests create only
 fictional session data and clean up records owned by their newly created users.
 Database TLS verification stays enabled.
@@ -176,6 +196,6 @@ backend/fsm-core at checkpoint 9a9ddeb, followed by collaboration documentation.
 The frontend/fsm-ux branch starts at stable main and adds only collaboration
 instructions. See [the two-developer workflow](docs/COLLABORATION.md).
 main and frontend/fsm-ux were published earlier with owner approval. The backend
-branch has not been pushed. The four migrations and one test Edge Function were
+branch has not been pushed. Seven migrations and one test Edge Function were
 applied/deployed after separate explicit approval. No Vercel website deployment
-or merge was performed. Phase 4B has not started.
+or merge was performed. Phase 4B is verified; Phase 5 has not started.

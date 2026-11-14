@@ -1,4 +1,4 @@
-import { basisPoints, cents, MAX_CENTS } from "../../lib/money";
+import { basisPoints, cents, MAX_CENTS } from "../../lib/money.ts";
 import type { Question, QuestionCategory } from "../../types/domain";
 
 const money = {

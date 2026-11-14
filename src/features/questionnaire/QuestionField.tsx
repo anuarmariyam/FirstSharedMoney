@@ -8,11 +8,13 @@ export function QuestionField({
   value,
   onChange,
   error,
+  preview = true,
 }: {
   question: Question;
   value: DraftValue | undefined;
   onChange: (value: DraftValue) => void;
   error: string;
+  preview?: boolean;
 }) {
   if (question.kind === "money")
     return (
@@ -43,7 +45,7 @@ export function QuestionField({
         />
         <p id="note-count" className="field-hint">
           {typeof value === "string" ? value.length : 0} / 500 characters ·
-          local preview only
+          {preview ? "local preview only" : "private to you"}
         </p>
         {error && <FieldError id="question-error">{error}</FieldError>}
       </div>

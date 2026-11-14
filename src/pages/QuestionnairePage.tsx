@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate, useSearchParams } from "react-router";
+import {
+  useLocation,
+  useNavigate,
+  useSearchParams,
+  useParams,
+  useOutletContext,
+} from "react-router";
 import {
   Badge,
   Button,
@@ -14,9 +20,28 @@ import { questions, categoryLabels } from "../features/questionnaire/catalog";
 import { validateAnswer } from "../features/questionnaire/validation";
 import { QuestionField } from "../features/questionnaire/QuestionField";
 import { useDemo } from "../hooks/useDemo";
-import type { QuestionCode } from "../types/domain";
+import type { QuestionCode, CoupleSession } from "../types/domain";
+import { LiveQuestionnairePage } from "../features/questionnaire/LiveQuestionnairePage";
 
 export default function QuestionnairePage() {
+  const { coupleId } = useParams();
+  const context = useOutletContext<
+    { session: CoupleSession; reload: () => void } | undefined
+  >();
+  return coupleId === "demo" ? (
+    <DemoQuestionnairePage />
+  ) : context ? (
+    <LiveQuestionnairePage
+      key={`${context.session.id}/${context.session.viewerPartnerId}`}
+      {...context}
+    />
+  ) : (
+    <EmptyState title="Your session is unavailable.">
+      Return to your plan and try again.
+    </EmptyState>
+  );
+}
+function DemoQuestionnairePage() {
   const demo = useDemo();
   const navigate = useNavigate();
   const location = useLocation();

@@ -9,6 +9,13 @@ import {
   parseSession,
   uuid,
 } from "../_shared/session-contract.ts";
+import {
+  answerValue,
+  parseQuestionnaire,
+  privacyConsent,
+  questionCode,
+  revision,
+} from "../_shared/questionnaire-contract.ts";
 
 export interface SessionBackend {
   verifyUser(token: string): Promise<boolean>;
@@ -22,6 +29,19 @@ export interface SessionBackend {
   }>;
 }
 const knownErrors: Record<string, { status: number; message: string }> = {
+  STALE_REVISION: {
+    status: 409,
+    message:
+      "Your answers changed in another tab. Review the latest saved answers before retrying.",
+  },
+  QUESTIONNAIRES_INCOMPLETE: {
+    status: 409,
+    message: "Complete all required questions before submitting.",
+  },
+  CONSENT_REQUIRED: {
+    status: 403,
+    message: "Both partners must explicitly allow this use of their data.",
+  },
   INVALID_INPUT: { status: 400, message: "Check the submitted fields." },
   UNAUTHENTICATED: {
     status: 401,
@@ -115,7 +135,7 @@ export function createSessionHandler(
       Vary: "Origin",
       "Access-Control-Allow-Headers":
         "authorization, apikey, content-type, x-client-info",
-      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, OPTIONS",
     });
     if (origin && allowed) headers.set("Access-Control-Allow-Origin", origin);
     function failure(code: string) {
@@ -182,23 +202,82 @@ export function createSessionHandler(
         };
         parse = parseRedeemedSession;
       } else {
-        const match = /^\/v1\/couples\/([^/]+)(\/invitations)?$/.exec(route);
-        if (!match) return failure("NOT_FOUND");
-        const coupleId = uuid(match[1]);
-        if (request.method === "GET" && !match[2]) {
-          name = "fsm_get_session";
-          args = { p_couple_id: coupleId };
-          parse = parseSession;
-        } else if (request.method === "POST" && match[2]) {
-          if (request.body) {
+        const questionnaireRoute =
+          /^\/v1\/couples\/([^/]+)\/(questionnaire(?:\/(submit|reopen))?|privacy|answers\/([^/]+))$/.exec(
+            route,
+          );
+        if (questionnaireRoute) {
+          const coupleId = uuid(questionnaireRoute[1]);
+          parse = parseQuestionnaire;
+          if (
+            request.method === "GET" &&
+            questionnaireRoute[2] === "questionnaire"
+          ) {
+            name = "fsm_get_questionnaire";
+            args = { p_couple_id: coupleId };
+          } else {
             const body = await readBody(request);
-            exactKeys(body, []);
+            const expectedRevision = revision(body.expectedRevision);
+            if (request.method === "PUT" && questionnaireRoute[4]) {
+              exactKeys(body, ["questionCode", "value", "expectedRevision"]);
+              const code = questionCode(questionnaireRoute[4]);
+              if (body.questionCode !== code) throw new Error("INVALID_INPUT");
+              name = "fsm_save_answer";
+              args = {
+                p_couple_id: coupleId,
+                p_question_code: code,
+                p_value: answerValue(code, body.value),
+                p_expected_revision: expectedRevision,
+              };
+            } else if (
+              request.method === "POST" &&
+              questionnaireRoute[3] === "reopen"
+            ) {
+              exactKeys(body, ["expectedRevision"]);
+              name = "fsm_reopen_questionnaire";
+              args = {
+                p_couple_id: coupleId,
+                p_expected_revision: expectedRevision,
+              };
+            } else if (
+              (request.method === "POST" &&
+                questionnaireRoute[3] === "submit") ||
+              (request.method === "PATCH" &&
+                questionnaireRoute[2] === "privacy")
+            ) {
+              exactKeys(body, ["expectedRevision", "consent"]);
+              const consent = privacyConsent(body.consent);
+              name =
+                questionnaireRoute[2] === "privacy"
+                  ? "fsm_update_privacy"
+                  : "fsm_submit_questionnaire";
+              args = {
+                p_couple_id: coupleId,
+                p_expected_revision: expectedRevision,
+                p_comparison: consent.comparison,
+                p_budget: consent.budget,
+              };
+            } else return failure("NOT_FOUND");
           }
-          name = "fsm_rotate_invitation";
-          args = { p_couple_id: coupleId };
-          parse = parseIssuedInvitation;
-          status = 201;
-        } else return failure("NOT_FOUND");
+        } else {
+          const match = /^\/v1\/couples\/([^/]+)(\/invitations)?$/.exec(route);
+          if (!match) return failure("NOT_FOUND");
+          const coupleId = uuid(match[1]);
+          if (request.method === "GET" && !match[2]) {
+            name = "fsm_get_session";
+            args = { p_couple_id: coupleId };
+            parse = parseSession;
+          } else if (request.method === "POST" && match[2]) {
+            if (request.body) {
+              const body = await readBody(request);
+              exactKeys(body, []);
+            }
+            name = "fsm_rotate_invitation";
+            args = { p_couple_id: coupleId };
+            parse = parseIssuedInvitation;
+            status = 201;
+          } else return failure("NOT_FOUND");
+        }
       }
       const result = await backend.rpc(name, args, token);
       if (result.error)

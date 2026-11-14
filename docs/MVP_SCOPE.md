@@ -1,7 +1,8 @@
 # FirstSharedMoney: MVP Scope and Delivery Gates
 
-Status: Phase 2 architecture accepted; Phase 3 frontend preview implemented.
-Backend work and publication still need separate authorization. No market-size,
+Status: Phase 2 architecture accepted; Phase 3 preview and Phase 4A/4B session and
+private questionnaire backend verified. Phase 5 and website publication require
+separate authorization. No market-size,
 conversion, willingness-to-pay, LTV, CAC, or
 retention figures are asserted as validated facts.
 

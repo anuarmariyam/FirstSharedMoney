@@ -11,7 +11,11 @@ import type { CoupleSession } from "../types/domain";
 export type LiveSessionState =
   | { kind: "demo" | "not_configured" | "loading" | "signed_out" }
   | { kind: "error"; error: SessionServiceError }
-  | { kind: "ready"; session: CoupleSession };
+  | {
+      kind: "ready";
+      session: CoupleSession;
+      refreshError?: SessionServiceError;
+    };
 export function useLiveSession(coupleId: string | undefined) {
   const auth = useBrowserAuth();
   const [revision, reload] = useReducer((value) => value + 1, 0);
@@ -45,9 +49,18 @@ export function useLiveSession(coupleId: string | undefined) {
       })
       .catch((error) => {
         if (!controller.signal.aborted)
-          setResult({
-            key,
-            state: { kind: "error", error: sessionError(error) },
+          setResult((previous) => {
+            const failure = sessionError(error);
+            if (
+              failure.code === "NETWORK_ERROR" &&
+              previous?.key === key &&
+              previous.state.kind === "ready"
+            )
+              return {
+                key,
+                state: { ...previous.state, refreshError: failure },
+              };
+            return { key, state: { kind: "error", error: failure } };
           });
       });
     return () => controller.abort();

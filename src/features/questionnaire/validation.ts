@@ -10,6 +10,8 @@ export function validateAnswer(
   if (question.kind === "text") {
     if (value === undefined) return null;
     if (typeof value !== "string") return "Write your note in plain text.";
+    if (value.includes("\u0000"))
+      return "Remove unsupported control characters.";
     return value.length > question.maxLength
       ? `Keep your note to ${question.maxLength} characters.`
       : null;

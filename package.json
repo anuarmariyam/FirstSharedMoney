@@ -9,7 +9,8 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "test:ui": "playwright test",
-    "test:backend": "node --test tests/backend/handler.test.ts tests/backend/config.test.ts",
+    "test:backend": "node --test tests/backend/handler.test.ts tests/backend/config.test.ts tests/backend/questionnaire.test.ts",
+    "test:questionnaire": "node scripts/test-questionnaire-security.ts",
     "test:security": "node scripts/test-session-security.ts",
     "test:live": "playwright test --config playwright.live.config.ts",
     "preview": "vite preview"

@@ -2,7 +2,8 @@
 
 Status: Phase 2 architecture accepted on 2026-11-14. Phase 4A's session foundation
 is deployed and verified in the approved test project; see PHASE4A_VERIFICATION.md.
-The broader financial and agreement backend remains planned. Phase 4B has not started.
+Phase 4B questionnaire persistence/privacy is also verified; see PHASE4B_VERIFICATION.md.
+The broader financial and agreement backend remains planned. Phase 5 has not started.
 
 ## 1. Existing project and boundaries
 

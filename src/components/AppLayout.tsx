@@ -7,6 +7,7 @@ import {
   EmptyState,
   ButtonLink,
   LoadingState,
+  Notice,
 } from "./ui";
 import { useLiveSession } from "../hooks/useLiveSession";
 import { Icon } from "./Icon";
@@ -165,12 +166,21 @@ export function AppLayout() {
           </div>
         </header>
         <main id="main-content" tabIndex={-1} className="app-main">
+          {live.state.kind === "ready" && live.state.refreshError && (
+            <Notice tone="warning">
+              Session refresh failed. Your unsaved answers are still here; we
+              will retry.
+            </Notice>
+          )}
           {isDemo ? (
             <Outlet />
           ) : live.state.kind === "loading" ? (
             <LoadingState />
           ) : live.state.kind === "ready" ? (
-            location.pathname.replace(/\/$/, "") === `/sessions/${coupleId}` ? (
+            location.pathname.replace(/\/$/, "") === `/sessions/${coupleId}` ||
+            location.pathname.startsWith(
+              `/sessions/${coupleId}/questionnaire`,
+            ) ? (
               <Outlet
                 context={{ session: live.state.session, reload: live.reload }}
               />

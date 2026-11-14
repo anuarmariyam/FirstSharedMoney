@@ -1,8 +1,9 @@
 # FirstSharedMoney: User Flow
 
-Status: accepted target workflow. Phase 3 implements a local frontend preview;
-live sessions, server persistence, financial engines, and independent approvals
-remain unconnected. All UI copy and questionnaire wording are English.
+Status: accepted target workflow. Live sessions and private questionnaire
+persistence/privacy are verified through Phase 4B; the Demo remains a local
+preview. Financial engines and independent agreement approvals remain planned.
+All UI copy and questionnaire wording are English.
 
 ## 1. Primary journey
 

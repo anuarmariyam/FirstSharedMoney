@@ -81,6 +81,8 @@ A private repository does not make checked-in secrets safe to share.
 
 The existing Supabase test project is linked. After read-only setup, the owner
 explicitly authorized Phase 4A migrations, fsm-api, and targeted security/live
-tests in lgboxbtxutgggvluhhqt. These completed successfully with test-data cleanup;
-see PHASE4A_VERIFICATION.md. This authorization does not cover another project,
-Phase 4B, production website deployment, or an additional Git push/merge.
+tests in lgboxbtxutgggvluhhqt. Phase 4B's three additional migrations, fsm-api
+update, and questionnaire tests were separately approved and verified with
+test-data cleanup; see PHASE4A_VERIFICATION.md and PHASE4B_VERIFICATION.md.
+This authorization does not cover another project, Phase 5, production website
+deployment, or an additional Git push/merge.

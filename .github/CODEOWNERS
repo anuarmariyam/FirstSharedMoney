@@ -17,6 +17,8 @@
 /src/app/auth-context.ts @anuarmariyam
 /src/hooks/useBrowserAuth.ts @anuarmariyam
 /src/hooks/useLiveSession.ts @anuarmariyam
+/src/hooks/useQuestionnaire.ts @anuarmariyam
+/src/features/questionnaire/answer-adapter.ts @anuarmariyam
 /src/features/questionnaire/catalog.ts @anuarmariyam
 /src/features/questionnaire/validation.ts @anuarmariyam
 /src/features/agreement/validation.ts @anuarmariyam

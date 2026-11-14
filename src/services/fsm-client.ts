@@ -64,6 +64,32 @@ export const fsmClient: FsmClient = {
         method = "POST";
         parse = parseIssuedInvitation;
         break;
+      case "getQuestionnaire":
+      case "submitQuestionnaire":
+      case "reopenQuestionnaire":
+      case "updatePrivacy":
+      case "saveAnswer": {
+        const { parseQuestionnaire, questionCode } =
+          await import("../../supabase/functions/_shared/questionnaire-contract.ts");
+        const base = `/couples/${uuid(resource.coupleId)}`;
+        parse = parseQuestionnaire;
+        if (operation === "saveAnswer") {
+          if (!body || !("questionCode" in body))
+            throw new SessionServiceError(
+              "INVALID_INPUT",
+              "Choose a valid question.",
+            );
+          path = `${base}/answers/${questionCode(body.questionCode)}`;
+          method = "PUT";
+        } else if (operation === "updatePrivacy") {
+          path = `${base}/privacy`;
+          method = "PATCH";
+        } else {
+          path = `${base}/questionnaire${operation === "submitQuestionnaire" ? "/submit" : operation === "reopenQuestionnaire" ? "/reopen" : ""}`;
+          method = operation === "getQuestionnaire" ? "GET" : "POST";
+        }
+        break;
+      }
       default:
         throw new SessionServiceError(
           "NOT_IMPLEMENTED",
@@ -112,6 +138,15 @@ export const fsmClient: FsmClient = {
           ? candidate.code
           : "INTERNAL_ERROR";
       const messages: Record<string, string> = {
+        STALE_REVISION:
+          "Your answers changed in another tab. Review the latest saved answers before retrying.",
+        QUESTIONNAIRES_INCOMPLETE:
+          "Complete all required questions before submitting.",
+        INVALID_STATE:
+          "This questionnaire changed. Reload it before continuing.",
+        INVALID_INPUT: "Check your answer and try again.",
+        CONSENT_REQUIRED:
+          "Both partners must explicitly allow this use of their data.",
         INVALID_INVITATION:
           "This invitation is unavailable, expired, revoked, or already used. Ask your partner for a new link.",
         IDENTITY_ALREADY_JOINED:
