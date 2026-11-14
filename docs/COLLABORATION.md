@@ -2,28 +2,32 @@
 
 Current owner status: Phase 6 agreement/PDF is verified locally and in the
 separately approved FSM test project; see PHASE6.md (143 passing cases).
-The earlier handoff was published at 4c43ad5. Phase 6 changes are local only;
-another push/merge, contributor-branch change or deployment is not authorized.
+The earlier handoff was published at 4c43ad5. After a separate explicit approval,
+Phase 6 commit 1aaeb3a was fast-forwarded to remote backend/fsm-core. New audit/docs
+changes remain local; another push/merge, contributor-branch change, workflow/issue
+creation or deployment is not authorized. See REPOSITORY_AUDIT.md for the snapshot.
 
 ## Baseline and branch purpose
 
 Stable main remains Phase 3 commit 590a234. The reviewed stable backend milestone
 is Phase 5 commit 3063cd4, with historical 111/111 passing cases and cloud evidence
-in PHASE5.md. The current review reran only the 13 targeted engine/contract cases;
-it did not repeat mutating cloud tests. This handoff changes documentation only.
+in PHASE5.md. An earlier review reran 13 targeted cases; the subsequent Phase 6
+verification passed 143 checks. The current audit reruns neither that complete
+suite nor mutating cloud tests because executable code is unchanged.
 
 | Branch | Owner | Contents |
 | --- | --- | --- |
 | main | Project owner | Accepted Phase 3 only; remains at 590a234 until an approved change. |
-| backend/fsm-core | Project owner / backend developer | Published handoff 4c43ad5 plus verified local Phase 6; another push is not authorized. |
+| backend/fsm-core | Project owner / backend developer | Published Phase 6 at 1aaeb3a; later audit/docs commit stays local pending approval. |
 | frontend/fsm-ux | Member 2 | Remote 9a640e5: stable main plus old collaboration instructions; no new UI commits observed. |
-| feature/fsm-insights | Member 3 | Same updated handoff base, descendant of 3063cd4; normal publication now authorized. Never start it from old main. |
+| feature/fsm-insights | Member 3 | Published handoff base 4c43ad5; no new Insights/PoC implementation commits observed. Never recreate from old main. |
 
 The repository remote is https://github.com/anuarmariyam/FirstSharedMoney.git.
 main and frontend/fsm-ux were pushed earlier with explicit owner approval. The
 owner separately authorized and completed normal push of backend/fsm-core and
 feature/fsm-insights at 4c43ad5 after the Qwen assignment and secret audit.
-That approval does not cover publishing Phase 6. No --all, --tags, main/frontend
+The later exact-commit approval published Phase 6 at 1aaeb3a; it does not cover
+the new audit/documentation commit. No --all, --tags, main/frontend
 push, force push, merge, rebase or website deployment is authorized.
 Do not force-push or merge either work branch automatically.
 
@@ -40,13 +44,13 @@ Do not force-push or merge either work branch automatically.
 | New src/features/insights/, tests/insights/, docs/insights/ | Member 3's isolated planned-spending interpretation, public-source research and fictional-data Qwen/Groq PoC; no API/UI/auth/engine changes. |
 | Questionnaire catalog/validation, agreement validation, financial/demo result fixtures | Backend owner; UI may present these values without changing their semantics. |
 | App.tsx, AppLayout.tsx, SessionPage.tsx, questionnaire/simulator/agreement pages, QuestionField.tsx | Shared: coordinate targeted presentation edits first. Backend owns data flow/auth. |
-| LiveSessionPage, SessionEntryPage, LiveQuestionnairePage, LiveSimulatorPage | Read-only to frontend/Insights contributors; backend integrates their pure presentation components. |
+| LiveSessionPage, SessionEntryPage, LiveQuestionnairePage, LiveSimulatorPage, LiveAgreementPage | Read-only to frontend/Insights contributors; backend integrates their pure presentation components. |
 | package.json/lockfile, Vite/TypeScript/Playwright config, architecture docs | Shared; coordinate before modifying. |
 
 Detailed independent briefs: [Member 2](TEAM_MEMBER_2_FRONTEND.md) and
 [Member 3](TEAM_MEMBER_3_INSIGHTS.md). Agreement presentation is frontend work;
-server approval/access and confirmed-version export remain backend work after
-separately approved Phase 6. Insights/AI must not delay that core workflow.
+server approval/access and confirmed-version export are implemented in Phase 6
+and remain backend-owned. Insights/AI must not delay that core workflow.
 
 No whole-src copy, mass reformat, or automatic conflict resolution across these
 branches. App.tsx, AppLayout.tsx, SessionPage.tsx, LandingPage.tsx, and UI tests
@@ -82,8 +86,10 @@ This is a review definition, not a write-access control. GitHub evaluates the
 CODEOWNERS file on a pull request's base branch. Because main is deliberately
 unchanged, this new file does not yet enforce reviews for PRs targeting main.
 
-The backend base already contains CODEOWNERS locally; its published copy can
-route backend-targeted PR reviews after authorization. main currently has none.
+The published backend base contains CODEOWNERS; main currently has none. This
+local audit adds explicit ownership for the other live integration containers;
+those additions require approval before publication. CODEOWNERS routes reviews
+where supported and configured; it does not itself restrict writes or require approval.
 After an explicitly approved documentation PR places these rules on main,
 configure available repository rules to require PRs and owner review and prevent
 force pushes. Read-only protection/ruleset API calls returned 403 during this
@@ -106,8 +112,9 @@ approved and verified; see PHASE5.md. The prior handoff added documentation,
 normal push of two named branches and a Member 3 fictional-data-only Qwen PoC
 assignment. The owner subsequently approved Phase 6's two migrations, existing
 fsm-api update and test-owned cleanup; these passed with JWT/RLS/TLS preserved.
-No AI was connected. Further cloud scope, website deployment, real-user AI
-analysis or automatic merge is not authorized.
+No AI was connected. The current audit published only approved commit 1aaeb3a;
+further cloud scope, website deployment, real-user AI analysis or automatic merge
+is not authorized. CI/workflow and issue plans are proposals, not created resources.
 
 ## Review snapshot and synchronization plan
 

@@ -7,21 +7,27 @@ Phase 5 financial/comparison and Phase 6 agreement/PDF are now verified in the
 same approved test project: 11 migrations, fsm-api v4 and 143 passing checks.
 See PHASE5.md and PHASE6.md for runtime evidence. The sections below retain the
 approved Phase 2 design; features outside the delivered phases remain planned.
+Phases 1-6 are complete in the test-project scope, and backend commit 1aaeb3a
+is published. Production website deployment/public submission remain pending;
+AI/Qwen has no connection to the main application's data or approval workflow.
 
 ## 1. Existing project and boundaries
 
-The working root is `D:\FirstSharedMoney`. Phase 1 contains the Vite React
-starter, a local Git repository on `main`, and a dependency lockfile. React
+The working root is `D:\FirstSharedMoney`. Phase 1 initialized the Vite React
+starter and Git/lockfile. Current owner development uses `backend/fsm-core`; main
+still preserves Phase 3. React
 19.3.1, TypeScript 7.0.2, and Vite 8.3.8 are installed locally. Node.js 24.11.1
 and npm 11.6.2 run the tooling. The npm cache is `D:\npm-cache`.
 
 The application uses ESM, Vite's React plugin, TypeScript project references,
 `noEmit`, and bundler module resolution. Phase 2 enables `strict` in both the
-application and tooling TypeScript configurations. Vite configuration and the
-starter UI remain unchanged. No dependencies are added.
+application and tooling TypeScript configurations. The current UI, guarded
+session services and test-mode Vite configuration extend that baseline. Runtime
+dependencies now include Supabase and server-only pdf-lib; there is no LLM SDK.
 
-Design decisions below are recommendations to approve before implementation.
-They are contracts, not claims of working backend functionality. Database
+The design below is the approved implementation reference. Delivered runtime
+behavior is evidenced by PHASE4A_VERIFICATION.md, PHASE4B_VERIFICATION.md,
+PHASE5.md and PHASE6.md, not by these design declarations alone. Database
 details are in [DATABASE_SCHEMA.md](DATABASE_SCHEMA.md), the journey is in
 [USER_FLOW.md](USER_FLOW.md), and delivery priorities are in
 [MVP_SCOPE.md](MVP_SCOPE.md).
@@ -39,7 +45,7 @@ flowchart LR
   EDGE --> COMPARE[Pure conflict engine]
   EDGE --> FINANCE[Pure financial engine]
   WEB --> FINANCE
-  EDGE --> POLICY[Agreement policy]
+  RPC --> POLICY[Agreement lifecycle and integrity checks]
 ```
 
 Use one SPA and one routed Edge Function. Avoid a separate Node server, custom
@@ -317,9 +323,11 @@ version is idempotent. No frontend status or approval count is authoritative.
 
 ## 5. API contract
 
-Use one future Edge Function `fsm-api`. Logical base path is `/v1`; the deployed
-prefix will be `/functions/v1/fsm-api/v1`. Exact operation DTOs are in
-`src/types/api.ts`. There is no implementation in this phase.
+The existing test-project Edge Function `fsm-api` v4 serves logical base `/v1`
+under `/functions/v1/fsm-api/v1`. Exact operation DTOs are in src/types/api.ts.
+Session, questionnaire, comparison, scenario and agreement/PDF routes are
+implemented. The original table below also describes future demo-session,
+self-revocation and deletion commands; those are not delivered API operations.
 
 All routes require a verified anonymous or permanent user JWT except CORS
 preflight. `Authorization: Bearer <user-jwt>` identifies the user; a project

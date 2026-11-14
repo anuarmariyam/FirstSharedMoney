@@ -4,6 +4,10 @@
 
 A web planning product for couples beginning their first shared financial life.
 
+Phases 1-6 are complete for the verified test-project implementation. Phase 6
+passed 143 automated checks; this audit did not rerun them because executable
+code is unchanged. No production website or public submission URL is deployed.
+
 Current delivery: **Phase 6 — Mutual Agreement & Authorized PDF Export**.
 Immutable agreement versions, independent same-version/hash confirmations and
 server-authorized PDF downloads are verified in the approved FSM test project.
@@ -18,6 +22,7 @@ See [Phase 6 implementation and verification](docs/PHASE6.md),
 - [Frontend contributor assignment](docs/TEAM_MEMBER_2_FRONTEND.md)
 - [Insights contributor assignment](docs/TEAM_MEMBER_3_INSIGHTS.md)
 - [Three-developer workflow](docs/COLLABORATION.md)
+- [Repository audit, integration priorities and proposed CI/issues](docs/REPOSITORY_AUDIT.md)
 - [Existing Supabase test project setup reference](docs/SUPABASE_SETUP.md)
 - [Phase 4A real test results](docs/PHASE4A_VERIFICATION.md)
 - [Phase 4B implementation and test results](docs/PHASE4B_VERIFICATION.md)
@@ -134,12 +139,12 @@ Do not switch A's identity to fill B: use a separate profile or device.
 - src/features/questionnaire: catalog, form controls, input validation.
 - src/engines: deterministic conflict comparison and BigInt financial calculations.
 - src/features/comparison and simulator: live integration and separate Demo fixtures.
-- src/features/agreement: local rule validation only.
+- src/features/agreement: live version/confirmation integration, typed policy and Demo validation.
 - src/features/session: create/join handling and live status UI.
 - src/app and src/hooks: separate demo state, actual Auth events, live loading.
-- src/services: Supabase SDK and typed session/questionnaire/comparison/scenario adapter.
+- src/services: typed session/questionnaire/comparison/scenario/agreement/PDF operations.
 - src/types: approved Phase 2 domain/API/engine contracts.
-- supabase/migrations: session, questionnaire and scenario tables, indexes, RLS and RPCs.
+- supabase/migrations: session, questionnaire, scenario and agreement tables, RLS and guarded RPCs.
 - supabase/functions: authenticated routed Edge Function and shared validation.
 - tests/backend: transport/configuration unit tests.
 - tests/ui: offline frontend regression tests.
@@ -205,7 +210,8 @@ means **cloud tests did not run**, not that security passed. Tests create only
 fictional session data and clean up records owned by their newly created users.
 Database TLS verification stays enabled.
 
-Runtime addition: @supabase/supabase-js. Development additions: pg and @types/pg,
+Runtime additions include @supabase/supabase-js and server-only pdf-lib.
+Development additions include pg and @types/pg,
 which are remote database clients/types, not a PostgreSQL server. Docker, local
 PostgreSQL, Deno CLI, .NET, and Python ML libraries were not installed.
 
@@ -213,9 +219,11 @@ Phase 3 is preserved on main at local commit 590a234. Phase 4A is saved in
 backend/fsm-core at checkpoint 9a9ddeb, followed by collaboration documentation.
 The frontend/fsm-ux branch starts at stable main and adds only collaboration
 instructions. See [the three-developer workflow](docs/COLLABORATION.md).
-main and frontend/fsm-ux were published earlier with owner approval. Publication
-of backend/fsm-core and feature/fsm-insights with the updated Qwen assignment is
-separately authorized; verify actual remote tips with git fetch/ls-remote.
+main and frontend/fsm-ux were published earlier with owner approval. The handoff
+base 4c43ad5 was published to backend/fsm-core and feature/fsm-insights. After
+the owner's separate approval, backend/fsm-core was fast-forwarded to Phase 6
+commit 1aaeb3a0d972c13111e4efabf6859eaa34dad3cb. Other branches were unchanged.
 Eleven migrations and one test Edge Function were
 applied/deployed after separate explicit approval. No Vercel website deployment
-or merge was performed. Phase 6 is verified; its local commit has not been pushed.
+or merge was performed. Subsequent audit/documentation changes are local only;
+their publication requires another approval. AI/Qwen is not connected to FSM.

@@ -7,8 +7,9 @@ English; explanations to the project owner are Russian.
 
 - main contains the accepted Phase 3 baseline. Do not put unfinished backend
   work or frontend redesign into main. Use reviewable pull requests.
-- backend/fsm-core belongs to the backend owner. Phases 4A, 4B, 5 and 6 are verified.
-  Phase 6 has no AI. Further development/cloud scope requires owner approval.
+- backend/fsm-core belongs to the backend owner. Phases 1-6 are complete in the
+  verified test-project scope (143 checks at Phase 6). No production website or
+  main-app AI/Qwen integration exists. Further feature/cloud scope needs approval.
 - frontend/fsm-ux starts from the stable main baseline and belongs to the UI/UX
   developer. Improve presentation, navigation, accessibility, responsive styles,
   and visualization of supplied results.
@@ -17,8 +18,8 @@ English; explanations to the project owner are Russian.
   tests/insights/ and docs/insights/ files, including a fictional-data Qwen/Groq
   PoC under tests/insights/qwen-poc/. Keep engines, auth, API and UI unchanged.
 - Read docs/TEAM_MEMBER_2_FRONTEND.md or docs/TEAM_MEMBER_3_INSIGHTS.md for the
-  exact contributor boundary. The current owner task implements Phase 6 agreement
-  and PDF backend/integration only, with no AI or contributor-branch changes.
+  exact contributor boundary. The current owner task audits GitHub and updates
+  documentation only; it adds no features, cloud changes or contributor-branch edits.
 - On frontend/fsm-ux, do not change supabase/, scripts/, src/types/, src/services/,
   src/lib/, authentication/session hooks, questionnaire catalogs/validation,
   agreement validation, demo calculation/result fixtures, or financial/conflict/
@@ -38,8 +39,11 @@ English; explanations to the project owner are Russian.
 
 Never discard another contributor's changes. No automatic merge, reset, force
 push, or remote publication. Git push requires the owner's explicit approval.
-The prior handoff publication completed at 4c43ad5. Phase 6 does not authorize
-another push, merge, tag/release or production deployment. The separately approved
+The prior handoff publication completed at 4c43ad5. The owner separately approved
+and completed the normal fast-forward push of exactly 1aaeb3a to backend/fsm-core
+after a clean-tree/private-repository/history audit. A subsequent audit/docs commit
+must remain local until another explicit approval. No merge, tags, release,
+workflow/issue creation or deployment is authorized. The separately approved
 test-only migrations/fsm-api v4 and fixture cleanup completed. Do not modify the frontend or
 Insights branch. Preserve the contributors' presentation and isolated module boundaries.
 Never commit local .env files, credentials, build output, test artifacts, or

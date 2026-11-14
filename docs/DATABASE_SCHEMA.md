@@ -5,6 +5,10 @@ slices are implemented and verified in the approved FSM test project through
 Phase 6 (11 migrations). See PHASE5.md and PHASE6.md for RLS/RPC/concurrency and
 PDF evidence. The detailed design below also includes later operational features;
 table DDL alone must never be presented as security verification.
+The Phase 1-6 implementation is verified against the test project only:
+11/11 migrations, fsm-api v4, 143 passing checks. Phase 6 commit 1aaeb3a is now
+published on backend/fsm-core. No production website readiness or new cloud
+operation is implied by this repository audit.
 
 Phase 4A applies the couples/partners/session_invitations slice in four verified
 migrations. Its temporary head-is-null guard was replaced in migration 0010

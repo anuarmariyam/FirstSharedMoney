@@ -1,8 +1,10 @@
 # FirstSharedMoney: User Flow
 
-Status: accepted target workflow. Live sessions and private questionnaire
-persistence/privacy are verified through Phase 4B; the Demo remains a local
-preview. Financial engines and independent agreement approvals remain planned.
+Status: Phases 1-6 are complete in the Supabase test-project scope. Real sessions,
+private questionnaires, comparison/simulation, independent version/hash-bound
+approvals and authorized PDF export passed 143 checks; see PHASE6.md. Phase 6
+commit 1aaeb3a is published. The separate Demo remains a local fictional preview.
+No production website/public submission URL or main-app AI/Qwen integration exists.
 All UI copy and questionnaire wording are English.
 
 ## 1. Primary journey
@@ -21,27 +23,31 @@ All UI copy and questionnaire wording are English.
 | 10 | First partner explicitly approves | Bind their approval to the exact current version/hash | Under review |
 | 11 | Other partner independently approves | Verify the second distinct identity on the same version | Approved |
 | 12 | Both inspect First Money Agreement | Display frozen shared terms, contributions, review date, version and both confirmations | Final planning document |
+| 13 | A member selects Download PDF | Recheck current head/hash, both confirmations, consent and revisions before issuing bytes | Authorized printable PDF |
 
 The planning document is a personal planning tool, not a legal contract or
 professional financial advice. Matching answers, viewing a proposal, or clicking
 Continue must never count as approval.
 
-### Proposed routes for later implementation
+### Current routes and the remaining history-view target
 
 | Route | Purpose and access |
 | --- | --- |
 | `/` | Product introduction, Create a shared plan, Try a demo |
+| `/create` | Create/resume using this browser's anonymous identity |
 | `/join#token=...` | One-use invitation handling; strip fragment immediately |
 | `/sessions/:coupleId` | Safe progress overview for an authenticated member |
 | `/sessions/:coupleId/questionnaire` | Caller-only form |
+| `/sessions/:coupleId/questionnaire/consent` | Separate owner comparison/budget choices |
 | `/sessions/:coupleId/differences` | Derived comparison, consent gate |
 | `/sessions/:coupleId/simulator` | Shared projections/models, budget consent gate |
 | `/sessions/:coupleId/agreement` | Current draft/proposal and explicit review |
-| `/sessions/:coupleId/agreement/:versionId` | Historical or current shared document |
+| `/sessions/:coupleId/agreement/preview` | Current shared document and guarded PDF action |
+| Historical version browser route | Future UI; historical terms are currently available through guarded getAgreementVersion API |
 
 Route guards are navigation aids; database and API checks enforce access.
-Session IDs in URLs never grant membership. Do not implement these routes in
-Phase 2; Phase 3 implements their frontend preview only.
+Session IDs in URLs never grant membership. Live routes use the Phase 4-6 API;
+/sessions/demo remains an independent in-memory preview with no real approvals.
 
 ## 2. Questionnaire v1
 
@@ -73,7 +79,7 @@ is allowed. The slider uses 0-10,000 basis points, steps of 100 (one percent).
 | 14 comfortable_income_share | What percentage of your own take-home income could comfortably go toward shared costs? | slider, integer basis points | none |
 | 15 discussion_note | Is there anything else you would like to prepare for your money conversation? | optional text, max 500 characters; author-only | none |
 
-Titles/help text/options are seeded catalog data, not implemented in Phase 2.
+Titles/help text/options are seeded immutable catalog data implemented in Phase 4B.
 Display friendly labels for enum values. All choices are preferences, not an
 assessment of which partner is responsible, compatible, or correct.
 
@@ -177,22 +183,27 @@ excludes private notes and raw income/obligation fields. A historical approved
 document remains approved as a historical record if a new draft is created;
 the overview clearly distinguishes it from the current unapproved head.
 
-PDF export is added only after the core flow is stable. It must state that it
-is a personal planning document, and expose no anonymous Auth credentials or
-invitation token.
+PDF export is implemented in Phase 6. Only the current twice-approved version
+with valid consent/revisions is exportable; historical read access is not export
+permission. The PDF states its personal-planning purpose and excludes Auth
+credentials, invitation tokens and private raw financial inputs.
 
 ## 6. Public jury demo without registration
 
-Try a demo creates a fresh, expiring session for that judge through anonymous
-Auth; it is not a public link to another couple's stored data. Use only fictional
-values, prominently label Demo data, and do not request real finances.
+Current Try Demo opens /sessions/demo: fictional fixtures and in-memory form
+state, without authentication, persisted results, real approvals or PDF export.
+The real registration-free workflow starts at /create and uses independent
+anonymous identities against the test project. No public website is deployed.
+A dedicated fresh-session/prefill jury entry remains a proposed enhancement;
+do not claim the planned POST /demo-sessions endpoint is implemented.
 
 The judge uses a normal browser profile as A and a private browser context (or
 another device/profile) as B through the invite. Two private windows belonging
 to the same private profile may share storage; do not claim they isolate users.
 If A's identity opens its own invite, show guidance rather than changing identity.
 
-Offer fixture prefills separately for each role. Prefills are editable drafts;
+For a future guided jury entry, offer fictional prefills separately for each role.
+Such prefills must be editable drafts;
 the judge still submits each questionnaire and independently approves with each
 role's JWT. No server route generates both approvals for the caller, and the
 frontend never holds both role credentials in one shared Auth store. Refreshing
@@ -201,8 +212,9 @@ one role retains that context's membership and persisted state.
 An example fixture uses A income $5,000, personal obligations $600; B income
 $3,000, obligations $300; household rent $2,200, utilities $300, groceries $500,
 other $200, savings $0; shared costs total $3,200. These are invented demo
-inputs, not market evidence. The expected equal/proportional calculations are
-computed by the financial engine and independently tested later.
+inputs, not market evidence. Equal/proportional calculations are already computed
+by the existing Financial Engine and tested through Phase 5/6. They do not make
+the current static Demo page a live simulator.
 
 No email/password registration is required. Clearly explain that anonymous
 browser access cannot be recovered after clearing the session. Do not present
@@ -222,11 +234,13 @@ automatic role switching or synthetic approvals as the secure two-person flow.
 | Expired/revoked membership | Clear in-memory private data, show unavailable session, stop polling |
 | Network error | Preserve unsaved draft in memory, show retry; do not assume a command failed after a lost response |
 | Version/revision conflict | Refetch and rereview; never silently overwrite |
-| Delete session | Explain that it deletes both partners' session data; explicit confirmation before the server command |
+| Delete session | Planned self-service operation; no live deletion UI/RPC is implemented through Phase 6. Future command requires explicit confirmation |
 
-Either active partner can delete the whole session; the other loses access.
-Self-revocation is also available but provides no recovery or seat recycling.
-Retention/expiry and the deletion choice must be visible before users enter data.
+The target policy permits either active partner to delete the whole session;
+self-revocation/deletion endpoints and UI remain future work. Current expiry and
+access checks are enforced, and security tests perform only test-owned cleanup.
+Do not advertise self-service deletion or automatic retention cleanup before
+implementation. Decide that production-data lifecycle before real-user release.
 
 A future Monthly Money Check-in reuses owner-only questionnaire edits, updated
 scenarios, and a fresh agreement version with two new confirmations. Reminders,

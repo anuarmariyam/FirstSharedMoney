@@ -30,6 +30,10 @@
 /src/features/questionnaire/answer-adapter.ts @anuarmariyam
 /src/features/questionnaire/catalog.ts @anuarmariyam
 /src/features/questionnaire/validation.ts @anuarmariyam
+/src/features/questionnaire/LiveQuestionnairePage.tsx @anuarmariyam
+/src/features/session/LiveSessionPage.tsx @anuarmariyam
+/src/features/session/SessionEntryPage.tsx @anuarmariyam
+/src/features/simulator/LiveSimulatorPage.tsx @anuarmariyam
 /src/features/agreement/validation.ts @anuarmariyam
 /src/features/agreement/policy.ts @anuarmariyam
 /src/features/agreement/LiveAgreementPage.tsx @anuarmariyam
