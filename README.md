@@ -14,6 +14,9 @@ See [Phase 5 implementation and verification](docs/PHASE5.md),
 
 ## Start here
 
+- [Frontend contributor assignment](docs/TEAM_MEMBER_2_FRONTEND.md)
+- [Insights contributor assignment](docs/TEAM_MEMBER_3_INSIGHTS.md)
+- [Three-developer workflow](docs/COLLABORATION.md)
 - [Existing Supabase test project setup reference](docs/SUPABASE_SETUP.md)
 - [Phase 4A real test results](docs/PHASE4A_VERIFICATION.md)
 - [Phase 4B implementation and test results](docs/PHASE4B_VERIFICATION.md)
@@ -154,7 +157,10 @@ npm.cmd run test:backend
 npm.cmd run test:ui
 ```
 
-Strict typechecking covers frontend, tooling, tests, and Edge-source contracts.
+The configured typecheck covers src and Vite tooling. Runtime test commands use
+Node's TypeScript stripping; they do not themselves statically typecheck tests.
+New isolated test suites must also run an explicit strict test typecheck as
+documented in the contributor brief.
 It is not proof of Deno execution or a deployed database. Backend unit tests use
 transport mocks and must not be described as real Auth/RLS tests.
 
@@ -200,7 +206,7 @@ PostgreSQL, Deno CLI, .NET, and Python ML libraries were not installed.
 Phase 3 is preserved on main at local commit 590a234. Phase 4A is saved in
 backend/fsm-core at checkpoint 9a9ddeb, followed by collaboration documentation.
 The frontend/fsm-ux branch starts at stable main and adds only collaboration
-instructions. See [the two-developer workflow](docs/COLLABORATION.md).
+instructions. See [the three-developer workflow](docs/COLLABORATION.md).
 main and frontend/fsm-ux were published earlier with owner approval. The backend
 branch has not been pushed. Nine migrations and one test Edge Function were
 applied/deployed after separate explicit approval. No Vercel website deployment

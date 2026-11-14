@@ -7,6 +7,13 @@
 /docs/USER_FLOW.md @anuarmariyam
 /docs/MVP_SCOPE.md @anuarmariyam
 /docs/COLLABORATION.md @anuarmariyam
+/docs/TEAM_MEMBER_2_FRONTEND.md @anuarmariyam
+/docs/TEAM_MEMBER_3_INSIGHTS.md @anuarmariyam
+/docs/PHASE5.md @anuarmariyam
+# Member 3 implements these isolated paths; the owner reviews integration.
+/src/features/insights/ @anuarmariyam
+/tests/insights/ @anuarmariyam
+/docs/insights/ @anuarmariyam
 /supabase/ @anuarmariyam
 /scripts/ @anuarmariyam
 /src/types/ @anuarmariyam

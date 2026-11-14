@@ -12,6 +12,11 @@ English; explanations to the project owner are Russian.
 - frontend/fsm-ux starts from the stable main baseline and belongs to the UI/UX
   developer. Improve presentation, navigation, accessibility, responsive styles,
   and visualization of supplied results.
+- feature/fsm-insights is prepared from the Phase 5 handoff (descendant of
+  3063cd4), not old main. Member 3 owns only new src/features/insights/,
+  tests/insights/ and docs/insights/ files. Keep engines, auth, API and UI unchanged.
+- Read docs/TEAM_MEMBER_2_FRONTEND.md or docs/TEAM_MEMBER_3_INSIGHTS.md for the
+  exact task boundary. The current task prepares these briefs, not their implementation.
 - On frontend/fsm-ux, do not change supabase/, scripts/, src/types/, src/services/,
   src/lib/, authentication/session hooks, questionnaire catalogs/validation,
   agreement validation, demo calculation/result fixtures, or financial/conflict/
@@ -20,8 +25,11 @@ English; explanations to the project owner are Russian.
   approval rules, or financial calculations. Render the existing typed data and
   keep demo data visibly labeled Demo or Sample Data.
 - App.tsx, AppLayout.tsx, SessionPage.tsx, and questionnaire/simulator/agreement
-  pages are shared integration files: coordinate behavioral/routing changes.
+  pages and QuestionField.tsx are shared integration files: coordinate edits.
   Do not replace whole files or folders to resolve cross-branch differences.
+- Live session/questionnaire/simulator containers are backend-owned integration;
+  frontend contributors supply pure presentation components. PDF layout does
+  not authorize server approval logic or export of a confirmed version.
 - Coordinate dependency, lockfile, tooling, API-contract, and architecture changes.
 
 ## Preservation and release
