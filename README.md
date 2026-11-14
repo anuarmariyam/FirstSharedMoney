@@ -4,13 +4,14 @@
 
 A web planning product for couples beginning their first shared financial life.
 
-Current delivery: **Phase 5 — Conflict Detection & Financial Simulation**.
-Consent-gated comparison, exact-cent financial calculations, five stress tests,
-and immutable saved scenarios are verified in the approved FSM test project.
-Nine migrations are applied and fsm-api version 3 is active with JWT verification.
-See [Phase 5 implementation and verification](docs/PHASE5.md),
+Current delivery: **Phase 6 — Mutual Agreement & Authorized PDF Export**.
+Immutable agreement versions, independent same-version/hash confirmations and
+server-authorized PDF downloads are verified in the approved FSM test project.
+Eleven migrations are applied and fsm-api version 4 is active with JWT verification.
+See [Phase 6 implementation and verification](docs/PHASE6.md),
+[Phase 5 implementation and verification](docs/PHASE5.md),
 [Phase 4B verification](docs/PHASE4B_VERIFICATION.md) and the earlier
-[Phase 4A baseline](docs/PHASE4A_VERIFICATION.md). Phase 6 has not started.
+[Phase 4A baseline](docs/PHASE4A_VERIFICATION.md). AI is not connected.
 
 ## Start here
 
@@ -144,8 +145,12 @@ Do not switch A's identity to fill B: use a separate profile or device.
 - tests/ui: offline frontend regression tests.
 - tests/live and scripts/test-session-security.ts: actual cloud verification.
 
-Agreement engine, independent approval, payment, PDF export, cleanup job, and
-public deployment are not implemented. Phase 6 requires separate authorization.
+Agreement creation/proposal/approval and PDF export now use real server operations.
+Only an available current baseline scenario can seed the nine-item document.
+Each edit creates a new draft with zero confirmations. A/B confirm independently;
+export requires the current twice-approved version, valid consents and revisions.
+Historical terms remain readable by active members. Payment, background cleanup,
+AI integration and public website deployment are not implemented.
 
 ## Local verification
 
@@ -185,6 +190,7 @@ acknowledge targeted test mutations:
 npm.cmd run test:security
 npm.cmd run test:questionnaire
 npm.cmd run test:finance
+npm.cmd run test:agreement
 npm.cmd run test:live
 ```
 
@@ -194,7 +200,7 @@ join, and expired membership. The live browser test checks separate identities
 and persistence after reload, owner-only answers, conflict/network recovery,
 independent consents, and reopening on isolated port 5175.
 
-All four commands fail preflight if the actual test project is missing. Such a result
+All five commands fail preflight if the actual test project is missing. Such a result
 means **cloud tests did not run**, not that security passed. Tests create only
 fictional session data and clean up records owned by their newly created users.
 Database TLS verification stays enabled.
@@ -210,6 +216,6 @@ instructions. See [the three-developer workflow](docs/COLLABORATION.md).
 main and frontend/fsm-ux were published earlier with owner approval. Publication
 of backend/fsm-core and feature/fsm-insights with the updated Qwen assignment is
 separately authorized; verify actual remote tips with git fetch/ls-remote.
-Nine migrations and one test Edge Function were
+Eleven migrations and one test Edge Function were
 applied/deployed after separate explicit approval. No Vercel website deployment
-or merge was performed. Phase 5 is verified; Phase 6 has not started.
+or merge was performed. Phase 6 is verified; its local commit has not been pushed.

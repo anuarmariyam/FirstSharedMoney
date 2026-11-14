@@ -28,7 +28,7 @@ export const fsmClient: FsmClient = {
   async request<Operation extends keyof FsmApiContract>(
     operation: Operation,
     body: FsmApiContract[Operation]["request"],
-    resource: { coupleId?: string; scenarioId?: string },
+    resource: { coupleId?: string; scenarioId?: string; versionId?: string },
     options?: { signal?: AbortSignal },
   ): Promise<FsmApiContract[Operation]["response"]> {
     if (!backendConfig)
@@ -90,6 +90,32 @@ export const fsmClient: FsmClient = {
         }
         break;
       }
+      case "getCurrentAgreement":
+      case "getAgreementVersion":
+      case "createAgreementVersion":
+      case "proposeAgreement":
+      case "approveAgreement":
+      case "exportAgreement": {
+        const { parseAgreement } =
+          await import("../../supabase/functions/_shared/agreement-contract.ts");
+        const base = `/couples/${uuid(resource.coupleId)}/agreement-versions`;
+        method =
+          operation === "getCurrentAgreement" ||
+          operation === "getAgreementVersion"
+            ? "GET"
+            : "POST";
+        path =
+          operation === "getCurrentAgreement"
+            ? `${base}/current`
+            : operation === "createAgreementVersion"
+              ? base
+              : `${base}/${uuid(resource.versionId)}${operation === "proposeAgreement" ? "/propose" : operation === "approveAgreement" ? "/approve" : operation === "exportAgreement" ? "/pdf" : ""}`;
+        parse = (value) =>
+          operation === "getCurrentAgreement" && value === null
+            ? null
+            : parseAgreement(value);
+        break;
+      }
       case "getComparison":
       case "getFinancialInputs":
       case "createScenario":
@@ -147,6 +173,23 @@ export const fsmClient: FsmClient = {
         "The server could not be reached. Retrying session creation uses the same request ID.",
       );
     }
+    if (operation === "exportAgreement" && response.ok) {
+      if (
+        response.headers.get("Content-Type")?.split(";")[0] !==
+        "application/pdf"
+      )
+        throw new SessionServiceError(
+          "INVALID_RESPONSE",
+          "The document could not be verified.",
+        );
+      const blob = await response.blob();
+      if (blob.size > 2_000_000 || blob.size < 100)
+        throw new SessionServiceError(
+          "INVALID_RESPONSE",
+          "The document could not be verified.",
+        );
+      return blob as FsmApiContract[Operation]["response"];
+    }
     const payload: unknown = await response.json().catch(() => null);
     if (!payload || typeof payload !== "object" || !("ok" in payload))
       throw new SessionServiceError(
@@ -163,6 +206,10 @@ export const fsmClient: FsmClient = {
           ? candidate.code
           : "INTERNAL_ERROR";
       const messages: Record<string, string> = {
+        STALE_VERSION:
+          "The agreement changed. Reload and review the current version before continuing.",
+        SCENARIO_UNAVAILABLE:
+          "Choose a current baseline scenario without a stress test to create your agreement.",
         INPUTS_CHANGED:
           "Your submitted answers or sharing choices changed. Refresh the inputs before calculating again.",
         STALE_REVISION:

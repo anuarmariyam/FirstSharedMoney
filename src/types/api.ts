@@ -159,6 +159,8 @@ export interface FsmApiContract {
   readonly createAgreementVersion: Operation<CreateAgreementVersionRequest, AgreementVersion>
   readonly proposeAgreement: Operation<ProposeAgreementRequest, AgreementVersion>
   readonly approveAgreement: Operation<ApproveAgreementRequest, AgreementVersion>
+  /** Binary PDF from the authorized, current, twice-approved server version. */
+  readonly exportAgreement: Operation<ApproveAgreementRequest, Blob>
   readonly revokeOwnAccess: Operation<RevokeAccessRequest, null>
   readonly deleteSession: Operation<DeleteSessionRequest, DeleteSessionResponse>
 }

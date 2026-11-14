@@ -1,5 +1,10 @@
 # Three-Developer Workflow
 
+Current owner status: Phase 6 agreement/PDF is verified locally and in the
+separately approved FSM test project; see PHASE6.md (143 passing cases).
+The earlier handoff was published at 4c43ad5. Phase 6 changes are local only;
+another push/merge, contributor-branch change or deployment is not authorized.
+
 ## Baseline and branch purpose
 
 Stable main remains Phase 3 commit 590a234. The reviewed stable backend milestone
@@ -10,15 +15,15 @@ it did not repeat mutating cloud tests. This handoff changes documentation only.
 | Branch | Owner | Contents |
 | --- | --- | --- |
 | main | Project owner | Accepted Phase 3 only; remains at 590a234 until an approved change. |
-| backend/fsm-core | Project owner / backend developer | Phase 5 milestone 3063cd4 plus handoff/Qwen brief; normal publication now authorized. |
+| backend/fsm-core | Project owner / backend developer | Published handoff 4c43ad5 plus verified local Phase 6; another push is not authorized. |
 | frontend/fsm-ux | Member 2 | Remote 9a640e5: stable main plus old collaboration instructions; no new UI commits observed. |
 | feature/fsm-insights | Member 3 | Same updated handoff base, descendant of 3063cd4; normal publication now authorized. Never start it from old main. |
 
 The repository remote is https://github.com/anuarmariyam/FirstSharedMoney.git.
 main and frontend/fsm-ux were pushed earlier with explicit owner approval. The
-owner now separately authorized normal push of backend/fsm-core and
-feature/fsm-insights after updating the Qwen assignment and auditing secrets.
-Check remote refs to confirm actual publication. No --all, --tags, main/frontend
+owner separately authorized and completed normal push of backend/fsm-core and
+feature/fsm-insights at 4c43ad5 after the Qwen assignment and secret audit.
+That approval does not cover publishing Phase 6. No --all, --tags, main/frontend
 push, force push, merge, rebase or website deployment is authorized.
 Do not force-push or merge either work branch automatically.
 
@@ -97,10 +102,12 @@ tests in lgboxbtxutgggvluhhqt. Phase 4B's three additional migrations, fsm-api
 update, and questionnaire tests were separately approved and verified with
 test-data cleanup; see PHASE4A_VERIFICATION.md and PHASE4B_VERIFICATION.md.
 Phase 5's two migrations, fsm-api v3 and test-owned fixture cleanup were separately
-approved and verified; see PHASE5.md. Current authorization adds a documentation
-update, normal push of the two named branches, and a Member 3 assignment for a
-fictional-data-only Qwen PoC. No Phase 6, further cloud mutation, website deployment,
-real-user AI analysis or automatic merge is authorized.
+approved and verified; see PHASE5.md. The prior handoff added documentation,
+normal push of two named branches and a Member 3 fictional-data-only Qwen PoC
+assignment. The owner subsequently approved Phase 6's two migrations, existing
+fsm-api update and test-owned cleanup; these passed with JWT/RLS/TLS preserved.
+No AI was connected. Further cloud scope, website deployment, real-user AI
+analysis or automatic merge is not authorized.
 
 ## Review snapshot and synchronization plan
 
@@ -124,13 +131,14 @@ comparison and numeric results have independent server consent/revision gates.
 Known nonblocking issues: obsolete technical/demo copy for Member 2 to simplify,
 an existing 501.79 kB build entry advisory, and future agreement/export not yet built.
 
-### Backend publication and member 3 base
+### Historical handoff publication and member 3 base
 
 Keep milestone/phase5 as a local immutable tag of 3063cd4; its publication is not
-authorized. The owner approved normal publication of backend/fsm-core and
+authorized. The owner approved the earlier publication of backend/fsm-core and
 feature/fsm-insights with the updated Qwen brief. Preserve all existing history
 and independently verify the exact remote tips after push. No branch publication
-merges anything into main. Only these two branch pushes are in scope:
+merges anything into main. These were the handoff commands, not current approval
+to publish Phase 6:
 
 ```powershell
 git push --set-upstream origin backend/fsm-core

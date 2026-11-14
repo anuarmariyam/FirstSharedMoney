@@ -8,7 +8,7 @@ import {
 import type { FsmApiContract } from "../types/api";
 
 export function useSharedResource<
-  Op extends "getComparison" | "getFinancialInputs",
+  Op extends "getComparison" | "getFinancialInputs" | "getCurrentAgreement",
 >(operation: Op, coupleId: string) {
   const auth = useBrowserAuth();
   const [revision, reload] = useReducer((n) => n + 1, 0);

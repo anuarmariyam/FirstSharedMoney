@@ -10,6 +10,7 @@
 /docs/TEAM_MEMBER_2_FRONTEND.md @anuarmariyam
 /docs/TEAM_MEMBER_3_INSIGHTS.md @anuarmariyam
 /docs/PHASE5.md @anuarmariyam
+/docs/PHASE6.md @anuarmariyam
 # Member 3 implements these isolated paths; the owner reviews integration.
 /src/features/insights/ @anuarmariyam
 /tests/insights/ @anuarmariyam
@@ -30,6 +31,8 @@
 /src/features/questionnaire/catalog.ts @anuarmariyam
 /src/features/questionnaire/validation.ts @anuarmariyam
 /src/features/agreement/validation.ts @anuarmariyam
+/src/features/agreement/policy.ts @anuarmariyam
+/src/features/agreement/LiveAgreementPage.tsx @anuarmariyam
 /src/features/comparison/demo-results.ts @anuarmariyam
 /src/features/simulator/demo-fixtures.ts @anuarmariyam
 /src/features/*/engine/ @anuarmariyam

@@ -18,6 +18,11 @@ import {
 } from "../_shared/questionnaire-contract.ts";
 import { financeOperation } from "./finance.ts";
 import { parseScenario } from "../_shared/finance-contract.ts";
+import {
+  parseAgreement,
+  createAgreementRequest,
+  agreementAction,
+} from "../_shared/agreement-contract.ts";
 
 export interface SessionBackend {
   verifyUser(token: string): Promise<boolean | { id: string }>;
@@ -38,6 +43,16 @@ export interface SessionBackend {
   }>;
 }
 const knownErrors: Record<string, { status: number; message: string }> = {
+  STALE_VERSION: {
+    status: 409,
+    message:
+      "The agreement changed. Reload and review the current version before continuing.",
+  },
+  SCENARIO_UNAVAILABLE: {
+    status: 409,
+    message:
+      "Choose a current available baseline scenario without a stress test.",
+  },
   INPUTS_CHANGED: {
     status: 409,
     message:
@@ -198,7 +213,94 @@ export function createSessionHandler(
         /^\/v1\/couples\/([^/]+)\/(comparison|financial-inputs|scenarios)(?:\/([^/]+))?$/.exec(
           route,
         );
-      if (financeRoute) {
+      const agreementRoute =
+        /^\/v1\/couples\/([^/]+)\/agreement-versions(?:\/([^/]+))?(?:\/(propose|approve|pdf))?$/.exec(
+          route,
+        );
+      if (agreementRoute) {
+        const coupleId = uuid(agreementRoute[1]),
+          segment = agreementRoute[2],
+          action = agreementRoute[3];
+        let rpcName: string, rpcArgs: Record<string, unknown>;
+        if (request.method === "GET" && segment && !action) {
+          rpcName = "fsm_get_agreement";
+          rpcArgs = {
+            p_couple_id: coupleId,
+            p_version_id: segment === "current" ? null : uuid(segment),
+          };
+        } else if (request.method === "POST" && !segment && !action) {
+          const body = createAgreementRequest(await readBody(request));
+          rpcName = "fsm_create_agreement";
+          rpcArgs = {
+            p_couple_id: coupleId,
+            p_request_id: body.requestId,
+            p_expected_head_version_id: body.expectedHeadVersionId,
+            p_source_scenario_id: body.sourceScenarioId,
+            p_rules: body.rules,
+          };
+        } else if (
+          request.method === "POST" &&
+          segment &&
+          segment !== "current" &&
+          action
+        ) {
+          const body = agreementAction(await readBody(request)),
+            versionId = uuid(segment);
+          if (body.expectedHeadVersionId !== versionId)
+            throw new Error("STALE_VERSION");
+          rpcName =
+            action === "propose"
+              ? "fsm_propose_agreement"
+              : action === "approve"
+                ? "fsm_approve_agreement"
+                : "fsm_export_agreement";
+          rpcArgs = {
+            p_couple_id: coupleId,
+            p_version_id: versionId,
+            p_expected_hash: body.expectedContentHash,
+          };
+        } else return failure("NOT_FOUND");
+        const result = await backend.rpc(rpcName, rpcArgs, token);
+        if (result.error) throw new Error(result.error.message);
+        const data =
+          result.data === null && rpcName === "fsm_get_agreement"
+            ? null
+            : parseAgreement(result.data);
+        if (action === "pdf") {
+          if (data?.status !== "approved") throw new Error("INVALID_STATE");
+          const { agreementPDF } = await import("../_shared/agreement-pdf.ts");
+          const bytes = await agreementPDF(data);
+          // Recheck head/consents after rendering, before issuing bytes. No public storage URL.
+          const fresh = await backend.rpc(rpcName, rpcArgs, token);
+          if (fresh.error) throw new Error(fresh.error.message);
+          const confirmed = parseAgreement(fresh.data);
+          if (
+            confirmed.status !== "approved" ||
+            confirmed.id !== data.id ||
+            confirmed.contentHash !== data.contentHash
+          )
+            throw new Error("STALE_VERSION");
+          const pdfHeaders = new Headers(headers);
+          pdfHeaders.set("Content-Type", "application/pdf");
+          pdfHeaders.set(
+            "Content-Disposition",
+            `attachment; filename="First-Money-Agreement-v${data.versionNumber}.pdf"`,
+          );
+          return new Response(bytes as Uint8Array<ArrayBuffer>, {
+            status: 200,
+            headers: pdfHeaders,
+          });
+        }
+        const created =
+          result.data &&
+          typeof result.data === "object" &&
+          "_created" in result.data &&
+          result.data._created === true;
+        return new Response(JSON.stringify({ ok: true, data, requestId }), {
+          status: created ? 201 : 200,
+          headers,
+        });
+      } else if (financeRoute) {
         const coupleId = uuid(financeRoute[1]);
         if (
           financeRoute[2] === "scenarios" &&

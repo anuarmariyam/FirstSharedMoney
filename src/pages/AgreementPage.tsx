@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import { LiveAgreementPage } from '../features/agreement/LiveAgreementPage';
 import {
   Badge,
   Button,
@@ -17,6 +18,9 @@ import { validateAgreementDraft } from "../features/agreement/validation";
 import type { AgreementDraftInputs } from "../app/demo-context";
 
 export default function AgreementPage() {
+ const {coupleId}=useParams();return coupleId==='demo'?<DemoAgreementPage/>:<LiveAgreementPage/>;
+}
+function DemoAgreementPage() {
   const { agreement, updateAgreement } = useDemo();
   const [errors, setErrors] = useState<
     ReturnType<typeof validateAgreementDraft>

@@ -182,7 +182,9 @@ export function AppLayout() {
               `/sessions/${coupleId}/questionnaire`,
             ) ||
             location.pathname === `/sessions/${coupleId}/differences` ||
-            location.pathname === `/sessions/${coupleId}/simulator` ? (
+            location.pathname === `/sessions/${coupleId}/simulator` ||
+            location.pathname === `/sessions/${coupleId}/agreement` ||
+            location.pathname === `/sessions/${coupleId}/agreement/preview` ? (
               <Outlet
                 context={{ session: live.state.session, reload: live.reload }}
               />

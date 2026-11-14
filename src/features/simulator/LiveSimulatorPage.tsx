@@ -589,6 +589,7 @@ function SimulatorForm({
         )}
       </section>
       <div className="next-step-banner">
+        {current&&current.stressTest===null&&current.output.split.status==='available'&&<ButtonLink to={`/sessions/${coupleId}/agreement?scenario=${current.id}`}>Create money agreement</ButtonLink>}
         <p>
           Scenarios explore choices. They do not change private answers or
           approve an agreement.

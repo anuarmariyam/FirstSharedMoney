@@ -3,7 +3,10 @@
 Status: Phase 2 architecture accepted on 2026-11-14. Phase 4A's session foundation
 is deployed and verified in the approved test project; see PHASE4A_VERIFICATION.md.
 Phase 4B questionnaire persistence/privacy is also verified; see PHASE4B_VERIFICATION.md.
-The broader financial and agreement backend remains planned. Phase 5 has not started.
+Phase 5 financial/comparison and Phase 6 agreement/PDF are now verified in the
+same approved test project: 11 migrations, fsm-api v4 and 143 passing checks.
+See PHASE5.md and PHASE6.md for runtime evidence. The sections below retain the
+approved Phase 2 design; features outside the delivered phases remain planned.
 
 ## 1. Existing project and boundaries
 

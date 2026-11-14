@@ -9,8 +9,13 @@ import { Icon } from "../components/Icon";
 import { useDemo } from "../hooks/useDemo";
 import { formatMoney, parseMoneyInput } from "../lib/money";
 import { validateAgreementDraft } from "../features/agreement/validation";
+import {useParams} from 'react-router';
+import { LiveAgreementPage } from '../features/agreement/LiveAgreementPage';
 
 export default function AgreementDocumentPage() {
+ const {coupleId}=useParams();return coupleId==='demo'?<DemoAgreementDocumentPage/>:<LiveAgreementPage preview/>;
+}
+function DemoAgreementDocumentPage() {
   const { agreement } = useDemo();
   const invalid = Object.keys(validateAgreementDraft(agreement)).length > 0;
   const threshold = parseMoneyInput(agreement.threshold);
