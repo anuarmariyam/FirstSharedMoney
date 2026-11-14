@@ -207,7 +207,9 @@ Phase 3 is preserved on main at local commit 590a234. Phase 4A is saved in
 backend/fsm-core at checkpoint 9a9ddeb, followed by collaboration documentation.
 The frontend/fsm-ux branch starts at stable main and adds only collaboration
 instructions. See [the three-developer workflow](docs/COLLABORATION.md).
-main and frontend/fsm-ux were published earlier with owner approval. The backend
-branch has not been pushed. Nine migrations and one test Edge Function were
+main and frontend/fsm-ux were published earlier with owner approval. Publication
+of backend/fsm-core and feature/fsm-insights with the updated Qwen assignment is
+separately authorized; verify actual remote tips with git fetch/ls-remote.
+Nine migrations and one test Edge Function were
 applied/deployed after separate explicit approval. No Vercel website deployment
 or merge was performed. Phase 5 is verified; Phase 6 has not started.

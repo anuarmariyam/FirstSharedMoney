@@ -14,7 +14,8 @@ English; explanations to the project owner are Russian.
   and visualization of supplied results.
 - feature/fsm-insights is prepared from the Phase 5 handoff (descendant of
   3063cd4), not old main. Member 3 owns only new src/features/insights/,
-  tests/insights/ and docs/insights/ files. Keep engines, auth, API and UI unchanged.
+  tests/insights/ and docs/insights/ files, including a fictional-data Qwen/Groq
+  PoC under tests/insights/qwen-poc/. Keep engines, auth, API and UI unchanged.
 - Read docs/TEAM_MEMBER_2_FRONTEND.md or docs/TEAM_MEMBER_3_INSIGHTS.md for the
   exact task boundary. The current task prepares these briefs, not their implementation.
 - On frontend/fsm-ux, do not change supabase/, scripts/, src/types/, src/services/,
@@ -36,6 +37,9 @@ English; explanations to the project owner are Russian.
 
 Never discard another contributor's changes. No automatic merge, reset, force
 push, or remote publication. Git push requires the owner's explicit approval.
+For the current handoff publication only, the owner explicitly authorized normal
+push of backend/fsm-core and feature/fsm-insights after the Qwen brief update and
+secret audit. No main/frontend push, tags, force push, merge or deployment.
 Never commit local .env files, credentials, build output, test artifacts, or
 Supabase CLI caches. Only blank environment examples belong in Git.
 
@@ -49,6 +53,9 @@ The owner separately approved Phase 5's two migrations, fsm-api v3 deployment,
 and test-owned fixture creation/cleanup after dry-run; these passed. See
 docs/PHASE5.md. Do not start Phase 6 or infer approval for additional cloud scope.
 Never disable JWT verification, RLS, or TLS verification.
+Member 3's P1 AI PoC uses fictional fixtures and a server/local-only Groq key.
+Never use VITE_GROQ_API_KEY, send real-user finances to AI, or upgrade to paid
+services without approval. This does not authorize an AI feature in fsm-api.
 Do not collect real financial data before security verification is complete.
 
 Do not move active VS Code/Codex storage or alter system PATH/TEMP/TMP. Keep

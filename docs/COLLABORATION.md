@@ -10,14 +10,16 @@ it did not repeat mutating cloud tests. This handoff changes documentation only.
 | Branch | Owner | Contents |
 | --- | --- | --- |
 | main | Project owner | Accepted Phase 3 only; remains at 590a234 until an approved change. |
-| backend/fsm-core | Project owner / backend developer | Phase 5 milestone 3063cd4 plus this handoff; local, publication pending. |
+| backend/fsm-core | Project owner / backend developer | Phase 5 milestone 3063cd4 plus handoff/Qwen brief; normal publication now authorized. |
 | frontend/fsm-ux | Member 2 | Remote 9a640e5: stable main plus old collaboration instructions; no new UI commits observed. |
-| feature/fsm-insights | Member 3 | Prepared locally from the Phase 5 handoff, a descendant of 3063cd4; publication pending. Never start it from old main. |
+| feature/fsm-insights | Member 3 | Same updated handoff base, descendant of 3063cd4; normal publication now authorized. Never start it from old main. |
 
 The repository remote is https://github.com/anuarmariyam/FirstSharedMoney.git.
-main and frontend/fsm-ux were pushed with explicit owner approval. The backend
-branch remains local. No push is authorized by this review/handoff request.
-Do not use git push --all: backend work has separate publication authorization.
+main and frontend/fsm-ux were pushed earlier with explicit owner approval. The
+owner now separately authorized normal push of backend/fsm-core and
+feature/fsm-insights after updating the Qwen assignment and auditing secrets.
+Check remote refs to confirm actual publication. No --all, --tags, main/frontend
+push, force push, merge, rebase or website deployment is authorized.
 Do not force-push or merge either work branch automatically.
 
 ## Responsibility boundaries
@@ -30,7 +32,7 @@ Do not force-push or merge either work branch automatically.
 | supabase/, migrations, RLS, Edge Functions, seed/test SQL | Backend owner only. |
 | src/types/, src/services/, src/lib/, src/engines/ | Backend owner; existing engines must not be duplicated or rewritten. |
 | src/app/, src/hooks/ including AuthProvider, useQuestionnaire and useSharedResource | Backend owner; preserve identity, saving, revisions and consent gates. |
-| New src/features/insights/, tests/insights/, docs/insights/ | Member 3's isolated planned-spending interpretation and public-source research; no API/UI/auth/engine changes. |
+| New src/features/insights/, tests/insights/, docs/insights/ | Member 3's isolated planned-spending interpretation, public-source research and fictional-data Qwen/Groq PoC; no API/UI/auth/engine changes. |
 | Questionnaire catalog/validation, agreement validation, financial/demo result fixtures | Backend owner; UI may present these values without changing their semantics. |
 | App.tsx, AppLayout.tsx, SessionPage.tsx, questionnaire/simulator/agreement pages, QuestionField.tsx | Shared: coordinate targeted presentation edits first. Backend owns data flow/auth. |
 | LiveSessionPage, SessionEntryPage, LiveQuestionnairePage, LiveSimulatorPage | Read-only to frontend/Insights contributors; backend integrates their pure presentation components. |
@@ -95,8 +97,10 @@ tests in lgboxbtxutgggvluhhqt. Phase 4B's three additional migrations, fsm-api
 update, and questionnaire tests were separately approved and verified with
 test-data cleanup; see PHASE4A_VERIFICATION.md and PHASE4B_VERIFICATION.md.
 Phase 5's two migrations, fsm-api v3 and test-owned fixture cleanup were separately
-approved and verified; see PHASE5.md. No Phase 6, further cloud mutation, website
-deployment, Git push or automatic merge is authorized by the current handoff.
+approved and verified; see PHASE5.md. Current authorization adds a documentation
+update, normal push of the two named branches, and a Member 3 assignment for a
+fictional-data-only Qwen PoC. No Phase 6, further cloud mutation, website deployment,
+real-user AI analysis or automatic merge is authorized.
 
 ## Review snapshot and synchronization plan
 
@@ -122,12 +126,11 @@ an existing 501.79 kB build entry advisory, and future agreement/export not yet 
 
 ### Backend publication and member 3 base
 
-Keep milestone/phase5 as a local immutable tag of 3063cd4. The owner can publish
-backend/fsm-core and feature/fsm-insights only after separately approving their
-exact tips. Do not push all branches or tags. Neither this tag nor a branch
-publication merges anything into main. No push command is executed by this task.
-After explicit approval, the owner can publish only the two prepared branches
-with these commands (not --all or --tags):
+Keep milestone/phase5 as a local immutable tag of 3063cd4; its publication is not
+authorized. The owner approved normal publication of backend/fsm-core and
+feature/fsm-insights with the updated Qwen brief. Preserve all existing history
+and independently verify the exact remote tips after push. No branch publication
+merges anything into main. Only these two branch pushes are in scope:
 
 ```powershell
 git push --set-upstream origin backend/fsm-core

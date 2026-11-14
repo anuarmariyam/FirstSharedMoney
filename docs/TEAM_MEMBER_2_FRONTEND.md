@@ -17,7 +17,8 @@ At this review, remote `main` is `590a234` (Phase 3), and remote
 `frontend/fsm-ux` is `9a640e5` (Phase 3 plus collaboration instructions). There are
 no new frontend implementation commits or open PRs on GitHub. These are review
 observations, not a claim about unpushed work on your computer. Never discard it.
-The backend branch is not published yet; its publication needs owner approval.
+The owner has authorized backend/Insights branch publication; fetch to confirm
+the available remote refs before inspecting their implementation.
 
 `src/types/domain.ts` and `src/types/engines.ts` are byte-identical between main
 and Phase 5. You can already build typed presentation components on your branch.
@@ -233,7 +234,7 @@ screenshots, commands/results and any skipped checks. Keep CSS/presentation and
 shared integration patches separate. No whole-file reformatting, vendored backend,
 new credentials or unrelated lockfile edits. Request owner review; never merge it.
 
-Branch publication by the owner is pending. After the owner publishes backend,
+Once the authorized backend publication is confirmed by fetch,
 use PR base **backend/fsm-core**, head **frontend/fsm-ux** for integration review;
 do not target main for a UI-only release. Existing branches share Phase 3 history,
 so a review can isolate your changes without copying backend into your branch.
