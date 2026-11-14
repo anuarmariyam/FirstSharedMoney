@@ -180,7 +180,9 @@ export function AppLayout() {
             location.pathname.replace(/\/$/, "") === `/sessions/${coupleId}` ||
             location.pathname.startsWith(
               `/sessions/${coupleId}/questionnaire`,
-            ) ? (
+            ) ||
+            location.pathname === `/sessions/${coupleId}/differences` ||
+            location.pathname === `/sessions/${coupleId}/simulator` ? (
               <Outlet
                 context={{ session: live.state.session, reload: live.reload }}
               />

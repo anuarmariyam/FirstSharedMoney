@@ -4,12 +4,13 @@
 
 A web planning product for couples beginning their first shared financial life.
 
-Current delivery: **Phase 4B — Real Questionnaire Persistence & Privacy**.
-Private questionnaire persistence, submission/reopening, and two independent
-consents are verified in the approved FSM test project. Seven migrations are
-applied and fsm-api version 2 is active with JWT verification. See
+Current delivery: **Phase 5 — Conflict Detection & Financial Simulation**.
+Consent-gated comparison, exact-cent financial calculations, five stress tests,
+and immutable saved scenarios are verified in the approved FSM test project.
+Nine migrations are applied and fsm-api version 3 is active with JWT verification.
+See [Phase 5 implementation and verification](docs/PHASE5.md),
 [Phase 4B verification](docs/PHASE4B_VERIFICATION.md) and the earlier
-[Phase 4A baseline](docs/PHASE4A_VERIFICATION.md). Phase 5 has not started.
+[Phase 4A baseline](docs/PHASE4A_VERIFICATION.md). Phase 6 has not started.
 
 ## Start here
 
@@ -115,29 +116,33 @@ The original in-memory Demo and visual design remain intact.
 | /sessions/demo/agreement              | Local draft rules                                                      |
 | /sessions/demo/agreement/preview      | Unapproved document                                                    |
 
-Live shared financial routes remain unavailable in Phase 4B. A session UUID is only a
-locator; it cannot grant access. Anonymous Auth persists in the browser profile.
+Live comparison requires both comparison consents; shared financial inputs and
+scenarios independently require both budget consents and submitted questionnaires.
+The server calculates scenarios and rechecks revisions before saving. Saved
+scenario URLs restore the form after refresh without storing financial amounts
+in localStorage. A session UUID is only a locator; it cannot grant access.
+Anonymous Auth persists in the browser profile.
 Do not switch A's identity to fill B: use a separate profile or device.
 
 ## Source structure
 
 - src/components: existing shared UI and workspace layout.
 - src/features/questionnaire: catalog, form controls, input validation.
-- src/features/comparison and simulator: explicit fictional fixtures.
+- src/engines: deterministic conflict comparison and BigInt financial calculations.
+- src/features/comparison and simulator: live integration and separate Demo fixtures.
 - src/features/agreement: local rule validation only.
 - src/features/session: create/join handling and live status UI.
 - src/app and src/hooks: separate demo state, actual Auth events, live loading.
-- src/services: Supabase SDK and typed four-operation session adapter.
+- src/services: Supabase SDK and typed session/questionnaire/comparison/scenario adapter.
 - src/types: approved Phase 2 domain/API/engine contracts.
-- supabase/migrations: three-table session slice, indexes, RLS and RPCs.
+- supabase/migrations: session, questionnaire and scenario tables, indexes, RLS and RPCs.
 - supabase/functions: authenticated routed Edge Function and shared validation.
 - tests/backend: transport/configuration unit tests.
 - tests/ui: offline frontend regression tests.
 - tests/live and scripts/test-session-security.ts: actual cloud verification.
 
-No conflict/financial engine, agreement engine,
-independent approval, payment, PDF export, cleanup job, or public deployment is
-implemented. Target architecture beyond the session slice remains future work.
+Agreement engine, independent approval, payment, PDF export, cleanup job, and
+public deployment are not implemented. Phase 6 requires separate authorization.
 
 ## Local verification
 
@@ -173,6 +178,7 @@ acknowledge targeted test mutations:
 ```powershell
 npm.cmd run test:security
 npm.cmd run test:questionnaire
+npm.cmd run test:finance
 npm.cmd run test:live
 ```
 
@@ -182,7 +188,7 @@ join, and expired membership. The live browser test checks separate identities
 and persistence after reload, owner-only answers, conflict/network recovery,
 independent consents, and reopening on isolated port 5175.
 
-All three commands fail preflight if the actual test project is missing. Such a result
+All four commands fail preflight if the actual test project is missing. Such a result
 means **cloud tests did not run**, not that security passed. Tests create only
 fictional session data and clean up records owned by their newly created users.
 Database TLS verification stays enabled.
@@ -196,6 +202,6 @@ backend/fsm-core at checkpoint 9a9ddeb, followed by collaboration documentation.
 The frontend/fsm-ux branch starts at stable main and adds only collaboration
 instructions. See [the two-developer workflow](docs/COLLABORATION.md).
 main and frontend/fsm-ux were published earlier with owner approval. The backend
-branch has not been pushed. Seven migrations and one test Edge Function were
+branch has not been pushed. Nine migrations and one test Edge Function were
 applied/deployed after separate explicit approval. No Vercel website deployment
-or merge was performed. Phase 4B is verified; Phase 5 has not started.
+or merge was performed. Phase 5 is verified; Phase 6 has not started.

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useParams } from "react-router";
+import { LiveSimulatorPage } from "../features/simulator/LiveSimulatorPage";
 import {
   Badge,
   Button,
@@ -20,6 +22,10 @@ import { formatMoney, parseMoneyInput } from "../lib/money";
 import type { SplitPreference } from "../types/domain";
 
 export default function SimulatorPage() {
+  const { coupleId } = useParams();
+  return coupleId === "demo" ? <DemoSimulatorPage /> : <LiveSimulatorPage />;
+}
+function DemoSimulatorPage() {
   const [model, setModel] = useState<SplitPreference>("proportional");
   const [fields, setFields] = useState({ ...baselineFields });
   const [customShare, setCustomShare] = useState(40);

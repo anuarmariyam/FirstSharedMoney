@@ -10,6 +10,7 @@ import type {
   CoupleId,
   CoupleSession,
   FinancialScenario,
+  FinancialInput,
   ISODateTime,
   Partner,
   PrivacyConsent,
@@ -149,6 +150,8 @@ export interface FsmApiContract {
   readonly reopenQuestionnaire: Operation<ReopenQuestionnaireRequest, Questionnaire>
   readonly updatePrivacy: Operation<UpdatePrivacyRequest, Questionnaire>
   readonly getComparison: Operation<null, ComparisonResponse>
+  /** Both budget consents required; provides the approved numeric projection and revisions. */
+  readonly getFinancialInputs: Operation<null, FinancialInput>
   readonly createScenario: Operation<CreateScenarioRequest, FinancialScenario>
   readonly getScenario: Operation<null, FinancialScenario>
   readonly getCurrentAgreement: Operation<null, AgreementVersion | null>

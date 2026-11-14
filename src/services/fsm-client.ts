@@ -28,7 +28,7 @@ export const fsmClient: FsmClient = {
   async request<Operation extends keyof FsmApiContract>(
     operation: Operation,
     body: FsmApiContract[Operation]["request"],
-    resource: { coupleId?: string },
+    resource: { coupleId?: string; scenarioId?: string },
     options?: { signal?: AbortSignal },
   ): Promise<FsmApiContract[Operation]["response"]> {
     if (!backendConfig)
@@ -90,6 +90,31 @@ export const fsmClient: FsmClient = {
         }
         break;
       }
+      case "getComparison":
+      case "getFinancialInputs":
+      case "createScenario":
+      case "getScenario": {
+        const { parseComparison, parseScenario } =
+          await import("../../supabase/functions/_shared/finance-contract.ts");
+        const { financialInput } = await import("../engines/financial.ts");
+        const base = `/couples/${uuid(resource.coupleId)}`;
+        method = operation === "createScenario" ? "POST" : "GET";
+        path =
+          operation === "getComparison"
+            ? `${base}/comparison`
+            : operation === "getFinancialInputs"
+              ? `${base}/financial-inputs`
+              : operation === "getScenario"
+                ? `${base}/scenarios/${uuid(resource.scenarioId)}`
+                : `${base}/scenarios`;
+        parse =
+          operation === "getComparison"
+            ? parseComparison
+            : operation === "getFinancialInputs"
+              ? financialInput
+              : parseScenario;
+        break;
+      }
       default:
         throw new SessionServiceError(
           "NOT_IMPLEMENTED",
@@ -138,6 +163,8 @@ export const fsmClient: FsmClient = {
           ? candidate.code
           : "INTERNAL_ERROR";
       const messages: Record<string, string> = {
+        INPUTS_CHANGED:
+          "Your submitted answers or sharing choices changed. Refresh the inputs before calculating again.",
         STALE_REVISION:
           "Your answers changed in another tab. Review the latest saved answers before retrying.",
         QUESTIONNAIRES_INCOMPLETE:

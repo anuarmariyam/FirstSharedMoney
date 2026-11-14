@@ -42,7 +42,32 @@ runtime.serve(
     {
       async verifyUser(token) {
         const { data, error } = await userClient(token).auth.getUser(token);
-        return !error && !!data.user;
+        return !error && data.user ? { id: data.user.id } : false;
+      },
+      async internalRpc(name, args) {
+        if (
+          ![
+            "fsm_internal_financial_inputs",
+            "fsm_internal_comparison_inputs",
+            "fsm_internal_store_scenario",
+          ].includes(name)
+        )
+          throw new Error("INTERNAL_ERROR");
+        const configured = runtime.env.get("SUPABASE_SECRET_KEYS");
+        const secret =
+          (configured
+            ? (JSON.parse(configured) as Record<string, string>).default
+            : undefined) || runtime.env.get("SUPABASE_SERVICE_ROLE_KEY");
+        if (!secret) throw new Error("INTERNAL_ERROR");
+        const admin = createClient(url, secret, {
+          auth: {
+            persistSession: false,
+            autoRefreshToken: false,
+            detectSessionInUrl: false,
+          },
+        });
+        const { data, error } = await admin.rpc(name, args);
+        return { data, error };
       },
       async rpc(name, args, token) {
         const { data, error } = await userClient(token).rpc(name, args);

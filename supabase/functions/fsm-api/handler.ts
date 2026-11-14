@@ -16,9 +16,18 @@ import {
   questionCode,
   revision,
 } from "../_shared/questionnaire-contract.ts";
+import { financeOperation } from "./finance.ts";
+import { parseScenario } from "../_shared/finance-contract.ts";
 
 export interface SessionBackend {
-  verifyUser(token: string): Promise<boolean>;
+  verifyUser(token: string): Promise<boolean | { id: string }>;
+  internalRpc?: (
+    name: string,
+    args: Record<string, unknown>,
+  ) => Promise<{
+    data: unknown;
+    error: { message: string; code?: string } | null;
+  }>;
   rpc(
     name: string,
     args: Record<string, unknown>,
@@ -29,6 +38,11 @@ export interface SessionBackend {
   }>;
 }
 const knownErrors: Record<string, { status: number; message: string }> = {
+  INPUTS_CHANGED: {
+    status: 409,
+    message:
+      "Submitted answers or permissions changed. Refresh the inputs before calculating again.",
+  },
   STALE_REVISION: {
     status: 409,
     message:
@@ -166,7 +180,8 @@ export function createSessionHandler(
       )
         return failure("UNAUTHENTICATED");
       const token = authorization.slice(7);
-      if (!(await backend.verifyUser(token))) return failure("UNAUTHENTICATED");
+      const verified = await backend.verifyUser(token);
+      if (!verified) return failure("UNAUTHENTICATED");
       const path = new URL(request.url).pathname;
       const marker = path.indexOf("/v1/");
       // Supports the hosted /functions/v1/fsm-api/v1 prefix and local handler tests.
@@ -179,7 +194,49 @@ export function createSessionHandler(
       let args: Record<string, unknown>;
       let parse: (value: unknown) => unknown;
       let status = 200;
-      if (request.method === "POST" && route === "/v1/couples") {
+      const financeRoute =
+        /^\/v1\/couples\/([^/]+)\/(comparison|financial-inputs|scenarios)(?:\/([^/]+))?$/.exec(
+          route,
+        );
+      if (financeRoute) {
+        const coupleId = uuid(financeRoute[1]);
+        if (
+          financeRoute[2] === "scenarios" &&
+          financeRoute[3] &&
+          request.method === "GET"
+        ) {
+          name = "fsm_get_scenario";
+          args = {
+            p_couple_id: coupleId,
+            p_scenario_id: uuid(financeRoute[3]),
+          };
+          parse = parseScenario;
+        } else {
+          if (
+            financeRoute[3] ||
+            (financeRoute[2] === "scenarios"
+              ? request.method !== "POST"
+              : request.method !== "GET")
+          )
+            return failure("NOT_FOUND");
+          if (typeof verified !== "object") return failure("UNAUTHENTICATED");
+          const actorId = uuid(verified.id);
+          const operation = await financeOperation(
+            backend,
+            actorId,
+            coupleId,
+            financeRoute[2] as "comparison" | "financial-inputs" | "scenarios",
+            financeRoute[2] === "scenarios" ? await readBody(request) : null,
+          );
+          return new Response(
+            JSON.stringify({ ok: true, data: operation.data, requestId }),
+            {
+              status: operation.status,
+              headers,
+            },
+          );
+        }
+      } else if (request.method === "POST" && route === "/v1/couples") {
         const body = await readBody(request);
         exactKeys(body, ["requestId"], ["displayName"]);
         name = "fsm_create_session";

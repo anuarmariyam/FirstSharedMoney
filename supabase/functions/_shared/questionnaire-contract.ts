@@ -101,7 +101,7 @@ export function answerValue<Code extends QuestionCode>(
   }
   return { ...row } as unknown as AnswerValueByQuestion[Code];
 }
-function sameJSON(a: unknown, b: unknown): boolean {
+export function sameJSON(a: unknown, b: unknown): boolean {
   if (a === b) return true;
   if (Array.isArray(a) && Array.isArray(b))
     return (
