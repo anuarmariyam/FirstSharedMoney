@@ -96,8 +96,10 @@ test("questionnaire validates, remembers local navigation, and finishes with opt
   await page.getByRole("button", { name: "Previous", exact: true }).click();
   await expect(amount).toHaveValue("0");
   await page.getByRole("button", { name: "Use fictional example" }).click();
-  for (let index = 1; index < 15; index++)
+  for (let index = 1; index < 15; index++) {
     await page.getByRole("button", { name: "Next question" }).click();
+    await expect(page).toHaveURL(new RegExp(`step=${index + 1}$`));
+  }
   await expect(
     page.getByRole("textbox", { name: "Your private note" }),
   ).toBeVisible();

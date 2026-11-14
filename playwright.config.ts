@@ -9,7 +9,7 @@ export default defineConfig({
   reporter: "list",
   timeout: 30_000,
   use: {
-    baseURL: "http://127.0.0.1:5173",
+    baseURL: "http://127.0.0.1:5174",
     channel: "msedge",
     screenshot: "only-on-failure",
     trace: "retain-on-failure",
@@ -27,9 +27,10 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "npm.cmd run dev -- --host 127.0.0.1 --port 5173 --strictPort",
-    url: "http://127.0.0.1:5173",
-    reuseExistingServer: true,
+    command:
+      "npm.cmd run dev -- --mode ui-test --host 127.0.0.1 --port 5174 --strictPort",
+    url: "http://127.0.0.1:5174",
+    reuseExistingServer: false,
     timeout: 20_000,
   },
 });

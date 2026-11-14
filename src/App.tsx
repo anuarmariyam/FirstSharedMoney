@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router";
 import { DemoProvider } from "./app/DemoProvider";
+import { AuthProvider } from "./app/AuthProvider";
 import { AppLayout } from "./components/AppLayout";
 import { LoadingState } from "./components/ui";
 import "./App.css";
@@ -56,31 +57,33 @@ function RouteAccessibility() {
 export default function App() {
   return (
     <BrowserRouter>
-      <DemoProvider>
-        <a href="#main-content" className="skip-link">
-          Skip to main content
-        </a>
-        <RouteAccessibility />
-        <Suspense fallback={<LoadingState />}>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/create" element={<SessionEntryPage />} />
-            <Route path="/join" element={<SessionEntryPage />} />
-            <Route path="/sessions/:coupleId" element={<AppLayout />}>
-              <Route index element={<SessionPage />} />
-              <Route path="questionnaire/*" element={<QuestionnairePage />} />
-              <Route path="differences" element={<DifferencesPage />} />
-              <Route path="simulator" element={<SimulatorPage />} />
-              <Route path="agreement" element={<AgreementPage />} />
-              <Route
-                path="agreement/preview"
-                element={<AgreementDocumentPage />}
-              />
-            </Route>
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </Suspense>
-      </DemoProvider>
+      <AuthProvider>
+        <DemoProvider>
+          <a href="#main-content" className="skip-link">
+            Skip to main content
+          </a>
+          <RouteAccessibility />
+          <Suspense fallback={<LoadingState />}>
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/create" element={<SessionEntryPage />} />
+              <Route path="/join" element={<SessionEntryPage />} />
+              <Route path="/sessions/:coupleId" element={<AppLayout />}>
+                <Route index element={<SessionPage />} />
+                <Route path="questionnaire/*" element={<QuestionnairePage />} />
+                <Route path="differences" element={<DifferencesPage />} />
+                <Route path="simulator" element={<SimulatorPage />} />
+                <Route path="agreement" element={<AgreementPage />} />
+                <Route
+                  path="agreement/preview"
+                  element={<AgreementDocumentPage />}
+                />
+              </Route>
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </Suspense>
+        </DemoProvider>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

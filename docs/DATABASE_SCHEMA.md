@@ -5,6 +5,11 @@ document has been applied to a database or verified against a live instance.
 The schema, policies, and transaction functions must ship together; table DDL
 alone is not a working or secure backend.
 
+Phase 4A prepares the couples/partners/session_invitations slice in four local
+migrations. No migration is applied. Other tables remain future work. The head
+pointer is restricted to NULL until agreement_versions and its composite FK
+are implemented. See [PHASE4A_BACKEND.md](PHASE4A_BACKEND.md).
+
 ## 1. Conventions and relationships
 
 - UUID primary keys use database-generated random UUIDs. All timestamps are

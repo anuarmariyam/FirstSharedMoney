@@ -14,5 +14,11 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true
   },
-  "include": ["playwright.config.ts", "tests/**/*.ts"]
+  "include": [
+    "playwright.config.ts",
+    "playwright.live.config.ts",
+    "tests/**/*.ts",
+    "scripts/**/*.ts",
+    "supabase/functions/**/*.ts"
+  ]
 }

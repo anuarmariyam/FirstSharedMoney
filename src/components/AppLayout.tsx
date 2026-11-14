@@ -1,6 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import { NavLink, Outlet, useParams } from "react-router";
-import { Brand, Badge, EmptyState, ButtonLink } from "./ui";
+import { NavLink, Outlet, useLocation, useParams } from "react-router";
+import {
+  Brand,
+  Badge,
+  Button,
+  EmptyState,
+  ButtonLink,
+  LoadingState,
+} from "./ui";
+import { useLiveSession } from "../hooks/useLiveSession";
 import { Icon } from "./Icon";
 
 const links = [
@@ -28,6 +36,13 @@ const links = [
 
 export function AppLayout() {
   const { coupleId } = useParams();
+  const location = useLocation();
+  const live = useLiveSession(coupleId);
+  const isDemo = coupleId === "demo";
+  const liveSession = live.state.kind === "ready" ? live.state.session : null;
+  const viewer = liveSession?.partners.find(
+    (partner) => partner.id === liveSession.viewerPartnerId,
+  );
   const [menuOpen, setMenuOpen] = useState(false);
   const menuButton = useRef<HTMLButtonElement>(null);
   const sidebar = useRef<HTMLElement>(null);
@@ -90,7 +105,7 @@ export function AppLayout() {
         </div>
         <div className="workspace-label">
           <span className="eyebrow">A little more together</span>
-          <Badge>Demo workspace</Badge>
+          <Badge>{isDemo ? "Demo workspace" : "Shared session"}</Badge>
         </div>
         <nav aria-label="Your plan">
           {links.map((link) => (
@@ -120,7 +135,9 @@ export function AppLayout() {
           <p>Take it one conversation at a time.</p>
           <div className="connection-label">
             <span />
-            Not connected yet
+            {live.state.kind === "ready"
+              ? "Session connected"
+              : "Not connected yet"}
           </div>
         </div>
       </aside>
@@ -138,15 +155,55 @@ export function AppLayout() {
           </button>
           <span className="topbar-title">Your first shared plan</span>
           <div className="topbar-right">
-            <Badge tone="neutral">Frontend preview</Badge>
+            <Badge tone="neutral">
+              {isDemo ? "Frontend preview" : "Session management"}
+            </Badge>
             <span className="avatar">
-              A<span className="avatar-dot" />
+              {isDemo ? "A" : (viewer?.slot ?? "…")}
+              <span className="avatar-dot" />
             </span>
           </div>
         </header>
         <main id="main-content" tabIndex={-1} className="app-main">
-          {coupleId === "demo" ? (
+          {isDemo ? (
             <Outlet />
+          ) : live.state.kind === "loading" ? (
+            <LoadingState />
+          ) : live.state.kind === "ready" ? (
+            location.pathname.replace(/\/$/, "") === `/sessions/${coupleId}` ? (
+              <Outlet
+                context={{ session: live.state.session, reload: live.reload }}
+              />
+            ) : (
+              <EmptyState title="This feature is not connected yet">
+                Phase 4A connects membership and invitations. Financial features
+                are not enabled for live sessions.
+                <div className="mt-6">
+                  <ButtonLink to={`/sessions/${coupleId}`}>
+                    Back to session status
+                  </ButtonLink>
+                </div>
+              </EmptyState>
+            )
+          ) : live.state.kind === "error" ? (
+            <EmptyState title="This session could not be loaded.">
+              {live.state.error.message}
+              <div className="mt-6 flex gap-3">
+                <Button onClick={live.reload}>Retry session status</Button>
+                <ButtonLink to="/create" variant="secondary">
+                  Create or resume a plan
+                </ButtonLink>
+              </div>
+            </EmptyState>
+          ) : live.state.kind === "signed_out" ? (
+            <EmptyState title="This browser does not have session access.">
+              Reopen your original invitation or return to the browser profile
+              that created this plan. A session address alone does not grant
+              access.
+              <div className="mt-6">
+                <ButtonLink to="/create">Create or resume a plan</ButtonLink>
+              </div>
+            </EmptyState>
           ) : (
             <EmptyState title="Live sessions are not connected yet">
               This address cannot open a real session in this frontend preview.

@@ -3,47 +3,31 @@
 **Two people. Different money habits. One shared plan.**
 
 A web planning product for couples beginning their first shared financial life.
-The current delivery is **Phase 3: UI Foundation & Core User Flow**.
 
-## What works locally
+Current delivery: **Phase 4A — Backend Foundation & Secure Session Management**.
+The source is implemented locally. The existing Supabase project's public
+connection and anonymous-sign-in settings have been checked. The CLI is linked;
+read-only inventory and migration dry-run succeeded. The corrected database
+password and verified TLS connection now work. **Cloud-write confirmation is
+pending; no migration is applied and no real Auth/RLS integration test has run.**
+See [preflight status](docs/SUPABASE_PREFLIGHT.md).
 
-- Responsive landing page, session entry screens, and a guided demo workspace.
-- Client-side routes and browser back/forward navigation using React Router.
-- All 15 specified questionnaire prompts, progress, Previous/Next navigation,
-  exact currency input validation, single/multiple choices, slider, optional
-  note, and a separate sharing-preferences screen.
-- Editable in-memory questionnaire drafts and an explicit fictional-data prefill.
-- Labeled static comparison examples with expandable discussion prompts.
-- Equal/proportional/custom fixture views, a visual baseline comparison, editable
-  simulator inputs, and stress-test control explanations.
-- Editable agreement rules and a clearly unapproved draft document preview.
-- Mobile navigation, visible focus styles, labels, keyboard access, and loading,
-  unavailable-feature, validation-error, and empty states.
+## Start here
 
-## What is not connected
+- [Create and configure the actual Supabase test project](docs/SUPABASE_SETUP.md)
+- [Phase 4A implementation, security boundaries, and verification status](docs/PHASE4A_BACKEND.md)
+- [Full architecture and API design](docs/ARCHITECTURE.md)
+- [Database schema](docs/DATABASE_SCHEMA.md)
+- [Target user flow and questionnaire](docs/USER_FLOW.md)
+- [MVP scope](docs/MVP_SCOPE.md)
 
-There is **no Supabase connection, authentication, cloud database, invitation
-redemption, server autosave, comparison engine, simulation engine, server
-versioning, independent approval, payment, PDF export, or deployment**.
+Never send private keys or database passwords through chat or commit them.
+The checked-in environment examples contain no working URL or key.
 
-The demo is a frontend preview, not the future authenticated two-browser jury
-demo. Use fictional information only. All local form state is held in memory
-and resets on refresh. Sharing checkboxes record preview choices only.
-
-Financial results are hand-authored fictional fixtures, not live calculations
-and not results derived from the visitor's questionnaire. Editing simulator
-inputs hides the primary sample result; the separately labeled baseline chart
-continues to illustrate the original fixture. Stress controls explain the
-future transformation without pretending to calculate it.
-
-Live create/join/propose/approve actions are disabled with visible explanations.
-No successful server response, user identity, or approval is fabricated.
-An incoming invitation URL fragment is removed without attempting redemption.
-
-## Run locally
+## Run the local application
 
 Use Node.js satisfying the installed Vite engine range. Initialization used
-Node.js 24.11.1 and npm 11.6.2. Run from the existing project directory:
+Node.js 24.11.1 and npm 11.6.2. From PowerShell:
 
 ```powershell
 Set-Location D:\FirstSharedMoney
@@ -51,91 +35,144 @@ npm.cmd ci
 npm.cmd run dev -- --host 127.0.0.1 --port 5173 --strictPort
 ```
 
-Open http://127.0.0.1:5173/. Stop the server with Ctrl+C.
-The .cmd suffix avoids PowerShell script-policy restrictions.
-
-Project dependencies are in D:\FirstSharedMoney\node_modules.
-The configured user npm cache is D:\npm-cache. When writes must stay strictly
-inside the checkout, use a command-scoped cache without changing that setting:
+Open http://127.0.0.1:5173/. Stop with Ctrl+C. The .cmd suffix avoids PowerShell
+script-policy restrictions. Dependencies are inside this project on D.
+The user npm cache remains D:\npm-cache; command-scoped checkout-only caching
+can be selected without changing the user setting:
 
 ```powershell
 npm.cmd --cache .\node_modules\.cache\npm run build
 ```
 
+## Phase 3 frontend that still works
+
+The responsive landing page and fictional workspace include all 15 specified
+questionnaire prompts, exact-cent input validation, progress and Previous/Next
+navigation, separate sharing choices, discussion examples, simulator controls,
+editable agreement rules, and an explicitly unapproved draft document.
+
+The demo is not authenticated and does not represent a stored couple. All its
+form data is held in memory and resets on refresh. Use fictional information.
+Financial/comparison results are hand-authored fixtures, not algorithms or
+results derived from the visitor's questionnaire. Changed simulator input hides
+the primary sample result; the read-only baseline chart remains labeled.
+
+## Phase 4A session source
+
+After actual project setup, the integrated code calls real Supabase APIs for:
+
+- Explicit anonymous sign-in, with existing-browser identity restoration.
+- A creating a session and receiving a one-use B invitation.
+- A replacing an unused invitation, revoking the old one.
+- B redeeming an invitation under a separate Auth identity.
+- Loading authorized session membership and refreshing status.
+
+These paths are implemented but **not verified against a cloud database yet**.
+With no configuration, Create/Join remain disabled instead of simulating success.
+No local state is treated as a verified identity, membership, or approval.
+
+Root .env.local requires the actual VITE_SUPABASE_URL and
+VITE_SUPABASE_PUBLISHABLE_KEY. Server-only/privileged VITE_ settings are rejected.
+The Edge Function needs only a publishable key and verified user JWTs in Phase 4A;
+no service_role runtime key is needed.
+
+Invitation fragments are captured only in memory and stripped immediately.
+Issuance returns the raw token once; SQL stores only its digest. Refreshing A's
+page loses that in-memory raw invitation, so A can issue a replacement. Losing
+the browser's Auth session has no automatic account recovery.
+
 ## Routes
 
-| Route                                 | Screen                                                           |
-| ------------------------------------- | ---------------------------------------------------------------- |
-| /                                     | Landing                                                          |
-| /create                               | Live-session creation layout, currently unconnected              |
-| /join                                 | Invitation handling layout and explicitly labeled error examples |
-| /sessions/demo                        | Fictional workspace overview                                     |
-| /sessions/demo/questionnaire?step=1   | Sequential 15-question form                                      |
-| /sessions/demo/questionnaire/consent  | Separate preview sharing choices                                 |
-| /sessions/demo/questionnaire/complete | Local completion, never server submission                        |
-| /sessions/demo/differences            | Fictional comparison examples                                    |
-| /sessions/demo/simulator              | Financial UI and labeled static fixtures                         |
-| /sessions/demo/agreement              | Local agreement rules                                            |
-| /sessions/demo/agreement/preview      | Unapproved draft document                                        |
+| Route                                 | Behavior                                                               |
+| ------------------------------------- | ---------------------------------------------------------------------- |
+| /                                     | Landing                                                                |
+| /create                               | Actual create flow when configured; honest unavailable state otherwise |
+| /join#token=...                       | In-memory invitation capture and explicit join                         |
+| /sessions/:coupleId                   | Authorized real session status when configured                         |
+| /sessions/demo                        | Separate fictional workspace                                           |
+| /sessions/demo/questionnaire?step=1   | Sequential 15-question preview                                         |
+| /sessions/demo/questionnaire/consent  | Preview sharing choices                                                |
+| /sessions/demo/questionnaire/complete | Local completion, not server submission                                |
+| /sessions/demo/differences            | Fictional comparison examples                                          |
+| /sessions/demo/simulator              | Static examples and financial input UI                                 |
+| /sessions/demo/agreement              | Local draft rules                                                      |
+| /sessions/demo/agreement/preview      | Unapproved document                                                    |
 
-Unknown session IDs show a not-connected state. Unknown pages show a 404 view.
+Live financial routes remain unavailable in Phase 4A. A session UUID is only a
+locator; it cannot grant access. Anonymous Auth persists in the browser profile.
+Do not switch A's identity to fill B: use a separate profile or device.
 
-## Frontend structure and integration
+## Source structure
 
-- src/components: shared UI, workspace layout, icons, and workflow presentation.
-- src/features/questionnaire: typed catalog, form fields, and input validation.
-- src/features/comparison: explicitly fictional editorial examples.
-- src/features/simulator: static financial fixtures and summary presentation.
-- src/features/agreement: local rule validation.
-- src/app and src/hooks: in-memory preview state, separated from server identity.
-- src/services/fsm-client.ts: generic typed client port using the Phase 2 API
-  contract; its current implementation fails explicitly as not connected.
-- src/types: unchanged Phase 2 domain, API, and engine contracts.
-- src/pages: route composition and interaction state.
-- tests/ui: browser interaction and responsive verification.
+- src/components: existing shared UI and workspace layout.
+- src/features/questionnaire: catalog, form controls, input validation.
+- src/features/comparison and simulator: explicit fictional fixtures.
+- src/features/agreement: local rule validation only.
+- src/features/session: create/join handling and live status UI.
+- src/app and src/hooks: separate demo state, actual Auth events, live loading.
+- src/services: Supabase SDK and typed four-operation session adapter.
+- src/types: approved Phase 2 domain/API/engine contracts.
+- supabase/migrations: three-table session slice, indexes, RLS and RPCs.
+- supabase/functions: authenticated routed Edge Function and shared validation.
+- tests/backend: transport/configuration unit tests.
+- tests/ui: offline frontend regression tests.
+- tests/live and scripts/test-session-security.ts: actual cloud verification.
 
-Phase 4 can add an authenticated client adapter and session-aware hooks while
-reusing form controls, the catalog, validation, layouts, and document rendering.
-Replace fixtures with validated API DTOs only when their engine/access checks
-exist. The local demo provider is not an authentication or authorization layer.
-Do not connect real data by simply toggling the client's connection flag.
+No questionnaire persistence, conflict/financial engine, agreement engine,
+independent approval, payment, PDF export, cleanup job, or public deployment is
+implemented. Target architecture beyond the session slice remains future work.
 
-Runtime additions: React Router for route history and lazy page composition.
-Tailwind CSS and its Vite plugin provide the styling foundation. Playwright is a
-development dependency for browser verification, using installed Microsoft Edge.
-No chart library is needed for the small static comparisons.
-
-## Checks
+## Local verification
 
 ```powershell
 npm.cmd run typecheck
 npm.cmd run lint
 npm.cmd run build
+npm.cmd run test:backend
 npm.cmd run test:ui
 ```
 
-Strict typechecking includes the frontend, tooling, and browser tests in separate
-TypeScript projects. The build output is dist/. Browser verification uses the
-installed Edge channel; no browser binary download is required on this machine.
-For another machine, install Edge or deliberately change the test channel.
+Strict typechecking covers frontend, tooling, tests, and Edge-source contracts.
+It is not proof of Deno execution or a deployed database. Backend unit tests use
+transport mocks and must not be described as real Auth/RLS tests.
 
-The browser suite covers route navigation, all questionnaire steps, invalid and
-exact money input, consent defaults/guards, memory reset on refresh, simulator
-fixture boundaries, agreement validation, disabled live actions, fragment
-removal, keyboard access, and horizontal overflow at desktop (1440), tablet
-(834), and mobile (390) widths. Browser console errors fail the tests.
+The offline Playwright suite starts a separate server on port 5174 in ui-test
+mode, which explicitly removes Supabase configuration. It cannot accidentally
+write to a real project. It checks desktop/tablet/mobile, navigation, form
+validation, sharing choices, keyboard access, fixture boundaries, local draft
+editing, memory reset, invitation fragment removal, and horizontal overflow.
+Browser console errors fail the suite. Installed Microsoft Edge is used.
 
-Screenshots are generated under artifacts/screenshots/. Test output is under
-artifacts/test-results/. Both are ignored by Git. These tests verify the UI;
-they do not prove RLS, server transactionality, independent approvals, or financial
-engine correctness, which remain later work.
+Screenshots and test results are written under ignored artifacts/. No financial
+or authentication live-test trace is intentionally captured.
 
-## Design documentation
+## Real cloud verification
 
-- [Architecture, security, and API](docs/ARCHITECTURE.md)
-- [Database schema and transaction design](docs/DATABASE_SCHEMA.md)
-- [User journey and questionnaire specification](docs/USER_FLOW.md)
-- [MVP scope and delivery gates](docs/MVP_SCOPE.md)
+After configuring a separate disposable test project as described in
+SUPABASE_SETUP.md, copy tests/security.env.example to ignored root
+.env.security.local, supply the actual project/database settings, and explicitly
+acknowledge targeted test mutations:
 
-No cloud project is connected, no remote repository is configured, and no code
-has been published as part of Phase 3.
+```powershell
+npm.cmd run test:security
+npm.cmd run test:live
+```
+
+The security suite exercises real A/B/C Auth identities, PostgREST/RPC, Edge,
+expiry, revocation, replay, direct-write denials, identity forgery, concurrent
+join, and expired membership. The live browser test checks separate identities
+and persistence after reload on isolated port 5175.
+
+Both commands fail preflight if the actual test project is missing. Such a result
+means **cloud tests did not run**, not that security passed. Tests create only
+fictional session data and clean up records owned by their newly created users.
+Database TLS verification stays enabled.
+
+Runtime addition: @supabase/supabase-js. Development additions: pg and @types/pg,
+which are remote database clients/types, not a PostgreSQL server. Docker, local
+PostgreSQL, Deno CLI, .NET, and Python ML libraries were not installed.
+
+Phase 3 is preserved in local commit 590a234. Phase 4A changes are local and
+uncommitted for review. No Git push, Vercel deployment, cloud project creation,
+migration application, or Edge deployment has been performed. Phase 4B has not
+started.

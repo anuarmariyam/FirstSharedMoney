@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router";
+import { useState } from "react";
+import { Link, useParams } from "react-router";
 import {
   Badge,
   Brand,
@@ -7,143 +7,19 @@ import {
   ButtonLink,
   DemoNotice,
   EmptyState,
-  Input,
-  Notice,
   PageHeading,
 } from "../components/ui";
 import { Icon } from "../components/Icon";
 import { useDemo } from "../hooks/useDemo";
-import { fsmClient } from "../services/fsm-client";
+import { LiveSessionPage } from "../features/session/LiveSessionPage";
 
-export function SessionEntryPage() {
-  const isJoin = useLocation().pathname === "/join";
-  const navigate = useNavigate();
-  const [name, setName] = useState("");
-  const [error, setError] = useState("");
-  const [inviteState, setInviteState] = useState<
-    "unavailable" | "expired" | "invalid"
-  >("unavailable");
-  useEffect(() => {
-    if (isJoin && window.location.hash)
-      window.history.replaceState(
-        window.history.state,
-        "",
-        window.location.pathname + window.location.search,
-      );
-  }, [isJoin]);
-  return (
-    <div className="entry-page">
-      <header className="content-width landing-header">
-        <Brand />
-        <ButtonLink to="/" variant="ghost">
-          <Icon name="back" size={17} />
-          Back home
-        </ButtonLink>
-      </header>
-      <main id="main-content" tabIndex={-1} className="entry-main">
-        <div className="entry-intro">
-          <Badge>YOUR NEXT CHAPTER</Badge>
-          <h1>
-            {isJoin
-              ? "A plan with room for you."
-              : "A little clarity starts here."}
-          </h1>
-          <p>
-            {isJoin
-              ? "One invitation. Two perspectives. A conversation you build together."
-              : "First your perspective. Then a shared conversation. Finally, a plan you can both stand behind."}
-          </p>
-          <div className="entry-steps">
-            <span>
-              <Icon name="document" />
-              Your perspective
-            </span>
-            <i />
-            <span>
-              <Icon name="people" />
-              Your conversation
-            </span>
-            <i />
-            <span>
-              <Icon name="heart" />
-              Your shared plan
-            </span>
-          </div>
-        </div>
-        <section className="entry-card">
-          <div className="feature-icon">
-            <Icon name={isJoin ? "link" : "people"} size={26} />
-          </div>
-          <h2>{isJoin ? "Join your partner" : "Create your shared space"}</h2>
-          <p className="muted">
-            {isJoin
-              ? "A valid invitation will connect a separate partner identity in the live product."
-              : "Live sessions will give each partner their own private access."}
-          </p>
-          <Input
-            id="display-name"
-            label="What should we call you?"
-            value={name}
-            onChange={(event) => {
-              setName(event.target.value);
-              setError("");
-            }}
-            maxLength={80}
-            placeholder="A first name or nickname"
-            hint="Optional. A nickname is fine. Use fictional details."
-            error={error}
-          />
-          <Notice title="Not connected yet">
-            {isJoin && inviteState !== "unavailable"
-              ? `Invitation ${inviteState} — example error state only. No live invitation has been checked.`
-              : "Live session creation, invitations, and secure access will be connected in a later phase. This form does not create an account or save your name."}
-          </Notice>
-          <Button
-            disabled={fsmClient.connection === "not_connected"}
-            className="w-full"
-          >
-            <Icon name="lock" size={17} />
-            {isJoin
-              ? "Join session — not connected"
-              : "Create session — not connected"}
-          </Button>
-          <div className="entry-divider">
-            <span>or take a look around</span>
-          </div>
-          <Button
-            variant="secondary"
-            className="w-full"
-            onClick={() => {
-              if (name.trim().length > 40) {
-                setError("Use 40 characters or fewer.");
-                return;
-              }
-              navigate("/sessions/demo");
-            }}
-          >
-            Explore the fictional demo <Icon name="arrow" size={17} />
-          </Button>
-          {isJoin && (
-            <div className="invite-state-examples">
-              <span>Preview invitation states:</span>
-              <button onClick={() => setInviteState("expired")}>Expired</button>
-              <button onClick={() => setInviteState("invalid")}>Invalid</button>
-              <button onClick={() => setInviteState("unavailable")}>
-                Not connected
-              </button>
-            </div>
-          )}
-          <p className="entry-bottom">
-            <Icon name="info" size={14} />
-            No real financial information, please.
-          </p>
-        </section>
-      </main>
-    </div>
-  );
-}
+export { SessionEntryPage } from "../features/session/SessionEntryPage";
 
 export default function SessionPage() {
+  const { coupleId } = useParams();
+  return coupleId === "demo" ? <DemoSessionPage /> : <LiveSessionPage />;
+}
+function DemoSessionPage() {
   const demo = useDemo();
   const [resetMessage, setResetMessage] = useState("");
   return (

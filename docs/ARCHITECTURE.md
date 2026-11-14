@@ -1,8 +1,8 @@
 # FirstSharedMoney: System Architecture
 
-Status: Phase 2 architecture accepted on 2026-11-14. Phase 3 adds the local
-frontend preview described in README.md. The backend, database security,
-financial engines, and server-verified approvals below remain design contracts.
+Status: Phase 2 architecture accepted on 2026-11-14. Phase 4A adds the local
+session foundation described in PHASE4A_BACKEND.md. No cloud project is configured
+or verified; the broader financial and agreement backend remains planned.
 
 ## 1. Existing project and boundaries
 
@@ -68,7 +68,7 @@ src/
   lib/                         parsing, money formatting, validated identifiers
   hooks/                       session and visibility-aware polling hooks
   types/                       domain models, API DTOs, engine ports
-supabase/                      future migrations and Edge Functions
+supabase/                      session migrations and Edge Function foundation
 docs/                          implementation design and scope
 ```
 

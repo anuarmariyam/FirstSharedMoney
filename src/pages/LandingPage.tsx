@@ -201,9 +201,10 @@ export default function LandingPage() {
                 <Icon name="chevron" />
               </summary>
               <p>
-                Not in this preview. Local drafts stay in memory and reset when
-                you refresh. Use fictional details; live sessions, storage, and
-                approvals are not connected yet.
+                The fictional demo stays in memory and resets when you refresh.
+                Configured live sessions store membership and invitations in
+                Supabase. Financial questionnaires and approvals are not
+                connected yet; use fictional details during testing.
               </p>
             </details>
           </div>
@@ -226,7 +227,7 @@ export default function LandingPage() {
       <footer className="landing-footer content-width">
         <Brand />
         <p>Personal planning, not financial or legal advice.</p>
-        <span>Frontend preview · No live accounts</span>
+        <span>Fictional demo · Financial features not connected</span>
       </footer>
     </div>
   );
