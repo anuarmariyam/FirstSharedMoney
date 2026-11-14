@@ -1,0 +1,34 @@
+# Review routing becomes effective only after this file is on the PR base branch.
+# Required code-owner review also needs the corresponding repository rule.
+/AGENTS.md @anuarmariyam
+/.github/ @anuarmariyam
+/docs/ARCHITECTURE.md @anuarmariyam
+/docs/DATABASE_SCHEMA.md @anuarmariyam
+/docs/USER_FLOW.md @anuarmariyam
+/docs/MVP_SCOPE.md @anuarmariyam
+/docs/COLLABORATION.md @anuarmariyam
+/supabase/ @anuarmariyam
+/scripts/ @anuarmariyam
+/src/types/ @anuarmariyam
+/src/services/ @anuarmariyam
+/src/lib/ @anuarmariyam
+/src/engines/ @anuarmariyam
+/src/app/AuthProvider.tsx @anuarmariyam
+/src/app/auth-context.ts @anuarmariyam
+/src/hooks/useBrowserAuth.ts @anuarmariyam
+/src/hooks/useLiveSession.ts @anuarmariyam
+/src/features/questionnaire/catalog.ts @anuarmariyam
+/src/features/questionnaire/validation.ts @anuarmariyam
+/src/features/agreement/validation.ts @anuarmariyam
+/src/features/comparison/demo-results.ts @anuarmariyam
+/src/features/simulator/demo-fixtures.ts @anuarmariyam
+/src/features/*/engine/ @anuarmariyam
+/tests/backend/ @anuarmariyam
+/tests/live/ @anuarmariyam
+/tests/security.env.example @anuarmariyam
+/package.json @anuarmariyam
+/package-lock.json @anuarmariyam
+/vite.config.ts @anuarmariyam
+/tsconfig*.json @anuarmariyam
+/playwright*.config.ts @anuarmariyam
+/.env.example @anuarmariyam
