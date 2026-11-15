@@ -1,9 +1,13 @@
 import { test as base, expect } from "@playwright/test";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { modelFixtures } from "../../src/features/simulator/demo-fixtures.ts";
 import { parseMoneyInput } from "../../src/lib/money.ts";
 import { questions } from "../../src/features/questionnaire/catalog.ts";
 import { validateAnswer } from "../../src/features/questionnaire/validation.ts";
+
+async function writeIfChanged(file: string, source: string) {
+  if (await readFile(file, 'utf8').catch(() => null) !== source) await writeFile(file, source);
+}
 
 const test = base.extend<{ consoleErrors: string[] }>({
   consoleErrors: [
@@ -54,7 +58,7 @@ test("landing links, browser history, and mobile navigation work", async ({
     "Money is personal.",
   );
   await page
-    .getByRole("link", { name: "Try Demo", exact: true })
+    .getByRole("link", { name: "Explore Preview", exact: true })
     .first()
     .click();
   await expect(page).toHaveURL(/\/sessions\/demo$/);
@@ -96,7 +100,7 @@ test("questionnaire validates, remembers local navigation, and finishes with opt
   await expect(page).toHaveURL(/step=2$/);
   await page.getByRole("button", { name: "Previous", exact: true }).click();
   await expect(amount).toHaveValue("0");
-  await page.getByRole("button", { name: "Use fictional example" }).click();
+  await page.getByRole("button", { name: "Use example answers" }).click();
   for (let index = 1; index < 15; index++) {
     await page.getByRole("button", { name: "Next question" }).click();
     await expect(page).toHaveURL(new RegExp(`step=${index + 1}$`));
@@ -159,7 +163,7 @@ test("fixture results never pretend to recalculate changed inputs", async ({
 }) => {
   await page.goto("/sessions/demo/simulator");
   await expect(
-    page.getByText("Sample Data. These fixed examples", { exact: false }),
+    page.getByText("Explore a fixed example budget", { exact: false }),
   ).toBeVisible();
   await expect(page.locator(".financial-summary")).toContainText("$2,000");
   await page.getByRole("button", { name: "Equal", exact: true }).click();
@@ -169,11 +173,11 @@ test("fixture results never pretend to recalculate changed inputs", async ({
     .fill("2500");
   await expect(
     page.getByRole("heading", {
-      name: "Live calculations are available in the connected app.",
+      name: "Start your plan to explore your own numbers.",
     }),
   ).toBeVisible();
   await expect(page.locator(".financial-summary")).toHaveCount(0);
-  await page.getByRole("button", { name: "Restore Sample Data" }).click();
+  await page.getByRole("button", { name: "Restore example plan" }).click();
   await page.getByRole("button", { name: "Custom", exact: true }).click();
   await page.getByRole("slider", { name: "Partner A’s share" }).focus();
   await page.getByRole("slider", { name: "Partner A’s share" }).press("Home");
@@ -217,7 +221,7 @@ test("agreement editing validates and produces only an unapproved draft", async 
     page.getByText("UNAPPROVED DRAFT", { exact: true }),
   ).toBeVisible();
   await expect(
-    page.getByText("Not approved · Demo", { exact: true }),
+    page.getByText("Not approved · Preview", { exact: true }),
   ).toHaveCount(2);
 });
 
@@ -228,7 +232,7 @@ test("live actions are disabled and invitation fragments are removed", async ({
   await expect(
     page.getByRole("button", { name: "Create session" }),
   ).toBeDisabled();
-  await page.goto("/join#token=fictional-preview-token");
+  await page.goto("/join#token=example-preview-token");
   await expect(page).toHaveURL(/\/join$/);
   await expect(
     page.getByRole("button", { name: "Join session" }),
@@ -241,7 +245,7 @@ test("live actions are disabled and invitation fragments are removed", async ({
   ).toBeVisible();
   await page.goto("/sessions/not-a-real-session");
   await expect(page.getByRole("heading")).toContainText(
-    "Open a session in the connected app",
+    "Open your shared plan",
   );
 });
 
@@ -275,11 +279,11 @@ test("screens render without horizontal overflow at the target viewport", async 
   }
 });
 
-// Isolated, fictional presentation harness; generated under ignored artifacts/.
+// Isolated, example presentation harness; generated under ignored artifacts/.
 // No routes, production fixtures, API mocks or financial calculators are added.
 test.beforeAll(async () => {
   await mkdir("artifacts", { recursive: true });
-  await writeFile(
+  await writeIfChanged(
     "artifacts/financial-preview.tsx",
     `
     import React from 'react';
@@ -478,7 +482,7 @@ test("consent and print preview preserve independent choices and unapproved stat
   page,
 }, info) => {
   await page.goto("/sessions/demo/questionnaire");
-  await page.getByRole("button", { name: "Use fictional example" }).click();
+  await page.getByRole("button", { name: "Use example answers" }).click();
   for (let index = 1; index < 15; index++)
     await page.getByRole("button", { name: "Next question" }).click();
   await page.getByRole("button", { name: "Review sharing choices" }).click();
@@ -500,7 +504,7 @@ test("consent and print preview preserve independent choices and unapproved stat
     page.getByText("UNAPPROVED DRAFT", { exact: true }),
   ).toBeVisible();
   await expect(
-    page.getByText("Not approved · Demo", { exact: true }),
+    page.getByText("Not approved · Preview", { exact: true }),
   ).toHaveCount(2);
   await page.screenshot({
     path: `artifacts/screenshots/${info.project.name}-document-print.png`,
@@ -534,6 +538,6 @@ test("server confirmations display one partner without confirming the other", as
   await expect(
     region.getByText("Pending confirmation", { exact: true }),
   ).toHaveCount(1);
-  await expect(region).toContainText("Version ID: version-7");
+  await expect(region).not.toContainText("Version ID:");
   await expect(region).toContainText("Nov 14, 2026");
 });

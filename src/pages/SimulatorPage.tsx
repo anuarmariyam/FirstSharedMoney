@@ -1,4 +1,6 @@
 import { BudgetOverview } from "../components/financial/BudgetOverview";
+import { InsightsPanel } from "../features/financial-insights/InsightsPanel";
+import { financialInput } from "../engines/financial";
 import { useState } from "react";
 import { useParams } from "react-router";
 import { LiveSimulatorPage } from "../features/simulator/LiveSimulatorPage";
@@ -82,14 +84,14 @@ function DemoSimulatorPage() {
         description="Explore ways to share everyday costs, with room for each person’s circumstances."
       />
       <DemoNotice>
-        Sample Data. These fixed examples are independent of your questionnaire.
-        Changing demo inputs hides the sample result; use the connected app for
+        Explore a fixed example budget, independent of your questionnaire.
+        Edited amounts hide the example results. Start your plan for
         live calculations.
       </DemoNotice>
       <div className="simulator-grid">
         <section className="surface simulator-inputs">
           <div className="section-title-row">
-            <h2>The example budget</h2>
+            <h2>Example budget</h2>
             <Button
               variant="ghost"
               onClick={reset}
@@ -101,7 +103,7 @@ function DemoSimulatorPage() {
           </div>
           <p className="muted small-copy">
             Explore the sample budget below. Edited amounts are not recalculated
-            in Demo.
+            in preview.
           </p>
           <div className="income-inputs">
             {moneyField("incomeA", "Partner A · take-home income")}
@@ -132,7 +134,7 @@ function DemoSimulatorPage() {
           <section className="surface model-panel">
             <div className="section-title-row">
               <h2>Three ways to share</h2>
-              <Badge>Sample Data</Badge>
+
             </div>
             <div
               className="model-switch"
@@ -183,7 +185,7 @@ function DemoSimulatorPage() {
                   <span>Partner B · {partnerBShare}%</span>
                 </div>
                 <p className="field-hint">
-                  Only the 40% / 60% fictional result is available in this
+                  Only the 40% / 60% example result is available in this
                   preview.
                 </p>
               </div>
@@ -200,22 +202,24 @@ function DemoSimulatorPage() {
                   monthlyTotalCents={fixture.result.monthlySharedTotalCents}
                 />
                 <FinancialSummary result={fixture.result} />
-                <div className="fixture-caption">
-                  <Icon name="info" size={14} />
-                  Sample Data · fixed monthly results
-                </div>
+                <InsightsPanel key={model} output={{ split: fixture.result, reserveUsedCents: sampleAmount('0'), effectiveInput: financialInput({
+                  currency: 'USD', sourceRevisions: { A: 1, B: 1 },
+                  partners: { A: { monthlyNetIncomeCents: sampleAmount(baselineFields.incomeA), monthlyPersonalObligationsCents: 60000 }, B: { monthlyNetIncomeCents: sampleAmount(baselineFields.incomeB), monthlyPersonalObligationsCents: 30000 } },
+                  sharedExpenses: sampleExpenses, sharedEmergencyFundCents: sampleAmount(baselineFields.reserve), oneOffSharedExpenseCents: 0,
+                }) }} />
+
               </>
             ) : (
               <EmptyState
                 icon="sliders"
-                title="Live calculations are available in the connected app."
+                title="Start your plan to explore your own numbers."
               >
-                You changed the demo inputs. Restore Sample Data to see the
+                You changed the example inputs. Restore example plan to see the
                 fixed example, or use the connected app to calculate your own
                 plan.
                 <div className="mt-5">
                   <Button variant="secondary" onClick={reset}>
-                    Restore Sample Data
+                    Restore example plan
                   </Button>
                 </div>
               </EmptyState>
@@ -224,7 +228,7 @@ function DemoSimulatorPage() {
           <section className="surface model-comparison">
             <h2>See the approaches side by side</h2>
             <p className="muted small-copy">
-              Read-only comparison of the original $3,200 fictional budget.
+              Read-only comparison of the original $3,200 example budget.
             </p>
             <div className="comparison-chart">
               {(["equal", "proportional", "custom"] as const).map((key) => (
@@ -247,7 +251,7 @@ function DemoSimulatorPage() {
             <p className="eyebrow">LIFE DOESN’T ALWAYS FOLLOW THE PLAN</p>
             <h2>Leave room for the what-ifs.</h2>
           </div>
-          <Badge tone="neutral">Demo scenarios</Badge>
+          <Badge tone="neutral">Example scenarios</Badge>
         </div>
         <div className="stress-grid">
           {stressExamples.map((item) => (
@@ -275,7 +279,7 @@ function DemoSimulatorPage() {
                   : stress === "savings_change"
                     ? "Explore a $500 monthly savings allocation, replacing the existing target."
                     : "Explore a $1,000 one-time bill. The engine uses the reserve before splitting the uncovered cost."}{" "}
-            Demo keeps the baseline unchanged. The connected app calculates the
+            This example keeps the baseline unchanged. Your own plan calculates the
             impact.
           </Notice>
         )}
@@ -290,7 +294,7 @@ function DemoSimulatorPage() {
           <p className="eyebrow">FROM POSSIBILITIES TO A SHARED DRAFT</p>
           <h2>Give the conversation a little structure.</h2>
           <p>
-            The agreement preview uses the original fictional proportional
+            The agreement preview uses the original example proportional
             example.
           </p>
         </div>

@@ -12,7 +12,7 @@ export function AgreementConfirmations({
       <p>
         {version
           ? `Version ${version.versionNumber} · ${version.status.replace("_", " ")}`
-          : "Demo draft · no server version · neither partner has approved."}
+          : "Example draft. Neither partner has approved."}
       </p>
       <div className="document-approval">
         {(["A", "B"] as const).map((slot) => {
@@ -25,11 +25,10 @@ export function AgreementConfirmations({
                   ? "Confirmed"
                   : version
                     ? "Pending confirmation"
-                    : "Not approved · Demo"}
+                    : "Not approved · Preview"}
               </span>
               {approval && (
                 <>
-                  <span>Version ID: {approval.versionId}</span>
                   <time dateTime={approval.approvedAt}>
                     {new Intl.DateTimeFormat("en-US", {
                       dateStyle: "medium",
@@ -38,9 +37,6 @@ export function AgreementConfirmations({
                     }).format(new Date(approval.approvedAt))}{" "}
                     UTC
                   </time>
-                  <span className="confirmation-hash">
-                    Content hash: {approval.contentHash}
-                  </span>
                 </>
               )}
             </div>

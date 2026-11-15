@@ -42,7 +42,7 @@ export default function QuestionnairePage() {
   );
 }
 function DemoQuestionnairePage() {
-  const demo = useDemo();
+  const preview = useDemo();
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
@@ -62,7 +62,7 @@ function DemoQuestionnairePage() {
   const isConsent = location.pathname.endsWith("/consent");
   const isComplete = location.pathname.endsWith("/complete");
   const firstInvalid = questions.findIndex(
-    (item) => validateAnswer(item, demo.answers[item.code]) !== null,
+    (item) => validateAnswer(item, preview.answers[item.code]) !== null,
   );
   useEffect(() => {
     heading.current?.focus();
@@ -74,7 +74,7 @@ function DemoQuestionnairePage() {
     navigate(`/sessions/demo/questionnaire?step=${next + 1}`);
   }
   function next() {
-    const message = validateAnswer(question, demo.answers[question.code]);
+    const message = validateAnswer(question, preview.answers[question.code]);
     if (message) {
       setError(message);
       return;
@@ -91,7 +91,7 @@ function DemoQuestionnairePage() {
     return (
       <div className="questionnaire-wrap">
         <DemoNotice />
-        {demo.questionnaireComplete ? (
+        {preview.questionnaireComplete ? (
           <section className="surface completion-card">
             <span className="completion-icon">
               <Icon name="check" size={32} />
@@ -111,7 +111,7 @@ function DemoQuestionnairePage() {
               <div>
                 <span>Comparison summary</span>
                 <strong>
-                  {demo.consent.comparison
+                  {preview.consent.comparison
                     ? "Selected in preview"
                     : "Not selected"}
                 </strong>
@@ -119,7 +119,7 @@ function DemoQuestionnairePage() {
               <div>
                 <span>Shared budget inputs</span>
                 <strong>
-                  {demo.consent.budget ? "Selected in preview" : "Not selected"}
+                  {preview.consent.budget ? "Selected in preview" : "Not selected"}
                 </strong>
               </div>
             </div>
@@ -169,7 +169,7 @@ function DemoQuestionnairePage() {
             className="surface question-card consent-card"
             onSubmit={(event) => {
               event.preventDefault();
-              demo.finishQuestionnaire();
+              preview.finishQuestionnaire();
               navigate("/sessions/demo/questionnaire/complete");
             }}
           >
@@ -187,10 +187,10 @@ function DemoQuestionnairePage() {
             <label className="consent-option">
               <input
                 type="checkbox"
-                checked={demo.consent.comparison}
+                checked={preview.consent.comparison}
                 onChange={(event) =>
-                  demo.updateConsent({
-                    ...demo.consent,
+                  preview.updateConsent({
+                    ...preview.consent,
                     comparison: event.target.checked,
                   })
                 }
@@ -206,10 +206,10 @@ function DemoQuestionnairePage() {
             <label className="consent-option">
               <input
                 type="checkbox"
-                checked={demo.consent.budget}
+                checked={preview.consent.budget}
                 onChange={(event) =>
-                  demo.updateConsent({
-                    ...demo.consent,
+                  preview.updateConsent({
+                    ...preview.consent,
                     budget: event.target.checked,
                   })
                 }
@@ -222,9 +222,9 @@ function DemoQuestionnairePage() {
                 </span>
               </span>
             </label>
-            <Notice title="Preview choices only">
+            <Notice title="Your choices in this preview">
               In real sessions, sharing requires both partners’ permission.
-              These demo choices do not grant access to real data.
+              These preview choices do not grant access to real data.
             </Notice>
             <div className="question-actions">
               <ButtonLink
@@ -258,7 +258,7 @@ function DemoQuestionnairePage() {
           variant="ghost"
           className="load-example"
           onClick={() => {
-            demo.loadExample();
+            preview.loadExample();
             setError("");
             setExampleMessage(
               "Fictional answers loaded for all 15 questions. You can edit them.",
@@ -266,7 +266,7 @@ function DemoQuestionnairePage() {
           }}
         >
           <Icon name="spark" size={16} />
-          Use fictional example
+          Use example answers
         </Button>
       </div>
       {exampleMessage && (
@@ -293,10 +293,10 @@ function DemoQuestionnairePage() {
         <p className="question-help">{question.helpText}</p>
         <QuestionField
           question={question}
-          value={demo.answers[question.code]}
+          value={preview.answers[question.code]}
           error={error}
           onChange={(value) => {
-            demo.updateAnswer(question.code, value);
+            preview.updateAnswer(question.code, value);
             setError("");
           }}
         />
@@ -317,8 +317,8 @@ function DemoQuestionnairePage() {
       <div className="question-reassurance">
         <Icon name="lock" size={15} />
         <p>
-          A little honesty, at your own pace. Use fictional details in this
-          demo.
+          A little honesty, at your own pace. Use example details in this
+          preview.
         </p>
       </div>
     </div>

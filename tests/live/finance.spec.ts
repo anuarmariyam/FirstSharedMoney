@@ -158,7 +158,7 @@ test("live derived comparison and financial scenarios update, persist and honor 
     const insights = a.getByRole('region', { name: 'Your Financial Insights' });
     await insights.getByRole('button', { name: 'Generate Insights' }).click();
     await expect(insights).toContainText('Your shared monthly plan is $3,200');
-    await expect(insights).toContainText('External AI analysis is not enabled');
+    await expect(insights).toContainText('No information is sent to an outside AI service');
     await changed(() =>
       a.getByRole("button", { name: "Equal", exact: true }).click(),
     );

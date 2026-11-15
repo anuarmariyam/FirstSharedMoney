@@ -22,6 +22,10 @@ export function LiveSessionPage() {
   const viewer = session.partners.find(
     (partner) => partner.id === session.viewerPartnerId,
   )!;
+  const bothSubmitted = session.partners.length === 2 && session.partners.every(p => p.questionnaireStatus === 'submitted');
+  const ownSubmitted = viewer.questionnaireStatus === 'submitted';
+  const nextLabel = !ownSubmitted ? 'Complete my questionnaire' : bothSubmitted ? 'Compare preferences' : 'Review sharing choices';
+  const nextPath = !ownSubmitted ? 'questionnaire' : bothSubmitted ? 'differences' : 'questionnaire/consent';
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
@@ -76,28 +80,23 @@ export function LiveSessionPage() {
             ? "Two perspectives. One shared space."
             : "Your shared space is ready."
         }
-        description={`You are ${viewer.displayName}, Partner ${viewer.slot}. This status was loaded from the session API.`}
+        description={`Welcome, ${viewer.displayName}. Build a plan together, one conversation at a time.`}
       >
         <Badge tone="green">Session connected</Badge>
       </PageHeading>
-      <Notice title="Phase 4A: session management only">
-        Membership and invitations use Supabase. Questionnaires, financial
-        analysis, and agreement approval are not connected to this live session
-        yet. Use fictional names during testing.
-      </Notice>
       <div className="overview-grid mt-6">
         <section className="surface overview-main">
           <p className="eyebrow">SEPARATE IDENTITIES, SHARED START</p>
           <h2>
             {session.partners.length === 2
               ? "Your partner has joined."
-              : "Invite the other perspective."}
+              : "Invite your partner"}
           </h2>
           <p>
             {session.partners.length === 2
-              ? "Both partner places are now taken. Each browser keeps its own identity."
+              ? bothSubmitted ? "Both questionnaires are complete. Shared results become available when you both allow sharing." : "You are both here. Complete your questionnaires separately to start planning."
               : viewer.slot === "A"
-                ? "Send a single-use invitation to your partner. It never includes your own access token."
+                ? "Share this one-time link privately. Your partner should open it in a different browser profile or device."
                 : "Your access belongs to this browser identity."}
           </p>
           <Button variant="secondary" onClick={reload}>
@@ -177,9 +176,8 @@ export function LiveSessionPage() {
                 </>
               ) : (
                 <Notice>
-                  The raw invitation is not stored on the server. After refresh
-                  or expiry, issue a new invitation; previous unused links will
-                  stop working.
+                  For your privacy, the invitation is not kept after refresh.
+                  Create a new link if needed; the previous unused link will stop working.
                 </Notice>
               )}
               <Button
@@ -210,14 +208,14 @@ export function LiveSessionPage() {
       <div className="next-step-banner">
         <div>
           <p className="eyebrow">THE NEXT PART OF THE CONVERSATION</p>
-          <h2>Your perspective comes first.</h2>
+          <h2>{!ownSubmitted ? 'Your perspective comes first.' : bothSubmitted ? 'Your answers are complete.' : 'Waiting for your partner’s questionnaire.'}</h2>
           <p>
             Save your answers privately, then choose what may be used in your
             shared plan.
           </p>
         </div>
-        <ButtonLink to={`/sessions/${session.id}/questionnaire`}>
-          My questionnaire
+        <ButtonLink to={`/sessions/${session.id}/${nextPath}`}>
+          {nextLabel}
         </ButtonLink>
       </div>
     </>

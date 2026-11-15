@@ -40,12 +40,10 @@ function DemoAgreementPage() {
         title="A shared plan. In your own terms."
         description="Turn a few thoughtful conversations into clear expectations for everyday life."
       >
-        <Badge tone="neutral">Demo draft · unapproved</Badge>
+        <Badge tone="neutral">Preview draft · unapproved</Badge>
       </PageHeading>
       <DemoNotice>
-        This editable draft uses the fixed fictional budget. No proposal,
-        approval, server version, or independent partner identity exists in this
-        preview.
+        Explore the example rules. This preview is not saved or approved by either partner.
       </DemoNotice>
       <section className="surface agreement-progress">
         <div className="section-title-row">
@@ -256,7 +254,7 @@ function DemoAgreementPage() {
             </h2>
             <p>
               In a real session, each person confirms the same server-verified
-              version independently. Demo records no confirmations.
+              version independently. Confirmations are available in your own shared plan.
             </p>
             {(["A", "B"] as const).map((slot) => (
               <div className="approval-placeholder" key={slot}>
@@ -268,7 +266,7 @@ function DemoAgreementPage() {
                   </span>
                   <div>
                     <strong>Partner {slot}</strong>
-                    <span>Not approved · Demo</span>
+                    <span>Not approved · Preview</span>
                   </div>
                 </div>
                 <Button variant="secondary" disabled>
@@ -285,7 +283,7 @@ function DemoAgreementPage() {
               Preview draft document
             </Button>
             <Button className="w-full" variant="ghost" disabled>
-              Proposals unavailable in Demo
+              Proposals unavailable in preview
             </Button>
           </aside>
         </div>

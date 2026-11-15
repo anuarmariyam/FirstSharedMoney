@@ -118,7 +118,7 @@ function DifferencesView({
       />
       {isDemo && (
         <DemoNotice>
-          Sample Data. These discussion topics are independent of your demo
+          Example Plan. These discussion topics are independent of your preview
           answers. No partner information is shared here.
         </DemoNotice>
       )}

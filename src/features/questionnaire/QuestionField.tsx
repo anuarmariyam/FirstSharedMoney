@@ -24,7 +24,7 @@ export function QuestionField({
         value={typeof value === "string" ? value : ""}
         onChange={onChange}
         error={error}
-        hint="USD · You can enter 0. Please use fictional amounts."
+        hint="USD · You can enter 0. Please use example amounts."
       />
     );
   if (question.kind === "text")
@@ -45,7 +45,7 @@ export function QuestionField({
         />
         <p id="note-count" className="field-hint">
           {typeof value === "string" ? value.length : 0} / 500 characters ·
-          {preview ? "local preview only" : "private to you"}
+          {preview ? "example answer" : "private to you"}
         </p>
         {error && <FieldError id="question-error">{error}</FieldError>}
       </div>

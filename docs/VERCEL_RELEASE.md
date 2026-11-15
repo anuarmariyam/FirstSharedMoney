@@ -121,7 +121,7 @@ review before opening collection of real finances.
 | Local Home/Demo/Create/Simulator HTTP checks | 200 on port 5173 |
 | Secret scan of tracked files and production assets | No known secret findings; no Groq network adapter in browser bundle |
 
-**Live release gate is not green.** Two of four final live browser cases could
+**Historical rate-limit failure (superseded by the consumer UX verification below).** Two of four final live browser cases could
 not complete because the Auth service rejected signup. One targeted diagnostic
 retry was performed; no rate limit, CAPTCHA, Auth setting, RLS, TLS or JWT check
 was changed. Do not claim all final tests passed, or deploy as a fully verified
@@ -139,3 +139,35 @@ Screenshots: ignored `artifacts/screenshots/` (desktop/tablet/mobile routes,
 financial warnings, consent and agreement/print preview).
 Only test-owned data may be created/cleaned by approved security/live suites.
 No deployment, origin update, Git promotion or push is part of this preparation.
+
+## Consumer UX verification update
+
+The subsequent owner-authorized consumer UX run passed all four real browser
+flows (session A/B/C, questionnaire persistence and independent consents, finance,
+and Agreement/PDF). Anonymous signup worked in this run; the prior HTTP 429
+blocker was not observed. No Auth setting, rate limit, schema, RLS, JWT, TLS or
+Edge deployment was changed. Future quota availability is not guaranteed.
+
+Consumer copy now uses Preview, Example Plan and Start your plan. Example pages
+retain a concise no-persistence notice; fixed results are hidden after edits.
+Generate Insights is available for the displayed example budget as well as live
+saved scenarios, and sends no data to outside AI. Rules forms have consistent
+spacing/focus styles, confirmations show human-readable state/times rather than
+technical identifiers, and simulator blockers use known DTO/error states.
+The session DTO does not expose partner consents: sharing readiness is never
+inferred from questionnaire completion. Server gates remain authoritative.
+
+Checks: app typecheck, lint, production build and strict changed-test typecheck
+passed. Offline UI verified 63 distinct cases across desktop/tablet/mobile after
+targeted corrections. The initial full run passed 58/63; a preview state naming
+error was corrected, and repeated writes of identical test harnesses were avoided
+to prevent cross-worker Vite reloads. All six affected questionnaire/simulator
+viewport cases then passed, without removing assertions. The earlier targeted
+consent copy expectations were updated to the new wording and passed.
+No backend/security or Groq smoke suite was unnecessarily repeated.
+
+Evidence: artifacts/consumer-ux/ (ignored); refreshed route screenshots and
+desktop-preview-insights.png, tablet-preview-insights.png, mobile-preview-insights.png
+under artifacts/screenshots/. Test-owned cloud data was cleaned by existing suites;
+no cleanup error was reported. These sessions are not retained as user preview links.
+All changes stay in the local integration branch pending release review.

@@ -8,7 +8,7 @@ export function InsightsPanel({ output }: { output: SimulationOutput }) {
   const facts = generated ? deterministicInsights(output) : [];
   return <section className="surface scenario-panel" aria-label="Your Financial Insights">
     <h2>Your Financial Insights</h2>
-    <p className="field-hint">Based on your calculated scenario. External AI analysis is not enabled; no data leaves FSM.</p>
+    <p className="field-hint">Understand this budget and find questions to discuss together. No information is sent to an outside AI service.</p>
     <Button onClick={() => setGenerated(true)}>Generate Insights</Button>
     {(['overview', 'observations', 'concerns', 'questions'] as const).map(section => {
       const items = facts.filter(f => f.section === section);

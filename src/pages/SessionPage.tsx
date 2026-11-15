@@ -39,7 +39,7 @@ function DemoSessionPage() {
         <section className="surface overview-main">
           <div className="flex items-center justify-between gap-4">
             <p className="eyebrow">THE CONVERSATION AHEAD</p>
-            <Badge tone="neutral">Sample Data</Badge>
+
           </div>
           <h2>
             Make space for
@@ -91,19 +91,17 @@ function DemoSessionPage() {
             <span className="avatar avatar-muted">B</span>
             <div>
               <strong>Your partner’s perspective</strong>
-              <p>No second partner in Demo</p>
+              <p>Ready to plan together?</p>
             </div>
             <Icon name="clock" size={18} />
           </div>
           <div className="invite-placeholder">
             <Icon name="link" size={18} />
             <span>
-              Invitations are available when you create a real session in the connected app.
+              Start your own shared plan to invite your partner.
             </span>
           </div>
-          <Button variant="secondary" className="w-full" disabled>
-            Invitations unavailable in Demo
-          </Button>
+          <ButtonLink to="/create" variant="secondary" className="w-full">Start your plan</ButtonLink>
         </section>
       </div>
       <div className="section-title-row">
@@ -160,12 +158,12 @@ function DemoSessionPage() {
           onClick={() => {
             demo.reset();
             setResetMessage(
-              "Sample Data cleared. No server data was changed.",
+              "Example Plan cleared. No server data was changed.",
             );
           }}
         >
           <Icon name="refresh" size={16} />
-          Reset Demo
+          Reset preview
         </Button>
       </div>
       {resetMessage && (

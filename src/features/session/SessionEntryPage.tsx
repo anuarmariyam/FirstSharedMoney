@@ -177,21 +177,21 @@ function SessionEntryContent({ isJoin }: { isJoin: boolean }) {
             }}
             maxLength={80}
             placeholder="A first name or nickname"
-            hint="Optional. A nickname is fine. Use fictional details during testing."
+            hint="Optional. A nickname is fine."
             error={nameError}
           />
           {!configured ? (
             <Notice title="Not connected yet">
               {isJoin && inviteState !== "unavailable"
                 ? `Invitation ${inviteState} — example error state only. No live invitation has been checked.`
-                : "Supabase has not been configured. This form does not create an account or save your name."}
+                : "Saving is not available in this browser right now. You can still explore the preview."}
             </Notice>
           ) : (
             <Notice
               title={
                 isJoin
-                  ? "Your own browser identity"
-                  : "Anonymous browser access"
+                  ? "Your own access"
+                  : "No account needed"
               }
             >
               {isJoin
@@ -225,7 +225,7 @@ function SessionEntryContent({ isJoin }: { isJoin: boolean }) {
             }
             className="w-full mt-5"
           >
-            <Icon name={configured ? "arrow" : "lock"} size={17} />
+
             {!configured
               ? isJoin
                 ? "Join session"
@@ -255,7 +255,7 @@ function SessionEntryContent({ isJoin }: { isJoin: boolean }) {
             className="w-full"
             onClick={() => navigate("/sessions/demo")}
           >
-            Try Demo
+            Explore Preview
           </Button>
           {isJoin && !configured && (
             <div className="invite-state-examples">

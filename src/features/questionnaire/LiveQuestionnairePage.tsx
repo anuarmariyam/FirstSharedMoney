@@ -142,7 +142,7 @@ export function LiveQuestionnairePage({
           </span>
           <Badge>ANSWERS SUBMITTED</Badge>
           <h1 ref={heading} tabIndex={-1}>
-            Your perspective is saved.
+            Your answers are saved.
           </h1>
           <p>
             Your raw answers and private note stay private. Shared tools require
@@ -150,15 +150,15 @@ export function LiveQuestionnairePage({
           </p>
           <div className="completion-choices">
             <div>
-              <span>Comparison summary</span>
+              <span>Compare preferences</span>
               <strong>
-                {state.consent.comparison ? "Allowed" : "Not allowed"}
+                {state.consent.comparison ? "On" : "Off"}
               </strong>
             </div>
             <div>
-              <span>Shared budget inputs</span>
+              <span>Shared budget planning</span>
               <strong>
-                {state.consent.budget ? "Allowed" : "Not allowed"}
+                {state.consent.budget ? "On" : "Off"}
               </strong>
             </div>
           </div>
@@ -167,6 +167,11 @@ export function LiveQuestionnairePage({
             saved answers are kept.
           </Notice>
           {feedback}
+          <p>{session.partners.some(p => p.id !== session.viewerPartnerId && p.questionnaireStatus !== 'submitted') || session.partners.length < 2
+            ? 'Your partner still needs to finish their questionnaire. You can review your sharing choices while you wait.'
+            : 'Shared comparisons and budgets each need permission from both partners.'}</p>
+          <ButtonLink to={`/sessions/${session.id}/differences`}>Compare preferences</ButtonLink>
+          <ButtonLink to={`/sessions/${session.id}/simulator`} variant="secondary">Plan our budget</ButtonLink>
           <Button
             disabled={state.busy || state.conflict}
             onClick={() => {
@@ -343,7 +348,7 @@ export function LiveQuestionnairePage({
       </form>
       <div className="question-reassurance">
         <Icon name="lock" size={15} />
-        <p>Only you can access these answers. Use sample data while testing.</p>
+        <p>Your answers stay private. Your sharing choices control the results you can plan with together.</p>
       </div>
     </div>
   );

@@ -66,10 +66,11 @@ export function LiveSimulatorPage() {
     <SimulatorLoader
       key={`${session.id}/${session.viewerPartnerId}`}
       coupleId={session.id}
+      session={session}
     />
   );
 }
-function SimulatorLoader({ coupleId }: { coupleId: string }) {
+function SimulatorLoader({ coupleId, session }: { coupleId: string; session: CoupleSession }) {
   const inputs = useSharedResource("getFinancialInputs", coupleId);
   const [params] = useSearchParams();
   const [initialId, setInitialId] = useState(() => params.get("scenario"));
@@ -108,8 +109,17 @@ function SimulatorLoader({ coupleId }: { coupleId: string }) {
   if (!inputs.data)
     return (
       <EmptyState title="Your shared budget is not ready.">
-        {inputs.error?.message}
+        {inputs.error?.code === 'CONSENT_REQUIRED'
+          ? 'Budget planning needs permission from both partners. Review your sharing choices and ask your partner to check theirs.'
+          : inputs.error?.code === 'NETWORK_ERROR'
+            ? 'We could not reach your plan. Try again in a moment.'
+            : session.partners.find(p => p.id === session.viewerPartnerId)?.questionnaireStatus === 'draft'
+              ? 'Finish and submit your questionnaire before planning your shared budget.'
+              : session.partners.length < 2 || session.partners.some(p => p.id !== session.viewerPartnerId && p.questionnaireStatus === 'draft')
+                ? 'Waiting for your partner to finish and submit their questionnaire.'
+                : inputs.error?.message}
         <div className="mt-6 flex gap-3">
+          <ButtonLink to={`/sessions/${coupleId}/questionnaire`}>My questionnaire</ButtonLink>
           <ButtonLink to={`/sessions/${coupleId}/questionnaire/consent`}>
             My sharing choices
           </ButtonLink>
@@ -130,7 +140,7 @@ function SimulatorLoader({ coupleId }: { coupleId: string }) {
               navigate(`/sessions/${coupleId}/simulator`, { replace: true });
             }}
           >
-            Start a new scenario
+            Recalculate budget
           </Button>
         </div>
       </EmptyState>

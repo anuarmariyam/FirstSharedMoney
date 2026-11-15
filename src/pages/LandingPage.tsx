@@ -11,7 +11,7 @@ export default function LandingPage() {
           <a href="#how-it-works">How it works</a>
           <a href="#made-for-two">Made for two</a>
           <ButtonLink to="/sessions/demo" variant="ghost">
-            Try Demo
+            Explore Preview
           </ButtonLink>
         </nav>
       </header>
@@ -37,15 +37,15 @@ export default function LandingPage() {
             </p>
             <div className="hero-actions">
               <ButtonLink to="/create">
-                Create Our Money Plan
+                Start your plan
               </ButtonLink>
               <ButtonLink to="/sessions/demo" variant="secondary">
-                Try Demo
+                Explore Preview
               </ButtonLink>
             </div>
             <div className="hero-footnote">
               <Icon name="info" size={15} />
-              <span>Try Demo uses sample data. Your own plan starts separately.</span>
+              <span>Explore Preview uses sample data. Your own plan starts separately.</span>
             </div>
           </div>
           <PlanPreview />
@@ -162,7 +162,7 @@ export default function LandingPage() {
             <h2>Sharing a life starts with choice.</h2>
             <p>
               Each partner chooses separately whether to share a comparison
-              summary and budget inputs. The demo uses fictional data and never
+              summary and budget inputs. The preview uses example data and never
               shares your answers with another person.
             </p>
           </div>
@@ -180,8 +180,8 @@ export default function LandingPage() {
                 <Icon name="chevron" />
               </summary>
               <p>
-                No. This is a planning workflow, not a bank. The MVP does not
-                connect to bank accounts or move money.
+                No. Keep your accounts separate and plan together. FSM does not
+                connect to your bank or move money.
               </p>
             </details>
             <details>
@@ -191,7 +191,7 @@ export default function LandingPage() {
               </summary>
               <p>
                 No. Compare Equal, Proportional, and Custom ways to share costs.
-                Try Demo shows a fixed sample budget for each approach.
+                Choose equal shares, a split based on income, or your own percentages.
               </p>
             </details>
             <details>
@@ -200,9 +200,8 @@ export default function LandingPage() {
                 <Icon name="chevron" />
               </summary>
               <p>
-                In Try Demo, drafts stay in this tab and reset on refresh.
-                Your own session saves answers and records each partner’s
-                confirmation separately. Use fictional details during testing.
+                Your own plan saves answers and each partner’s confirmation.
+                The preview uses example details and resets when you refresh.
               </p>
             </details>
           </div>
@@ -218,14 +217,14 @@ export default function LandingPage() {
           </h2>
           <p>A little structure for a conversation that matters.</p>
           <ButtonLink to="/create">
-            Create Our Money Plan
+            Start your plan
           </ButtonLink>
         </section>
       </main>
       <footer className="landing-footer content-width">
         <Brand />
         <p>Personal planning, not financial or legal advice.</p>
-        <span>Demo uses sample data</span>
+        <span>Explore a plan before starting your own</span>
       </footer>
     </div>
   );

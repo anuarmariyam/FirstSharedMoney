@@ -256,10 +256,10 @@ export function ProgressIndicator({
 export function DemoNotice({ children }: { children?: ReactNode }) {
   return (
     <div className="demo-notice">
-      <Badge>Demo</Badge>
+      <Badge>Preview</Badge>
       <p>
         {children ??
-          "Sample Data. Demo drafts stay in this tab and reset on refresh. Nothing is saved to the server."}
+          "Explore with example details. Changes reset on refresh; start your own plan to save."}
       </p>
     </div>
   );

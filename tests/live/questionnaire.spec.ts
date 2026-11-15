@@ -207,16 +207,16 @@ test("real questionnaires autosave privately, recover from network/revision erro
       await expect(checkbox).not.toBeChecked();
     await a.getByRole("button", { name: "Submit my answers" }).click();
     await expect(
-      a.getByRole("heading", { name: "Your perspective is saved." }),
+      a.getByRole("heading", { name: "Your answers are saved." }),
     ).toBeVisible();
     await a.reload();
-    await expect(a.getByText("Not allowed", { exact: true })).toHaveCount(2);
+    await expect(a.getByText("Off", { exact: true })).toHaveCount(2);
     await a.getByRole("link", { name: "Sharing choices", exact: true }).click();
     await a.getByRole("checkbox").nth(0).check();
     await a.getByRole("button", { name: "Save sharing choices" }).click();
     await expect(a).toHaveURL(/\/complete$/);
     await a.reload();
-    await expect(a.getByText("Allowed", { exact: true })).toHaveCount(1);
+    await expect(a.getByText("On", { exact: true })).toHaveCount(1);
 
     await b.goto(`${base}/consent`);
     for (const checkbox of await b.getByRole("checkbox").all())
@@ -224,10 +224,10 @@ test("real questionnaires autosave privately, recover from network/revision erro
     await b.getByRole("checkbox").nth(1).check();
     await b.getByRole("button", { name: "Submit my answers" }).click();
     await expect(
-      b.getByRole("heading", { name: "Your perspective is saved." }),
+      b.getByRole("heading", { name: "Your answers are saved." }),
     ).toBeVisible();
     await b.reload();
-    await expect(b.getByText("Allowed", { exact: true })).toHaveCount(1);
+    await expect(b.getByText("On", { exact: true })).toHaveCount(1);
     await expect(
       b.getByText("Sample A private note", { exact: true }),
     ).toHaveCount(0);
@@ -243,7 +243,7 @@ test("real questionnaires autosave privately, recover from network/revision erro
     for (const checkbox of await a.getByRole("checkbox").all())
       await expect(checkbox).not.toBeChecked();
     await b.reload();
-    await expect(b.getByText("Allowed", { exact: true })).toHaveCount(1);
+    await expect(b.getByText("On", { exact: true })).toHaveCount(1);
     expect(errors).toEqual([]);
   } finally {
     await contextA.unroute("**/functions/v1/fsm-api/**").catch(() => undefined);

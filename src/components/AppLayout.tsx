@@ -106,7 +106,7 @@ export function AppLayout() {
         </div>
         <div className="workspace-label">
           <span className="eyebrow">A little more together</span>
-          <Badge>{isDemo ? "Demo" : "Shared session"}</Badge>
+          {!isDemo && <Badge>Shared session</Badge>}
         </div>
         <nav aria-label="Your plan">
           {links.map((link) => (
@@ -137,7 +137,7 @@ export function AppLayout() {
           <div className="connection-label">
             <span />
             {isDemo
-              ? "Demo · not saved"
+              ? "Preview experience"
               : live.state.kind === "ready"
                 ? "Session connected"
                 : "Not connected yet"}
@@ -158,7 +158,7 @@ export function AppLayout() {
           </button>
           <span className="topbar-title">Your first shared plan</span>
           <div className="topbar-right">
-            <Badge tone="neutral">{isDemo ? "Sample Data" : "Shared plan"}</Badge>
+            {!isDemo && <Badge tone="neutral">Shared plan</Badge>}
             <span className="avatar">
               {isDemo ? "A" : (viewer?.slot ?? "…")}
               <span className="avatar-dot" />
@@ -218,10 +218,10 @@ export function AppLayout() {
               </div>
             </EmptyState>
           ) : (
-            <EmptyState title="Open a session in the connected app">
-              This standalone demo cannot open real sessions. Use the connected app and your own invitation.
+            <EmptyState title="Open your shared plan">
+              Open your own plan using your original browser or partner invitation.
               <div className="mt-6">
-                <ButtonLink to="/sessions/demo">Explore the demo</ButtonLink>
+                <ButtonLink to="/sessions/demo">Explore Preview</ButtonLink>
               </div>
             </EmptyState>
           )}

@@ -41,12 +41,11 @@ function DemoAgreementDocumentPage() {
         </ButtonLink>
         <Button variant="secondary" disabled>
           <Icon name="lock" size={16} />
-          Confirmed PDF unavailable in Demo
+          Confirmed PDF unavailable in preview
         </Button>
       </div>
       <DemoNotice>
-        Unapproved local document preview. No signatures, server version, or
-        independent approvals exist.
+        An example document, not an approved agreement. Start your plan for independent confirmations and PDF export.
       </DemoNotice>
       <article className="agreement-document">
         <div className="document-top">
@@ -73,12 +72,12 @@ function DemoAgreementDocumentPage() {
             <i className="dot dot-lavender" />
             Partner B
           </span>
-          <span>Fictional example</span>
+          <span>Example plan</span>
         </div>
         <dl className="document-meta">
           <div><dt>Contribution model</dt><dd>Proportional</dd></div>
           <div><dt>Currency</dt><dd>USD · monthly amounts</dd></div>
-          <div><dt>Version</dt><dd>Sample · no server version</dd></div>
+          <div><dt>Version</dt><dd>Example draft</dd></div>
         </dl>
         <section>
           <h2>01 / Our shared everyday</h2>
@@ -140,7 +139,7 @@ function DemoAgreementDocumentPage() {
               : agreement.emergencyRule === "pause_savings_then_discuss"
                 ? "We pause shared savings first, then discuss the remaining cost."
                 : "We discuss unexpected costs before spending."}{" "}
-            The fictional available shared reserve is <strong>$1,000</strong>.
+            The example available shared reserve is <strong>$1,000</strong>.
           </p>
         </section>
         <section>
@@ -166,7 +165,7 @@ function DemoAgreementDocumentPage() {
         </section>
         <AgreementConfirmations />
         <footer>
-          This fictional draft is a personal planning tool, not a legal contract
+          This example draft is a personal planning tool, not a legal contract
           or professional financial advice. It has not been proposed or approved
           by two independent partners.
         </footer>

@@ -1,7 +1,11 @@
 import { test, expect, type Page } from "@playwright/test";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { agreementFixture } from "../backend/agreement-fixture.ts";
 import { financialInput } from "../../src/engines/financial.ts";
+
+async function writeIfChanged(file: string, source: string) {
+  if (await readFile(file, 'utf8').catch(() => null) !== source) await writeFile(file, source);
+}
 
 // Offline UI contracts only. No Supabase connection, identity or persistence proof.
 const input = financialInput({
@@ -18,7 +22,7 @@ const input = financialInput({
 
 test.beforeAll(async () => {
   await mkdir("artifacts", { recursive: true });
-  await writeFile("artifacts/live-ui-preview.tsx", `
+  await writeIfChanged("artifacts/live-ui-preview.tsx", `
     import React from 'react';
     import { createRoot } from 'react-dom/client';
     import { createMemoryRouter, RouterProvider, Outlet } from 'react-router';
@@ -41,7 +45,7 @@ test.beforeAll(async () => {
         window.offlineUiCalls.push({ operation, body, resource });
         if (operation === 'getFinancialInputs') {
           if (window.offlineDenyFinances)
-            throw new SessionServiceError('CONSENT_REQUIRED', 'Both partners must share budget inputs.');
+            throw new SessionServiceError(props.failureCode ?? 'CONSENT_REQUIRED', 'Budget planning needs permission from both partners. Review your sharing choices and ask your partner to check theirs.');
           return props.input;
         }
         if (operation === 'getCurrentAgreement') return props.version;
@@ -56,7 +60,7 @@ test.beforeAll(async () => {
         }
         throw new SessionServiceError('OFFLINE_ONLY', 'No approval or export is performed by this offline test.');
       };
-      const session = { id: props.version.coupleId,
+      const session = props.session ?? { id: props.version.coupleId,
         viewerPartnerId: 'fictional-viewer-B',
         partners: [{ id: 'fictional-viewer-B', slot: 'B' }] };
       const router = createMemoryRouter([{
@@ -98,7 +102,7 @@ test("live simulator charts follow API results and the existing stress engine", 
   const insights = preview.getByRole('region', { name: 'Your Financial Insights' });
   await insights.getByRole('button', { name: 'Generate Insights' }).click();
   await expect(insights).toContainText('Your shared monthly plan is $3,200.01');
-  await expect(insights).toContainText('External AI analysis is not enabled');
+  await expect(insights).toContainText('No information is sent to an outside AI service');
   await expect(preview.getByRole("region", { name: "Partner A budget" })).toContainText("$2,000.01");
   await expect(preview.getByRole("region", { name: "Partner B budget" })).toContainText("$1,200");
   await preview.getByRole("button", { name: "Equal", exact: true }).click();
@@ -120,7 +124,7 @@ test("live agreement presents server confirmations and retains explicit approval
   const confirmations = preview.getByRole("region", { name: "Partner confirmations" });
   await expect(confirmations.getByText("Confirmed", { exact: true })).toHaveCount(1);
   await expect(confirmations.getByText("Pending confirmation", { exact: true })).toHaveCount(1);
-  await expect(confirmations).toContainText(version.contentHash);
+  await expect(confirmations).not.toContainText("Content hash:");
   const confirm = preview.getByRole("button", { name: "Confirm as Partner B" });
   await expect(confirm).toBeDisabled();
   await expect(preview.getByRole("button", { name: "Download PDF" })).toBeDisabled();
@@ -147,7 +151,7 @@ test("approved preview enables PDF only while the finance consent gate remains a
     (window as unknown as { offlineDenyFinances: boolean }).offlineDenyFinances = true;
     window.dispatchEvent(new Event("focus"));
   });
-  await expect(preview.getByText("Both partners must share budget inputs.")).toBeVisible();
+  await expect(preview.getByText("Budget planning needs permission from both partners. Review your sharing choices and ask your partner to check theirs.")).toBeVisible();
   await expect(download).toBeDisabled();
   await expect(preview.getByRole("button", { name: /Confirm as Partner/ })).toHaveCount(0);
   expect(errors).toEqual([]);
@@ -156,8 +160,35 @@ test("approved preview enables PDF only while the finance consent gate remains a
 test("live simulator hides all financial charts when sharing is unavailable", async ({ page }) => {
   const { preview, errors } = await mount(page, { view: "simulator", version: agreementFixture(), denyFinances: true });
   await expect(preview.getByRole("heading", { name: "Your shared budget is not ready." })).toBeVisible();
-  await expect(preview.getByText("Both partners must share budget inputs.")).toBeVisible();
+  await expect(preview.getByText("Budget planning needs permission from both partners. Review your sharing choices and ask your partner to check theirs.")).toBeVisible();
   await expect(preview.locator(".budget-overview-cards, .budget-donut, .financial-summary")).toHaveCount(0);
   await expect(preview.getByRole("link", { name: "My sharing choices" })).toBeVisible();
   expect(errors).toEqual([]);
+});
+
+test('budget blockers use known questionnaire states without inventing partner permissions', async ({ page }) => {
+  const version = agreementFixture();
+  for (const [ownStatus, otherStatus, expected] of [
+    ['draft', 'submitted', 'Finish and submit your questionnaire'],
+    ['submitted', 'draft', 'Waiting for your partner to finish'],
+  ] as const) {
+    const session = { id: version.coupleId, viewerPartnerId: 'own', partners: [
+      { id: 'own', slot: 'A', questionnaireStatus: ownStatus },
+      { id: 'other', slot: 'B', questionnaireStatus: otherStatus },
+    ] };
+    const { preview, errors } = await mount(page, { view: 'simulator', version, session, denyFinances: true, failureCode: 'QUESTIONNAIRE_NOT_SUBMITTED' });
+    await expect(preview.getByText(expected, { exact: false })).toBeVisible();
+    await expect(preview.locator('.financial-summary')).toHaveCount(0);
+    expect(errors).toEqual([]);
+  }
+});
+
+test('preview insights explain only the displayed example and disappear for edited amounts', async ({ page }) => {
+  await page.goto('/sessions/demo/simulator');
+  const insights = page.getByRole('region', { name: 'Your Financial Insights' });
+  await insights.getByRole('button', { name: 'Generate Insights' }).click();
+  await expect(insights).toContainText('Your shared monthly plan is $3,200');
+  await expect(insights).toContainText('No information is sent to an outside AI service');
+  await page.getByRole('textbox', { name: 'Rent & home', exact: true }).fill('999');
+  await expect(insights).toHaveCount(0);
 });

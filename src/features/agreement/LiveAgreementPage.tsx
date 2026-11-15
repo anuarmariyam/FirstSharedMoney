@@ -59,7 +59,7 @@ export function LiveAgreementPage({ preview = false }: { preview?: boolean }) {
         }
         description="Review the same terms and confirm independently."
       />
-      {!ready && (
+      {!ready && !inputs.loading && (
         <Notice tone="warning">
           {inputs.error?.message ??
             "Financial inputs changed. Save a current baseline scenario before creating and confirming a new version."}
@@ -73,12 +73,9 @@ export function LiveAgreementPage({ preview = false }: { preview?: boolean }) {
           ready={ready}
           reload={agreement.reload}
         />
-      ) : (
-        <Notice>
-          No agreement has been created yet. Choose a saved baseline scenario to
-          begin.
-        </Notice>
-      )}
+      ) : preview ? (
+        <Notice>Select a saved budget and set your rules to create an agreement.</Notice>
+      ) : null}
       {!preview && (
         <AgreementForm
           key={v?.id ?? "new"}
@@ -370,7 +367,7 @@ function AgreementForm({
     } catch (e) {
       setError(
         e instanceof Error && e.message === "INVALID_INPUT"
-          ? "Check the rules, scenario ID and a review date after today within the next 366 days."
+          ? "Check your rules, selected budget and a review date within the next year."
           : sessionError(e).message,
       );
     } finally {
@@ -378,12 +375,12 @@ function AgreementForm({
     }
   }
   return (
-    <form className="surface agreement-section mt-6" onSubmit={save} noValidate>
+    <form className="surface agreement-section agreement-rules-form mt-6" onSubmit={save} noValidate>
       <h2>
         {current ? "Create a revised agreement" : "Create your agreement"}
       </h2>
       <p className="field-hint">
-        Use a saved baseline scenario. New versions require two fresh
+        Use a saved monthly budget. New versions require two fresh
         confirmations.
       </p>
       <Notice>
@@ -393,9 +390,10 @@ function AgreementForm({
       </Notice>
       <p>
         <ButtonLink variant="secondary" to={`/sessions/${coupleId}/simulator`}>
-          Choose a financial scenario
+          Select a saved budget
         </ButtonLink>
       </p>
+      <fieldset className="agreement-rule-fields" disabled={!scenario || !budgetAllowed}><legend>Set your agreement rules</legend>
       <label className="field">
         Personal spending
         <select
@@ -487,6 +485,7 @@ function AgreementForm({
           <Notice tone="warning">{error}</Notice>
         </div>
       )}
+      </fieldset>
       <Button type="submit" disabled={busy || !budgetAllowed || !scenario}>
         {busy
           ? "Saving draft..."
