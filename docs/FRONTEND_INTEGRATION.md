@@ -66,7 +66,8 @@ the owner base. No Insights or AI integration was performed.
 | Backend unit tests, including auth/privacy/financial/agreement/PDF assertions | 44 passed, 0 failed |
 | Offline browser cases across desktop/tablet/mobile | 57 distinct cases passed after the targeted correction below |
 | Console/uncaught errors and horizontal page overflow | No findings in tested screens |
-| Actual cloud security/live runs on this integration | Not run; separate owner permission required |
+| Actual cloud security runs after separate owner approval | 68 passed: session 15, questionnaire 16, finance 18, agreement 19 |
+| Actual live browser flows after separate owner approval | 4 distinct cases passed after the targeted selector update below |
 
 The initial complete browser run passed 54/57. Three viewport variants expected
 an old unconfigured-session heading; the new heading was already correctly
@@ -101,4 +102,14 @@ with creation/deletion limited to test-owned fixtures. Verify independent A/B
 flow, questionnaire save/refresh, consents, saved scenario restore, approval and
 actual protected PDF download through the integrated screens. Reuse the existing
 cloud test suites; do not redeploy or change SQL as part of that verification.
-The original Phase 6 cloud evidence remains historical and was not rerun here.
+The owner subsequently authorized those checks in the same test project. All
+68 real security checks passed. The browser run initially passed 3/4; the
+agreement case still selected the removed `.model-total` element. It now checks
+the same exact $3,200 in the new Budget overview, and the unchanged two-pending
+confirmation assertion uses the new presentation wording. The targeted rerun
+passed, including independent A/B approval, actual PDF download and content/sum
+verification, version reset, refresh and mobile overflow. No security assertion
+was removed. Test-owned fixture cleanup ran; no cleanup error was reported.
+No SQL, RLS, Auth setting or Edge deployment was changed. This verifies the
+existing integrated application against fsm-api v4, not an undeployed Insights
+endpoint. Relevant logs are ignored under artifacts/integration-verification/.

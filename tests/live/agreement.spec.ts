@@ -85,7 +85,7 @@ test("real partners create review independently approve export and revise the sa
     await a
       .getByRole("textbox", { name: "Rent & home", exact: true })
       .fill("3200");
-    await expect(a.locator(".model-total strong")).toHaveText("$3,200");
+    await expect(a.getByRole('group', { name: 'Budget overview' }).getByText('$3,200', { exact: true })).toBeVisible();
     await expect(a.getByText("Saved scenario", { exact: true })).toBeVisible();
     await a
       .getByRole("link", { name: "Create money agreement", exact: true })
@@ -168,7 +168,7 @@ test("real partners create review independently approve export and revise the sa
       a.getByRole("heading", { name: "Your shared plan, version 2." }),
     ).toBeVisible();
     await expect(
-      a.getByText("Awaiting confirmation", { exact: true }),
+      a.getByText("Pending confirmation", { exact: true }),
     ).toHaveCount(2);
     await expect(
       a.getByRole("button", { name: "Propose this version" }),
