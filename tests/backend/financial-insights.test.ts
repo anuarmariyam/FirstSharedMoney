@@ -41,7 +41,7 @@ test('valid structured response selects evidence without transmitting facts or n
   const result = await createGroqAdapter({ key: 'fictional', fetcher })(facts, true);
   assert.equal(result.source, 'qwen'); assert.equal(result.facts[0].id, 'shortfall_A');
 });
-for (const status of [401, 429, 500]) test(`HTTP ${status} uses safe fallback`, async () => {
+for (const status of [401, 403, 429, 500]) test(`HTTP ${status} uses safe fallback`, async () => {
   const result = await createGroqAdapter({ key: 'fictional', fetcher: async () => new Response('', { status }) })(facts, true);
   assert.equal(result.reason, `HTTP_${status}`);
 });

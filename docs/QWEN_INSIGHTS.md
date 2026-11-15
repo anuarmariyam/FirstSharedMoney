@@ -17,8 +17,10 @@ new accounting formulas, compatibility scores or invented AI prose are used.
 Checked official Groq documentation on 2026-11-15:
 https://console.groq.com/docs/structured-outputs
 lists `qwen/qwen3.8-27b` for `json_schema` with `strict: true`.
-Account-specific availability/quota and an actual completion remain unverified
-until a key and a confirmed free account are provided. No paid service was used.
+The owner confirmed a free account. One authorized fictional-only completion
+returned HTTP 200 with response model `qwen/qwen3.8-27b`, source `qwen` and five
+validated evidence IDs. No fallback was used for that request. This verifies
+current account access, not future quota or availability. No billing setting changed.
 
 The server-only adapter uses standard fetch, an eight-second deadline covering
 response reading, byte/request bounds, strict schema and evidence validation,
@@ -35,7 +37,9 @@ does not claim a full natural-language reasoning feature.
 `node scripts/qwen-insights-poc.ts` works without a key using fallback.
 For a real completion, first confirm the Groq account has a free quota and no
 paid usage. Put `GROQ_API_KEY` and `FSM_GROQ_FREE_POC=1` in ignored root
-`.env.groq.local`, then rerun that command. Never send the key in chat, use a
+`.env.qwen.local`, then rerun that command. The earlier `.env.groq.local` is
+supported when the Qwen file is absent. Both files are ignored by Git.
+Never send the key in chat, use a
 VITE-prefixed key, commit that file, or upload it to a browser.
 The PoC constructs its own fictional engine inputs; it never reads user records.
 
@@ -68,10 +72,13 @@ agreement writes, approvals or PDF eligibility.
 ## Verification record
 
 App typecheck, lint, build and explicit strict new-test typecheck passed.
-Backend regression: 44/44; AI/response/fallback tests: 10/10; offline UI: 57/57,
+Backend regression: 44/44; AI/response/fallback tests: 11/11 (including HTTP 403); offline UI: 57/57,
 including Generate Insights from dynamic API-result DTOs on all three viewports.
-The fictional PoC executed with KEY_MISSING fallback; no real Groq completion
-was attempted. The existing build entry warning remains (503.13 kB).
+The earlier fictional PoC verified KEY_MISSING fallback. The subsequent single
+real request passed structured evidence validation as recorded above. Raw provider
+output and credentials were not logged. The existing build entry warning remains
+(503.13 kB). Configuration-only smoke-test follow-up reran AI tests, app typecheck,
+lint and build; it did not repeat cloud/backend/browser regression suites.
 The separately authorized integration check passed 68 real security checks and
 four real browser flows; see FRONTEND_INTEGRATION.md for targeted retry details.
 Those cloud runs exercised deployed v4, not the prepared local Insights route.
