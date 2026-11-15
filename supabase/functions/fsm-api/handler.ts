@@ -18,6 +18,7 @@ import {
 } from "../_shared/questionnaire-contract.ts";
 import { financeOperation } from "./finance.ts";
 import { parseScenario } from "../_shared/finance-contract.ts";
+import { deterministicInsights } from "../../../src/features/financial-insights/summary.ts";
 import {
   parseAgreement,
   createAgreementRequest,
@@ -217,6 +218,17 @@ export function createSessionHandler(
         /^\/v1\/couples\/([^/]+)\/agreement-versions(?:\/([^/]+))?(?:\/(propose|approve|pdf))?$/.exec(
           route,
         );
+      const insightsRoute = /^\/v1\/couples\/([^/]+)\/scenarios\/([^/]+)\/insights$/.exec(route);
+      if (insightsRoute) {
+        if (request.method !== 'GET') return failure('NOT_FOUND');
+        const result = await backend.rpc('fsm_get_scenario', {
+          p_couple_id: uuid(insightsRoute[1]), p_scenario_id: uuid(insightsRoute[2]),
+        }, token);
+        if (result.error) throw new Error(result.error.message);
+        const scenario = parseScenario(result.data);
+        // Same owner/consent/revision gate as scenario retrieval. No external AI path.
+        return new Response(JSON.stringify({ ok: true, data: { source: 'deterministic', facts: deterministicInsights(scenario.output), externalAiEnabled: false }, requestId }), { status: 200, headers });
+      }
       if (agreementRoute) {
         const coupleId = uuid(agreementRoute[1]),
           segment = agreementRoute[2],

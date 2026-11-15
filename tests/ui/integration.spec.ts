@@ -95,6 +95,10 @@ test("live simulator charts follow API results and the existing stress engine", 
   await expect(preview.getByText("Saved scenario", { exact: true })).toBeVisible();
   const budget = preview.getByRole("table", { name: /Monthly budget by category/ });
   await expect(budget).toContainText("$3,200.01");
+  const insights = preview.getByRole('region', { name: 'Your Financial Insights' });
+  await insights.getByRole('button', { name: 'Generate Insights' }).click();
+  await expect(insights).toContainText('Your shared monthly plan is $3,200.01');
+  await expect(insights).toContainText('External AI analysis is not enabled');
   await expect(preview.getByRole("region", { name: "Partner A budget" })).toContainText("$2,000.01");
   await expect(preview.getByRole("region", { name: "Partner B budget" })).toContainText("$1,200");
   await preview.getByRole("button", { name: "Equal", exact: true }).click();

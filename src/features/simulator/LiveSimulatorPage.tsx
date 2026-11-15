@@ -11,6 +11,7 @@ import {
   PageHeading,
 } from "../../components/ui";
 import { FinancialSummary } from "./FinancialSummary";
+import { InsightsPanel } from "../financial-insights/InsightsPanel";
 import { BudgetOverview } from "../../components/financial/BudgetOverview";
 import { BudgetBreakdown } from "../../components/financial/BudgetBreakdown";
 import { ContributionComparison } from "../../components/financial/ContributionComparison";
@@ -548,6 +549,7 @@ function SimulatorForm({
           <ScenarioComparison before={calculation.baseline} after={current.output} />
         </section>
       )}
+      {current && <InsightsPanel key={current.id} output={current.output} />}
       <div className="next-step-banner">
         {current&&current.stressTest===null&&current.output.split.status==='available'&&<ButtonLink to={`/sessions/${coupleId}/agreement?scenario=${current.id}`}>Create money agreement</ButtonLink>}
         <p>
