@@ -1,3 +1,4 @@
+import { AgreementConfirmations } from "../features/agreement/presentation/AgreementConfirmations";
 import {
   Badge,
   Button,
@@ -40,7 +41,7 @@ function DemoAgreementDocumentPage() {
         </ButtonLink>
         <Button variant="secondary" disabled>
           <Icon name="lock" size={16} />
-          PDF export — coming later
+          Confirmed PDF unavailable in Demo
         </Button>
       </div>
       <DemoNotice>
@@ -74,13 +75,20 @@ function DemoAgreementDocumentPage() {
           </span>
           <span>Fictional example</span>
         </div>
+        <dl className="document-meta">
+          <div><dt>Contribution model</dt><dd>Proportional</dd></div>
+          <div><dt>Currency</dt><dd>USD · monthly amounts</dd></div>
+          <div><dt>Version</dt><dd>Sample · no server version</dd></div>
+        </dl>
         <section>
           <h2>01 / Our shared everyday</h2>
           <p>
             Our example monthly shared budget is <strong>$3,200</strong>, using
             an income-based proportional split.
           </p>
-          <div className="document-expenses">
+          <table className="document-expenses">
+            <caption className="sr-only">Sample monthly shared budget in USD</caption>
+            <thead className="sr-only"><tr><th scope="col">Category</th><th scope="col">Monthly amount</th></tr></thead><tbody>
             {[
               ["Rent & home", "$2,200"],
               ["Utilities", "$300"],
@@ -88,12 +96,12 @@ function DemoAgreementDocumentPage() {
               ["Other shared costs", "$200"],
               ["Shared savings", "$0"],
             ].map(([label, value]) => (
-              <div key={label}>
-                <span>{label}</span>
-                <strong>{value}</strong>
-              </div>
+              <tr key={label}>
+                <th scope="row">{label}</th>
+                <td>{value}</td>
+              </tr>
             ))}
-          </div>
+          </tbody><tfoot><tr><th scope="row">Total, including savings</th><td>$3,200</td></tr></tfoot></table>
           <div className="document-contributions">
             <div>
               <span>Partner A contributes</span>
@@ -156,16 +164,7 @@ function DemoAgreementDocumentPage() {
             .
           </p>
         </section>
-        <div className="document-approval">
-          <div>
-            <strong>Partner A</strong>
-            <span>Not approved · not connected</span>
-          </div>
-          <div>
-            <strong>Partner B</strong>
-            <span>Not approved · not connected</span>
-          </div>
-        </div>
+        <AgreementConfirmations />
         <footer>
           This fictional draft is a personal planning tool, not a legal contract
           or professional financial advice. It has not been proposed or approved

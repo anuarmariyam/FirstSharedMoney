@@ -1,3 +1,4 @@
+import { BudgetOverview } from "../components/financial/BudgetOverview";
 import { useState } from "react";
 import { useParams } from "react-router";
 import { LiveSimulatorPage } from "../features/simulator/LiveSimulatorPage";
@@ -12,14 +13,30 @@ import {
   PageHeading,
 } from "../components/ui";
 import { Icon } from "../components/Icon";
+import { BudgetBreakdown } from "../components/financial/BudgetBreakdown";
+import { ContributionComparison } from "../components/financial/ContributionComparison";
+import { ScenarioComparison } from "../components/financial/ScenarioComparison";
 import { FinancialSummary } from "../features/simulator/FinancialSummary";
 import {
   baselineFields,
   modelFixtures,
   stressExamples,
 } from "../features/simulator/demo-fixtures";
-import { formatMoney, parseMoneyInput } from "../lib/money";
+import { parseMoneyInput } from "../lib/money";
 import type { SplitPreference } from "../types/domain";
+
+function sampleAmount(value: string) {
+  const parsed = parseMoneyInput(value);
+  if (!parsed.ok) throw new Error("Invalid supplied sample amount");
+  return parsed.value;
+}
+const sampleExpenses = {
+  rent: sampleAmount(baselineFields.rent),
+  utilities: sampleAmount(baselineFields.utilities),
+  groceries: sampleAmount(baselineFields.groceries),
+  other: sampleAmount(baselineFields.other),
+  shared_savings: sampleAmount(baselineFields.savings),
+};
 
 export default function SimulatorPage() {
   const { coupleId } = useParams();
@@ -65,8 +82,9 @@ function DemoSimulatorPage() {
         description="Explore ways to share everyday costs, with room for each person’s circumstances."
       />
       <DemoNotice>
-        All results below are hand-authored fictional fixtures. No calculation
-        engine is connected, and your questionnaire answers are not used.
+        Sample Data. These fixed examples are independent of your questionnaire.
+        Changing demo inputs hides the sample result; use the connected app for
+        live calculations.
       </DemoNotice>
       <div className="simulator-grid">
         <section className="surface simulator-inputs">
@@ -82,8 +100,8 @@ function DemoSimulatorPage() {
             </Button>
           </div>
           <p className="muted small-copy">
-            Edit the fields to preview input states. New results require the
-            future calculation engine.
+            Explore the sample budget below. Edited amounts are not recalculated
+            in Demo.
           </p>
           <div className="income-inputs">
             {moneyField("incomeA", "Partner A · take-home income")}
@@ -114,7 +132,7 @@ function DemoSimulatorPage() {
           <section className="surface model-panel">
             <div className="section-title-row">
               <h2>Three ways to share</h2>
-              <Badge>Fixed example</Badge>
+              <Badge>Sample Data</Badge>
             </div>
             <div
               className="model-switch"
@@ -142,14 +160,7 @@ function DemoSimulatorPage() {
                 <h3>{fixture.label}</h3>
                 <p>{fixture.description}</p>
               </div>
-              {resultsAvailable && (
-                <div className="model-total">
-                  <span>Shared total</span>
-                  <strong>
-                    $3,200<span>/mo</span>
-                  </strong>
-                </div>
-              )}
+
             </div>
             {model === "custom" && (
               <div className="custom-share">
@@ -179,29 +190,32 @@ function DemoSimulatorPage() {
             )}
             {resultsAvailable ? (
               <>
-                <div
-                  className="split-bar result-split"
-                  aria-label={`Example contribution split: A ${fixture.shares[0]}, B ${fixture.shares[1]}`}
-                >
-                  <span style={{ width: `${fixture.bars[0]}%` }} />
-                  <span style={{ width: `${fixture.bars[1]}%` }} />
-                </div>
+                <BudgetOverview
+                  result={fixture.result}
+                  sharedSavingsCents={sampleExpenses.shared_savings}
+                  reserveCents={sampleAmount(baselineFields.reserve)}
+                />
+                <BudgetBreakdown
+                  expenses={sampleExpenses}
+                  monthlyTotalCents={fixture.result.monthlySharedTotalCents}
+                />
                 <FinancialSummary result={fixture.result} />
                 <div className="fixture-caption">
                   <Icon name="info" size={14} />
-                  Static example amounts, not live calculations.
+                  Sample Data · fixed monthly results
                 </div>
               </>
             ) : (
               <EmptyState
                 icon="sliders"
-                title="Your draft inputs are ready for an engine."
+                title="Live calculations are available in the connected app."
               >
-                The example result is hidden because you changed the inputs. New
-                calculations are not connected yet.
+                You changed the demo inputs. Restore Sample Data to see the
+                fixed example, or use the connected app to calculate your own
+                plan.
                 <div className="mt-5">
                   <Button variant="secondary" onClick={reset}>
-                    Restore the fictional example
+                    Restore Sample Data
                   </Button>
                 </div>
               </EmptyState>
@@ -220,30 +234,7 @@ function DemoSimulatorPage() {
                       ? "Custom 40 / 60"
                       : modelFixtures[key].label}
                   </strong>
-                  <div className="chart-bar-row">
-                    <span>A</span>
-                    <div>
-                      <i style={{ width: `${modelFixtures[key].bars[0]}%` }} />
-                    </div>
-                    <strong>
-                      {formatMoney(
-                        modelFixtures[key].result.allocations.A
-                          .monthlyContributionCents,
-                      )}
-                    </strong>
-                  </div>
-                  <div className="chart-bar-row bar-b">
-                    <span>B</span>
-                    <div>
-                      <i style={{ width: `${modelFixtures[key].bars[1]}%` }} />
-                    </div>
-                    <strong>
-                      {formatMoney(
-                        modelFixtures[key].result.allocations.B
-                          .monthlyContributionCents,
-                      )}
-                    </strong>
-                  </div>
+                  <ContributionComparison result={modelFixtures[key].result} />
                 </div>
               ))}
             </div>
@@ -256,7 +247,7 @@ function DemoSimulatorPage() {
             <p className="eyebrow">LIFE DOESN’T ALWAYS FOLLOW THE PLAN</p>
             <h2>Leave room for the what-ifs.</h2>
           </div>
-          <Badge tone="neutral">Scenario controls preview</Badge>
+          <Badge tone="neutral">Demo scenarios</Badge>
         </div>
         <div className="stress-grid">
           {stressExamples.map((item) => (
@@ -274,11 +265,24 @@ function DemoSimulatorPage() {
           ))}
         </div>
         {stress && (
-          <Notice title="Stress calculation not connected">
-            {stressExamples.find((item) => item.id === stress)?.explanation}{" "}
-            Selecting this control does not change the fixed baseline charts
-            above.
+          <Notice title="Scenario example only">
+            {stress === "rent_increase"
+              ? "Explore a $300 increase in monthly rent."
+              : stress === "income_reduction"
+                ? "Explore a 20% reduction in Partner A’s income."
+                : stress === "income_loss"
+                  ? "Explore a month without Partner B’s income."
+                  : stress === "savings_change"
+                    ? "Explore a $500 monthly savings allocation, replacing the existing target."
+                    : "Explore a $1,000 one-time bill. The engine uses the reserve before splitting the uncovered cost."}{" "}
+            Demo keeps the baseline unchanged. The connected app calculates the
+            impact.
           </Notice>
+        )}
+        {stress && (
+          <div className="surface scenario-panel">
+            <ScenarioComparison before={null} after={null} />
+          </div>
         )}
       </section>
       <div className="next-step-banner">
@@ -290,9 +294,7 @@ function DemoSimulatorPage() {
             example.
           </p>
         </div>
-        <ButtonLink to="/sessions/demo/agreement">
-          Preview our agreement <Icon name="arrow" />
-        </ButtonLink>
+        <ButtonLink to="/sessions/demo/agreement">Preview agreement</ButtonLink>
       </div>
     </>
   );

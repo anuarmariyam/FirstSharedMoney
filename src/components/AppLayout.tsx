@@ -106,7 +106,7 @@ export function AppLayout() {
         </div>
         <div className="workspace-label">
           <span className="eyebrow">A little more together</span>
-          <Badge>{isDemo ? "Demo workspace" : "Shared session"}</Badge>
+          <Badge>{isDemo ? "Demo" : "Shared session"}</Badge>
         </div>
         <nav aria-label="Your plan">
           {links.map((link) => (
@@ -136,9 +136,11 @@ export function AppLayout() {
           <p>Take it one conversation at a time.</p>
           <div className="connection-label">
             <span />
-            {live.state.kind === "ready"
-              ? "Session connected"
-              : "Not connected yet"}
+            {isDemo
+              ? "Demo · not saved"
+              : live.state.kind === "ready"
+                ? "Session connected"
+                : "Not connected yet"}
           </div>
         </div>
       </aside>
@@ -156,9 +158,7 @@ export function AppLayout() {
           </button>
           <span className="topbar-title">Your first shared plan</span>
           <div className="topbar-right">
-            <Badge tone="neutral">
-              {isDemo ? "Frontend preview" : "Session management"}
-            </Badge>
+            <Badge tone="neutral">{isDemo ? "Sample Data" : "Shared plan"}</Badge>
             <span className="avatar">
               {isDemo ? "A" : (viewer?.slot ?? "…")}
               <span className="avatar-dot" />
@@ -190,8 +190,7 @@ export function AppLayout() {
               />
             ) : (
               <EmptyState title="This feature is not connected yet">
-                Phase 4A connects membership and invitations. Financial features
-                are not enabled for live sessions.
+                Return to your plan to continue with the available steps.
                 <div className="mt-6">
                   <ButtonLink to={`/sessions/${coupleId}`}>
                     Back to session status
@@ -219,8 +218,8 @@ export function AppLayout() {
               </div>
             </EmptyState>
           ) : (
-            <EmptyState title="Live sessions are not connected yet">
-              This address cannot open a real session in this frontend preview.
+            <EmptyState title="Open a session in the connected app">
+              This standalone demo cannot open real sessions. Use the connected app and your own invitation.
               <div className="mt-6">
                 <ButtonLink to="/sessions/demo">Explore the demo</ButtonLink>
               </div>

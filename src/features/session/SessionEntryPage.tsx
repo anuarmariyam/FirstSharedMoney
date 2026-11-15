@@ -196,7 +196,7 @@ function SessionEntryContent({ isJoin }: { isJoin: boolean }) {
             >
               {isJoin
                 ? "Open this link in a separate browser profile or device from Partner A. We never replace an existing identity to fill the other seat."
-                : "Your session will last up to 30 days. Clearing browser storage loses access; automatic recovery is not available. Financial forms are not connected in Phase 4A."}
+                : "Your session will last up to 30 days. Clearing browser storage loses access; automatic recovery is not available."}
             </Notice>
           )}
           {configured && isJoin && !token && (
@@ -228,8 +228,8 @@ function SessionEntryContent({ isJoin }: { isJoin: boolean }) {
             <Icon name={configured ? "arrow" : "lock"} size={17} />
             {!configured
               ? isJoin
-                ? "Join session — not connected"
-                : "Create session — not connected"
+                ? "Join session"
+                : "Create session"
               : busy
                 ? isJoin
                   ? "Joining your partner…"
@@ -243,7 +243,7 @@ function SessionEntryContent({ isJoin }: { isJoin: boolean }) {
           {configured && previous && isUUID(previous) && (
             <div className="mt-3">
               <ButtonLink to={`/sessions/${previous}`} variant="ghost">
-                Return to my current plan <Icon name="arrow" size={16} />
+                Return to my current plan
               </ButtonLink>
             </div>
           )}
@@ -255,7 +255,7 @@ function SessionEntryContent({ isJoin }: { isJoin: boolean }) {
             className="w-full"
             onClick={() => navigate("/sessions/demo")}
           >
-            Explore the fictional demo <Icon name="arrow" size={17} />
+            Try Demo
           </Button>
           {isJoin && !configured && (
             <div className="invite-state-examples">

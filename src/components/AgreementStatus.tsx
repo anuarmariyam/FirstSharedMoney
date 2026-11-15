@@ -10,7 +10,7 @@ const statuses: { key: Status; label: string }[] = [
 ];
 export function AgreementStatus({ status = "draft" }: { status?: Status }) {
   return (
-    <ol className="agreement-status" aria-label="Planned agreement workflow">
+    <ol className="agreement-status" aria-label="Agreement workflow">
       {statuses.map((item, index) => (
         <li
           key={item.key}

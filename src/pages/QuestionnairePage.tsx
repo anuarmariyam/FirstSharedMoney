@@ -96,7 +96,7 @@ function DemoQuestionnairePage() {
             <span className="completion-icon">
               <Icon name="check" size={32} />
             </span>
-            <Badge>LOCAL PREVIEW COMPLETE</Badge>
+            <Badge>DEMO COMPLETE</Badge>
             <h1>
               You’ve made space
               <br />
@@ -124,7 +124,7 @@ function DemoQuestionnairePage() {
               </div>
             </div>
             <ButtonLink to="/sessions/demo/differences">
-              Explore example perspectives <Icon name="arrow" />
+              Explore example perspectives
             </ButtonLink>
             <ButtonLink to="/sessions/demo/questionnaire" variant="ghost">
               Review my answers
@@ -160,7 +160,7 @@ function DemoQuestionnairePage() {
               <ButtonLink
                 to={`/sessions/demo/questionnaire?step=${firstInvalid + 1}`}
               >
-                Continue my questionnaire <Icon name="arrow" />
+                Continue my questionnaire
               </ButtonLink>
             </div>
           </EmptyState>
@@ -223,9 +223,8 @@ function DemoQuestionnairePage() {
               </span>
             </label>
             <Notice title="Preview choices only">
-              Live sharing requires both partners’ permission and server access
-              checks. Those are not connected here. These checkboxes do not
-              grant real data access.
+              In real sessions, sharing requires both partners’ permission.
+              These demo choices do not grant access to real data.
             </Notice>
             <div className="question-actions">
               <ButtonLink
@@ -236,7 +235,7 @@ function DemoQuestionnairePage() {
                 Previous
               </ButtonLink>
               <Button type="submit">
-                Finish preview <Icon name="arrow" size={18} />
+                Finish preview
               </Button>
             </div>
           </form>
@@ -312,7 +311,6 @@ function DemoQuestionnairePage() {
           </Button>
           <Button type="submit">
             {step === 14 ? "Review sharing choices" : "Next question"}
-            <Icon name="arrow" size={18} />
           </Button>
         </div>
       </form>
@@ -320,7 +318,7 @@ function DemoQuestionnairePage() {
         <Icon name="lock" size={15} />
         <p>
           A little honesty, at your own pace. Use fictional details in this
-          local preview.
+          demo.
         </p>
       </div>
     </div>

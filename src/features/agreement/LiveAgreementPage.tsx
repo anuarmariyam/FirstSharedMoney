@@ -11,6 +11,7 @@ import {
   PageHeading,
 } from "../../components/ui";
 import { AgreementStatus } from "../../components/AgreementStatus";
+import { AgreementConfirmations } from "./presentation/AgreementConfirmations";
 import { useSharedResource } from "../../hooks/useSharedResource";
 import { fsmClient } from "../../services/fsm-client";
 import { sessionError } from "../../services/session-error";
@@ -158,22 +159,6 @@ function AgreementReview({
         Version {v.versionNumber}
       </p>
       <AgreementDetails version={v} />
-      <div className="partner-row">
-        <strong>Partner A</strong>
-        <span>
-          {v.approvals.A
-            ? `Confirmed ${new Date(v.approvals.A.approvedAt).toLocaleString("en-US")}`
-            : "Awaiting confirmation"}
-        </span>
-      </div>
-      <div className="partner-row">
-        <strong>Partner B</strong>
-        <span>
-          {v.approvals.B
-            ? `Confirmed ${new Date(v.approvals.B.approvedAt).toLocaleString("en-US")}`
-            : "Awaiting confirmation"}
-        </span>
-      </div>
       {error && (
         <div role="alert">
           <Notice tone="warning">{error}</Notice>
@@ -250,16 +235,24 @@ function AgreementDetails({ version: v }: { version: AgreementVersion }) {
         Shared monthly budget:{" "}
         {formatMoney(v.financialSummary.monthlySharedTotalCents)}
       </h3>
-      <div className="document-expenses">
-        {v.items.map((i) =>
-          "monthlyCents" in i ? (
-            <div key={i.id}>
-              <span>{i.key.replaceAll("_", " ")}</span>
-              <strong>{formatMoney(i.monthlyCents)}</strong>
-            </div>
-          ) : null,
-        )}
-      </div>
+      <dl className="document-meta">
+        <div><dt>Version</dt><dd>{v.versionNumber}</dd></div>
+        <div><dt>Contribution model</dt><dd>{v.financialSummary.splitModel.kind}</dd></div>
+        <div><dt>Currency</dt><dd>USD · monthly amounts</dd></div>
+      </dl>
+      <table className="document-expenses">
+        <caption className="sr-only">Agreed monthly shared budget in USD</caption>
+        <thead className="sr-only"><tr><th scope="col">Category</th><th scope="col">Monthly amount</th></tr></thead>
+        <tbody>
+          {v.items.map((item) => "monthlyCents" in item ? (
+            <tr key={item.id}>
+              <th scope="row">{item.key.replaceAll("_", " ")}</th>
+              <td>{formatMoney(item.monthlyCents)}</td>
+            </tr>
+          ) : null)}
+        </tbody>
+        <tfoot><tr><th scope="row">Total, including savings</th><td>{formatMoney(v.financialSummary.monthlySharedTotalCents)}</td></tr></tfoot>
+      </table>
       <p>
         Contribution model: {v.financialSummary.splitModel.kind}
         {v.financialSummary.splitModel.kind === "custom"
@@ -306,6 +299,7 @@ function AgreementDetails({ version: v }: { version: AgreementVersion }) {
         This personal financial planning agreement is not legal advice or
         professional financial advice.
       </p>
+      <AgreementConfirmations version={v} />
     </article>
   );
 }

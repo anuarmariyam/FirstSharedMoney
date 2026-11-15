@@ -118,8 +118,8 @@ function DifferencesView({
       />
       {isDemo && (
         <DemoNotice>
-          Fictional comparison fixtures, not an analysis of your questionnaire.
-          The comparison engine and partner data are not connected.
+          Sample Data. These discussion topics are independent of your demo
+          answers. No partner information is shared here.
         </DemoNotice>
       )}
       <div className="perspective-intro">
@@ -182,7 +182,7 @@ function DifferencesView({
           </p>
         </div>
         <ButtonLink to={`/sessions/${coupleId}/simulator`}>
-          Explore the numbers <Icon name="arrow" />
+          Explore the numbers
         </ButtonLink>
       </div>
     </>

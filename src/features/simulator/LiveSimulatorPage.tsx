@@ -11,6 +11,10 @@ import {
   PageHeading,
 } from "../../components/ui";
 import { FinancialSummary } from "./FinancialSummary";
+import { BudgetOverview } from "../../components/financial/BudgetOverview";
+import { BudgetBreakdown } from "../../components/financial/BudgetBreakdown";
+import { ContributionComparison } from "../../components/financial/ContributionComparison";
+import { ScenarioComparison } from "../../components/financial/ScenarioComparison";
 import { useSharedResource } from "../../hooks/useSharedResource";
 import { fsmClient } from "../../services/fsm-client";
 import { sessionError } from "../../services/session-error";
@@ -27,7 +31,6 @@ import type {
   FinancialInput,
   FinancialScenario,
   RequestId,
-  SplitCalculation,
   SplitModel,
   StressTestScenario,
 } from "../../types/domain";
@@ -54,23 +57,6 @@ function keyOf(
     model,
     stressTest: stress,
   });
-}
-function barWidth(
-  result: Extract<SplitCalculation, { status: "available" }>,
-  slot: "A" | "B",
-) {
-  return result.monthlySharedTotalCents === 0
-    ? 0
-    : (result.allocations[slot].monthlyContributionCents /
-        result.monthlySharedTotalCents) *
-        100;
-}
-function warningText(code: string, slot: string | null) {
-  return code === "reserve_exhausted"
-    ? "The shared emergency reserve is exhausted in this scenario."
-    : code === "zero_income"
-      ? `Partner ${slot} has no income in this scenario.`
-      : `Partner ${slot}'s modeled costs exceed available income.`;
 }
 
 export function LiveSimulatorPage() {
@@ -267,7 +253,8 @@ function SimulatorForm({
           ),
         }),
       );
-      return { input, model, stress, models, key: keyOf(input, model, stress) };
+      const baseline = financialEngine.simulate(input, model, null);
+      return { input, model, stress, models, baseline, key: keyOf(input, model, stress) };
     } catch {
       return null;
     }
@@ -459,18 +446,16 @@ function SimulatorForm({
             )}
             {result?.status === "available" && (
               <>
-                <div className="model-total">
-                  <span>Shared monthly total</span>
-                  <strong>{formatMoney(result.monthlySharedTotalCents)}</strong>
-                </div>
+                <BudgetOverview
+                  result={result}
+                  sharedSavingsCents={current!.output.effectiveInput.sharedExpenses.shared_savings}
+                  reserveCents={current!.output.effectiveInput.sharedEmergencyFundCents}
+                />
+                <BudgetBreakdown
+                  expenses={current!.output.effectiveInput.sharedExpenses}
+                  monthlyTotalCents={result.monthlySharedTotalCents}
+                />
                 <FinancialSummary result={result} />
-                <p>
-                  Shared savings included:{" "}
-                  {formatMoney(
-                    current!.output.effectiveInput.sharedExpenses
-                      .shared_savings,
-                  )}
-                </p>
                 <p>
                   Uncovered one-off expense:{" "}
                   {formatMoney(result.oneOffSharedTotalCents)} · A{" "}
@@ -484,11 +469,6 @@ function SimulatorForm({
                     current!.output.effectiveInput.sharedEmergencyFundCents,
                   )}
                 </p>
-                {result.warnings.map((warning, i) => (
-                  <Notice key={i} tone="warning">
-                    {warningText(warning.code, warning.partnerSlot)}
-                  </Notice>
-                ))}
               </>
             )}
           </section>
@@ -509,32 +489,7 @@ function SimulatorForm({
                           ? "Proportional"
                           : "Custom"}
                     </strong>
-                    {output.split.status === "available" ? (
-                      (["A", "B"] as const).map((slot) => {
-                        const split = output.split;
-                        return split.status === "available" ? (
-                          <div
-                            className={`chart-bar-row ${slot === "B" ? "bar-b" : ""}`}
-                            key={slot}
-                          >
-                            <span>{slot}</span>
-                            <div>
-                              <i
-                                style={{ width: `${barWidth(split, slot)}%` }}
-                              />
-                            </div>
-                            <strong>
-                              {formatMoney(
-                                split.allocations[slot]
-                                  .monthlyContributionCents,
-                              )}
-                            </strong>
-                          </div>
-                        ) : null;
-                      })
-                    ) : (
-                      <p>N/A — both incomes are zero.</p>
-                    )}
+                    <ContributionComparison result={output.split} />
                   </div>
                 ))}
               </div>
@@ -588,6 +543,11 @@ function SimulatorForm({
           />
         )}
       </section>
+      {current?.stressTest && calculation && (
+        <section className="surface scenario-panel">
+          <ScenarioComparison before={calculation.baseline} after={current.output} />
+        </section>
+      )}
       <div className="next-step-banner">
         {current&&current.stressTest===null&&current.output.split.status==='available'&&<ButtonLink to={`/sessions/${coupleId}/agreement?scenario=${current.id}`}>Create money agreement</ButtonLink>}
         <p>

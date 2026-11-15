@@ -39,7 +39,7 @@ function DemoSessionPage() {
         <section className="surface overview-main">
           <div className="flex items-center justify-between gap-4">
             <p className="eyebrow">THE CONVERSATION AHEAD</p>
-            <Badge tone="neutral">Local preview</Badge>
+            <Badge tone="neutral">Sample Data</Badge>
           </div>
           <h2>
             Make space for
@@ -54,7 +54,6 @@ function DemoSessionPage() {
             {demo.questionnaireComplete
               ? "Review my answers"
               : "Start my questionnaire"}
-            <Icon name="arrow" size={18} />
           </ButtonLink>
           <div className="overview-meta">
             <span>
@@ -92,18 +91,18 @@ function DemoSessionPage() {
             <span className="avatar avatar-muted">B</span>
             <div>
               <strong>Your partner’s perspective</strong>
-              <p>Waiting for a live connection</p>
+              <p>No second partner in Demo</p>
             </div>
             <Icon name="clock" size={18} />
           </div>
           <div className="invite-placeholder">
             <Icon name="link" size={18} />
             <span>
-              An invitation will appear here after a live session is created.
+              Invitations are available when you create a real session in the connected app.
             </span>
           </div>
           <Button variant="secondary" className="w-full" disabled>
-            Invite partner — not connected
+            Invitations unavailable in Demo
           </Button>
         </section>
       </div>
@@ -146,7 +145,6 @@ function DemoSessionPage() {
             </div>
             <span className="journey-link">
               {step.label}
-              <Icon name="arrow" size={18} />
             </span>
           </Link>
         ))}
@@ -162,12 +160,12 @@ function DemoSessionPage() {
           onClick={() => {
             demo.reset();
             setResetMessage(
-              "Local preview cleared. No server data was changed.",
+              "Sample Data cleared. No server data was changed.",
             );
           }}
         >
           <Icon name="refresh" size={16} />
-          Reset local preview
+          Reset Demo
         </Button>
       </div>
       {resetMessage && (
@@ -187,7 +185,7 @@ export function NotFoundPage() {
         The address may be incomplete or the page may have moved.
         <div className="mt-6">
           <ButtonLink to="/">
-            Back to the beginning <Icon name="arrow" />
+            Back to the beginning
           </ButtonLink>
         </div>
       </EmptyState>
