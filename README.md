@@ -1,231 +1,243 @@
-# FirstSharedMoney (FSM)
+<div align="center">
+  <img src="public/fsm-mark.svg" alt="FirstSharedMoney logo" width="64" />
+  <h1>FirstSharedMoney</h1>
+  <p><strong>Two people. Different money habits. One shared plan.</strong></p>
+  <p>A clearer first conversation about sharing money, responsibilities, and a future.</p>
+  <p>
+    <a href="https://firstsharedmoney.vercel.app/">Explore the website</a> &middot;
+    <a href="https://firstsharedmoney.vercel.app/sessions/demo">Explore Preview</a> &middot;
+    <a href="https://github.com/anuarmariyam/FirstSharedMoney">GitHub Repository</a>
+  </p>
+</div>
 
-**Two people. Different money habits. One shared plan.**
+![React](https://img.shields.io/badge/React-19-149ECA?logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-7-3178C6?logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-Backend-3ECF8E?logo=supabase&logoColor=white)
+[![Website](https://img.shields.io/badge/Vercel-Website%20Live-000000?logo=vercel&logoColor=white)](https://firstsharedmoney.vercel.app/)
 
-A web planning product for couples beginning their first shared financial life.
+FirstSharedMoney is a web-based financial planning platform that helps couples beginning their shared financial life understand each other's financial expectations, explore ways to split expenses, prepare for unexpected changes, and create a mutually approved financial agreement.
 
-Phases 1-6 and the reviewed consumer UI are integrated. The latest verification
-passed backend 44/44, AI/fallback 11/11, 63 distinct UI cases after targeted fixes,
-and real A/B/C browser flows 4/4. Earlier security evidence is 68/68.
-Deterministic Insights work in preview and saved plans; Qwen remains a separate
-fictional-only PoC. No production website or public submission URL is deployed.
+Designed primarily for US couples aged 25-45 who are planning shared finances for the first time, FSM turns separate perspectives into practical decisions both people can revisit.
 
-Current delivery: **Phase 6 — Mutual Agreement & Authorized PDF Export**.
-Immutable agreement versions, independent same-version/hash confirmations and
-server-authorized PDF downloads are verified in the approved FSM test project.
-Eleven migrations are applied and fsm-api version 4 is active with JWT verification.
-See [Phase 6 implementation and verification](docs/PHASE6.md),
-[Phase 5 implementation and verification](docs/PHASE5.md),
-[Phase 4B verification](docs/PHASE4B_VERIFICATION.md) and the earlier
-[Phase 4A baseline](docs/PHASE4A_VERIFICATION.md). AI is not connected.
+## Live Website
 
-## Start here
+**[https://firstsharedmoney.vercel.app](https://firstsharedmoney.vercel.app/)**
 
-- [Frontend contributor assignment](docs/TEAM_MEMBER_2_FRONTEND.md)
-- [Insights contributor assignment](docs/TEAM_MEMBER_3_INSIGHTS.md)
-- [Three-developer workflow](docs/COLLABORATION.md)
-- [Repository audit, integration priorities and proposed CI/issues](docs/REPOSITORY_AUDIT.md)
-- [Existing Supabase test project setup reference](docs/SUPABASE_SETUP.md)
-- [Phase 4A real test results](docs/PHASE4A_VERIFICATION.md)
-- [Phase 4B implementation and test results](docs/PHASE4B_VERIFICATION.md)
-- [Phase 4A implementation, security boundaries, and verification status](docs/PHASE4A_BACKEND.md)
-- [Full architecture and API design](docs/ARCHITECTURE.md)
-- [Database schema](docs/DATABASE_SCHEMA.md)
-- [Target user flow and questionnaire](docs/USER_FLOW.md)
-- [MVP scope](docs/MVP_SCOPE.md)
+Explore FirstSharedMoney online and discover how two partners can turn individual financial expectations into one shared plan. No email registration is required.
 
-Never send private keys or database passwords through chat or commit them.
-The checked-in environment examples contain no working URL or key.
+| Experience | What to expect |
+| --- | --- |
+| **Preview** | Explore a sample plan without signing in. Budget examples and comparison topics are fixed; they are not calculated from your questionnaire. Editing example inputs hides the primary example result. Preview answers and drafts reset on refresh and cannot record real approvals or export an approved PDF. |
+| **Your shared session** | Start a plan, invite your partner, and answer separately using independent anonymous browser identities. Submitted answers persist; authorized comparisons, financial scenarios, agreement versions, confirmations, and PDF export use the real backend. |
 
-## Run the local application
+Use fictional financial details when evaluating the public release. For two partners, use separate browser profiles or devices. Keep your original browser access: clearing its storage removes automatic access, and anonymous identity recovery is not available.
 
-Use Node.js satisfying the installed Vite engine range. Initialization used
-Node.js 24.11.1 and npm 11.6.2. From PowerShell:
+## The Problem
 
-```powershell
-Set-Location D:\FirstSharedMoney
-npm.cmd ci
-npm.cmd run dev -- --host 127.0.0.1 --port 5173 --strictPort
+Couples often begin sharing rent, bills, and financial responsibilities before discussing income differences, savings expectations, personal debts, unexpected costs, or financial boundaries.
+
+An expense tracker can show what was spent. It does not necessarily help two people decide how to share costs, understand different expectations, or confirm the same plan before those decisions become a source of friction.
+
+## Our Solution
+
+**A guided two-person decision workflow, ending in a First Money Agreement.**
+
+1. **Create a shared session** with your own browser identity.
+2. **Invite a partner** through a private, one-use invitation.
+3. **Answer separately** to describe your finances and preferences.
+4. **Compare perspectives** when both partners permit comparison.
+5. **Explore the budget** through alternative splits and stress scenarios.
+6. **Build an agreement** from a validated, saved financial scenario.
+7. **Approve independently** so both confirmations refer to the same version and content.
+8. **Download the agreement** once the current version has both confirmations and passes the server's access checks.
+
+## Key Features
+
+| Feature | What it does |
+| --- | --- |
+| Independent partner identities | Separate anonymous access for Partner A and Partner B; one identity cannot occupy both places. |
+| Private questionnaire | Fifteen questions covering income, obligations, shared costs, savings, purchases, emergencies, transparency, and budget reviews. |
+| Two sharing choices | Separate, revocable permissions for preference comparison and shared financial inputs. Neither permission authorizes external AI processing. |
+| Conflict Detection Engine | Classifies aligned preferences, different expectations, and unresolved decisions without psychological compatibility scores. |
+| Three expense splits | Equal, income-based Proportional, and Custom percentage allocation, including zero-income and affordability states. |
+| Exact-cent calculations | Integer cents and BigInt intermediates preserve allocation totals without losing cents to rounding. Live scenarios are calculated and validated server-side before saving. |
+| Five stress scenarios | Higher rent, reduced income, an unexpected shared expense, temporary income loss, and a changed savings target. Reserve use is accounted for separately. |
+| Financial visualization | Expense breakdowns, contribution bars, income burden, remaining balances, and before/after scenario comparisons. |
+| Smart Insights | Deterministic explanations of validated results, financial warnings, and neutral questions to discuss together. |
+| Immutable agreement versions | Editing terms creates a new version; earlier confirmations do not transfer. |
+| Independent approvals | Both partners explicitly confirm the same version and content hash using their own identities. |
+| Authorized PDF export | A server-generated document with agreed amounts, rules, version details, and confirmation timestamps; access is rechecked before delivery. |
+
+**Financial calculations are deterministic.** Neither an LLM nor a compatibility score decides how much either partner pays or whether an agreement is approved.
+
+## Screenshots / Product Preview
+
+Explore the actual interface through the links below. Repository-hosted product screenshots have not been published yet; these links open the working application rather than mockups.
+
+| Screen | Explore |
+| --- | --- |
+| Landing Page | [Product introduction and how it works](https://firstsharedmoney.vercel.app/) |
+| Create Shared Space | [Start your own shared plan](https://firstsharedmoney.vercel.app/create) |
+| Questionnaire | [Explore the fifteen-question experience](https://firstsharedmoney.vercel.app/sessions/demo/questionnaire) |
+| Financial Simulator | [Compare sample allocation models](https://firstsharedmoney.vercel.app/sessions/demo/simulator) |
+| Expense Breakdown | [View the example budget, contributions, and Insights](https://firstsharedmoney.vercel.app/sessions/demo/simulator) |
+| Agreement Builder | [Explore the example rules](https://firstsharedmoney.vercel.app/sessions/demo/agreement) |
+| Agreement Document / PDF | [View the unapproved document layout](https://firstsharedmoney.vercel.app/sessions/demo/agreement/preview). An approved PDF requires two real confirmations in a shared session. |
+
+The interface supports desktop, tablet, and mobile, with a light cream/lavender palette and keyboard-accessible controls.
+
+## Technology Stack
+
+| Area | Implementation |
+| --- | --- |
+| Frontend | React, TypeScript, Vite, React Router |
+| Styling | Tailwind CSS with custom CSS |
+| Authentication | Supabase Anonymous Auth |
+| Backend | Supabase Edge Functions and PostgreSQL RPCs |
+| Database access | Supabase PostgreSQL, Row Level Security, and explicit access checks |
+| Validation and calculations | Typed contracts, runtime validators, deterministic TypeScript engines |
+| PDF | Server-side `pdf-lib` |
+| Deployment | Vercel-hosted frontend; Supabase-hosted backend |
+| Testing | Node.js unit tests, Playwright UI tests, and real security/integration tests in an authorized test project |
+| Linting | Oxlint via `npm run lint` |
+
+## Architecture
+
+```mermaid
+flowchart LR
+    UI[React Frontend] -->|Verified JWT| EDGE[Supabase Edge Function]
+    EDGE --> DB[(PostgreSQL / RLS)]
+    EDGE --> FIN[Financial Engine]
+    EDGE --> AGR[Agreement Engine]
+    FIN -->|Validated scenarios| DB
+    AGR -->|Versions and approvals| DB
+    EDGE -->|Authorized approved version| PDF[PDF Export]
+    PDF --> UI
+    EDGE -. Future consent-gated integration .-> AI[Optional AI / not enabled for real sessions]
 ```
 
-Open http://127.0.0.1:5173/. Stop with Ctrl+C. The .cmd suffix avoids PowerShell
-script-policy restrictions. Dependencies are inside this project on D.
-The user npm cache remains D:\npm-cache; command-scoped checkout-only caching
-can be selected without changing the user setting:
+The server is authoritative for saved financial scenarios, agreement state, and PDF eligibility. The frontend renders typed results and keeps the sample Preview separate from real sessions.
 
-```powershell
-npm.cmd --cache .\node_modules\.cache\npm run build
+Implementation references: [Architecture](docs/ARCHITECTURE.md), [Database Schema](docs/DATABASE_SCHEMA.md), and [User Flow](docs/USER_FLOW.md).
+
+## Security & Privacy
+
+- **Separate identities:** each partner has independent anonymous access. Invitations are cryptographically random, one-use, expiring, and stored as hashes.
+- **Private answers:** raw questionnaire records and private notes are owner-only. Budget consent separately permits the structured income and obligation inputs needed for shared planning.
+- **Consent-gated results:** comparison and budget permissions are independent. Withdrawal and revision changes are checked server-side before shared results can be retrieved.
+- **Layered access checks:** JWT verification, membership checks, PostgreSQL permissions, guarded RPCs, and RLS enforce access beyond the interface.
+- **Server-authoritative finances:** client-supplied calculated totals are not accepted as authoritative saved results.
+- **Version-bound confirmations:** approvals bind an authenticated partner to a specific version and content hash. New content requires new confirmations.
+- **Restricted PDF delivery:** only authorized partners can export the current eligible, twice-approved agreement. No public document URL substitutes for access checks.
+- **Server-only secrets:** privileged credentials and the experimental Groq key do not belong in the browser or repository.
+
+These are implemented controls backed by testing, not a claim of absolute security, regulatory certification, or completed commercial operations readiness.
+
+## Smart Insights & Qwen
+
+**Currently available:** deterministic Smart Insights based on validated financial calculations. Generate Insights explains the displayed plan, highlights allocations and potential shortfalls, and suggests discussion questions. It works without an external AI service.
+
+**Experimental:** Qwen through GroqCloud was tested separately with fictional data. The narrow PoC validates structured evidence IDs; it does not generate authoritative financial amounts, change agreements, or analyze real shared sessions.
+
+External AI for real financial data remains disabled. Enabling it requires separate explicit consent, server-side consent enforcement, payload review, durable rate limiting, and an approved deployment. Existing comparison/budget consents do not authorize sharing with an AI provider.
+
+See the [Qwen PoC notes](docs/QWEN_INSIGHTS.md) for the isolated implementation and its limitations.
+
+## Getting Started
+
+### Requirements
+
+- **Node.js 24.x**; the verified local toolchain uses Node.js 24.11.1.
+- **npm 11.6.2**, the verified clean-install version used for this release.
+- Git; Microsoft Edge for the current Playwright browser configuration.
+
+### Install
+
+```bash
+git clone https://github.com/anuarmariyam/FirstSharedMoney.git
+cd FirstSharedMoney
+npm ci
 ```
 
-## Phase 3 frontend that still works
+Use the integrated `main` branch. On Windows PowerShell, use `npm.cmd` in place of `npm` if script execution policy blocks npm's PowerShell wrapper.
 
-The responsive landing page and fictional workspace include all 15 specified
-questionnaire prompts, exact-cent input validation, progress and Previous/Next
-navigation, separate sharing choices, discussion examples, simulator controls,
-editable agreement rules, and an explicitly unapproved draft document.
+### Configure public backend settings
 
-The demo is not authenticated and does not represent a stored couple. All its
-form data is held in memory and resets on refresh. Use fictional information.
-Financial/comparison results are hand-authored fixtures, not algorithms or
-results derived from the visitor's questionnaire. Changed simulator input hides
-the primary sample result; the read-only baseline chart remains labeled.
+Copy [.env.example](.env.example) to `.env.local` and fill in the public settings for your configured Supabase project:
 
-## Phase 4A session source
-
-After actual project setup, the integrated code calls real Supabase APIs for:
-
-- Explicit anonymous sign-in, with existing-browser identity restoration.
-- A creating a session and receiving a one-use B invitation.
-- A replacing an unused invitation, revoking the old one.
-- B redeeming an invitation under a separate Auth identity.
-- Loading authorized session membership and refreshing status.
-
-These paths passed real cloud security and isolated-browser integration checks.
-With no configuration, Create/Join remain disabled instead of simulating success.
-No local state is treated as a verified identity, membership, or approval.
-
-Root .env.local requires the actual VITE_SUPABASE_URL and
-VITE_SUPABASE_PUBLISHABLE_KEY. Server-only/privileged VITE_ settings are rejected.
-The Edge Function needs only a publishable key and verified user JWTs in Phase 4A;
-no service_role runtime key is needed.
-
-Invitation fragments are captured only in memory and stripped immediately.
-Issuance returns the raw token once; SQL stores only its digest. Refreshing A's
-page loses that in-memory raw invitation, so A can issue a replacement. Losing
-the browser's Auth session has no automatic account recovery.
-
-## Private questionnaire persistence
-
-The 15-question live flow saves valid answers privately and restores completed
-saves after refresh. Next/Submit flush pending writes. Loading, unsaved changes,
-network retry, incomplete answers, and stale revisions have explicit states.
-Conflicting tabs preserve unsaved input and require a review before another write.
-
-Submission allows either or both sharing permissions to remain off. Raw answers
-and notes are never exposed to the other partner, even with consent. Editing
-submitted answers requires reopening, which clears both permissions and retains
-the answers as a draft. Sharing permissions can also be changed independently.
-The original in-memory Demo and visual design remain intact.
-
-## Routes
-
-| Route                                 | Behavior                                                               |
-| ------------------------------------- | ---------------------------------------------------------------------- |
-| /                                     | Landing                                                                |
-| /create                               | Actual create flow when configured; honest unavailable state otherwise |
-| /join#token=...                       | In-memory invitation capture and explicit join                         |
-| /sessions/:coupleId                   | Authorized real session status when configured                         |
-| /sessions/:coupleId/questionnaire     | Owner-only persisted questions and answers                             |
-| /sessions/:coupleId/questionnaire/consent | Submit or update independent sharing choices                         |
-| /sessions/:coupleId/questionnaire/complete | Persisted submission status; reopen for editing                     |
-| /sessions/demo                        | Separate fictional workspace                                           |
-| /sessions/demo/questionnaire?step=1   | Sequential 15-question preview                                         |
-| /sessions/demo/questionnaire/consent  | Preview sharing choices                                                |
-| /sessions/demo/questionnaire/complete | Local completion, not server submission                                |
-| /sessions/demo/differences            | Fictional comparison examples                                          |
-| /sessions/demo/simulator              | Static examples and financial input UI                                 |
-| /sessions/demo/agreement              | Local draft rules                                                      |
-| /sessions/demo/agreement/preview      | Unapproved document                                                    |
-
-Live comparison requires both comparison consents; shared financial inputs and
-scenarios independently require both budget consents and submitted questionnaires.
-The server calculates scenarios and rechecks revisions before saving. Saved
-scenario URLs restore the form after refresh without storing financial amounts
-in localStorage. A session UUID is only a locator; it cannot grant access.
-Anonymous Auth persists in the browser profile.
-Do not switch A's identity to fill B: use a separate profile or device.
-
-## Source structure
-
-- src/components: existing shared UI and workspace layout.
-- src/features/questionnaire: catalog, form controls, input validation.
-- src/engines: deterministic conflict comparison and BigInt financial calculations.
-- src/features/comparison and simulator: live integration and separate Demo fixtures.
-- src/features/agreement: live version/confirmation integration, typed policy and Demo validation.
-- src/features/session: create/join handling and live status UI.
-- src/app and src/hooks: separate demo state, actual Auth events, live loading.
-- src/services: typed session/questionnaire/comparison/scenario/agreement/PDF operations.
-- src/types: approved Phase 2 domain/API/engine contracts.
-- supabase/migrations: session, questionnaire, scenario and agreement tables, RLS and guarded RPCs.
-- supabase/functions: authenticated routed Edge Function and shared validation.
-- tests/backend: transport/configuration unit tests.
-- tests/ui: offline frontend regression tests.
-- tests/live and scripts/test-session-security.ts: actual cloud verification.
-
-Agreement creation/proposal/approval and PDF export now use real server operations.
-Only an available current baseline scenario can seed the nine-item document.
-Each edit creates a new draft with zero confirmations. A/B confirm independently;
-export requires the current twice-approved version, valid consents and revisions.
-Historical terms remain readable by active members. Payment, background cleanup,
-AI integration and public website deployment are not implemented.
-
-## Local verification
-
-```powershell
-npm.cmd run typecheck
-npm.cmd run lint
-npm.cmd run build
-npm.cmd run test:backend
-npm.cmd run test:ui
+```dotenv
+VITE_SUPABASE_URL=
+VITE_SUPABASE_PUBLISHABLE_KEY=
 ```
 
-The configured typecheck covers src and Vite tooling. Runtime test commands use
-Node's TypeScript stripping; they do not themselves statically typecheck tests.
-New isolated test suites must also run an explicit strict test typecheck as
-documented in the contributor brief.
-It is not proof of Deno execution or a deployed database. Backend unit tests use
-transport mocks and must not be described as real Auth/RLS tests.
+Leave these blank to explore Preview without a backend. Real session creation needs Anonymous Auth and the existing database/Edge setup described in [Supabase Setup](docs/SUPABASE_SETUP.md). The frontend origin must be explicitly allowed by the backend.
 
-The offline Playwright suite starts a separate server on port 5174 in ui-test
-mode, which explicitly removes Supabase configuration. It cannot accidentally
-write to a real project. It checks desktop/tablet/mobile, navigation, form
-validation, sharing choices, keyboard access, fixture boundaries, local draft
-editing, memory reset, invitation fragment removal, and horizontal overflow.
-Browser console errors fail the suite. Installed Microsoft Edge is used.
+Never place a database password, privileged Supabase key, or Groq key in a `VITE_` variable. Local environment files are ignored by Git. Review backend setup before any cloud change; do not apply migrations to a shared project without authorization.
 
-Screenshots and test results are written under ignored artifacts/. No financial
-or authentication live-test trace is intentionally captured.
+### Run locally
 
-## Real cloud verification
-
-After configuring a separate disposable test project as described in
-SUPABASE_SETUP.md, copy tests/security.env.example to ignored root
-.env.security.local, supply the actual project/database settings, and explicitly
-acknowledge targeted test mutations:
-
-```powershell
-npm.cmd run test:security
-npm.cmd run test:questionnaire
-npm.cmd run test:finance
-npm.cmd run test:agreement
-npm.cmd run test:live
+```bash
+npm run dev -- --host 127.0.0.1 --port 5173 --strictPort
 ```
 
-The security suites exercise real A/B/C Auth identities, PostgREST/RPC, Edge,
-expiry, revocation, replay, direct-write denials, identity forgery, concurrent
-join, and expired membership. The live browser test checks separate identities
-and persistence after reload, owner-only answers, conflict/network recovery,
-independent consents, and reopening on isolated port 5175.
+Open [http://127.0.0.1:5173](http://127.0.0.1:5173/). For a real two-person flow, use separate browser profiles or devices and share only the generated partner invitation.
 
-All five commands fail preflight if the actual test project is missing. Such a result
-means **cloud tests did not run**, not that security passed. Tests create only
-fictional session data and clean up records owned by their newly created users.
-Database TLS verification stays enabled.
+### Build
 
-Runtime additions include @supabase/supabase-js and server-only pdf-lib.
-Development additions include pg and @types/pg,
-which are remote database clients/types, not a PostgreSQL server. Docker, local
-PostgreSQL, Deno CLI, .NET, and Python ML libraries were not installed.
+```bash
+npm run build
+```
 
-Phase 3 is preserved on main at local commit 590a234. Phase 4A is saved in
-backend/fsm-core at checkpoint 9a9ddeb, followed by collaboration documentation.
-The frontend/fsm-ux branch starts at stable main and adds only collaboration
-instructions. See [the three-developer workflow](docs/COLLABORATION.md).
-main and frontend/fsm-ux were published earlier with owner approval. The handoff
-base 4c43ad5 was published to backend/fsm-core and feature/fsm-insights. After
-the owner's separate approval, backend/fsm-core was fast-forwarded to Phase 6
-commit 1aaeb3a0d972c13111e4efabf6859eaa34dad3cb. Other branches were unchanged.
-Eleven migrations and one test Edge Function were
-applied/deployed after separate explicit approval. No Vercel website deployment
-or merge was performed. Subsequent audit/documentation changes are local only;
-their publication requires another approval. AI/Qwen is not connected to FSM.
+Vite writes the frontend to `dist`. The Vercel configuration includes an SPA fallback so direct React Router links can load after refresh.
+
+## Testing
+
+These local commands do not require cloud database credentials:
+
+```bash
+npm run typecheck
+npm run lint
+npm run build
+npm run test:backend
+npm run test:ui
+```
+
+The separate AI adapter/fallback suite is also offline:
+
+```bash
+node --test tests/backend/financial-insights.test.ts
+```
+
+Unit tests check contracts, exact financial allocation, edge cases, agreement rules, and PDF behavior. Playwright covers desktop/tablet/mobile navigation, input validation, preview boundaries, accessibility interactions, and overflow. Its offline UI configuration removes Supabase settings and uses an isolated local server.
+
+**Cloud security and live integration tests are separate.** They require an explicitly authorized test project, guarded local configuration, verified database TLS, and permission to create and clean up test-owned records. Do not run them against customer or shared production data. They exercise real independent A/B/C identities, private access, consents, persistence, approvals, and PDF download; offline mocks do not establish that those controls work in the cloud.
+
+See [verification and setup guidance](docs/SUPABASE_SETUP.md) before requesting a cloud test run. Cloud mutation commands are intentionally not included in this quick start.
+
+## Current Status
+
+| Capability | Status |
+| --- | --- |
+| Core two-person financial planning workflow | Implemented and integration-tested |
+| Independent A/B confirmations and authorized PDF export | Implemented and integration-tested |
+| Public frontend | Deployed on Vercel, connected to the verified Supabase test backend |
+| Smart Insights | Available in deterministic mode |
+| Qwen / GroqCloud | Experimental, fictional-data PoC; not connected to real sessions |
+| Bank connections, payments, and money transfers | Not implemented |
+
+The public release is available for evaluation with fictional data. Banking integrations, commercial billing, and ongoing operational/privacy readiness are not implied by the hackathon deployment.
+
+## Team
+
+**Team ForExample**
+
+- Mariyam Anuar
+- Dilmira Dauletova
+- Saida Yerbol
+
+**Project:** Zimran Business Cup 2.0 - MONEY Track.
+
+## Disclaimer
+
+FirstSharedMoney is a financial planning and communication tool. It does not provide banking services, transfer funds, or offer professional financial or legal advice.
