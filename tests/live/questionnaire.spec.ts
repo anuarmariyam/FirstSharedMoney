@@ -26,6 +26,12 @@ test("real questionnaires autosave privately, recover from network/revision erro
   const a = await contextA.newPage(),
     b = await contextB.newPage();
   const pages = [a, b];
+  for (const page of pages) page.on('response', async response => {
+    if (new URL(response.url()).pathname !== '/auth/v1/signup' || response.status() < 400) return;
+    const data = await response.json().catch(() => null);
+    const code = data?.error_code ?? data?.code;
+    console.log(`Anonymous signup HTTP ${response.status()}; code=${typeof code === 'string' && /^[a-z_]{1,80}$/.test(code) ? code : 'unavailable'}`);
+  });
   const errors: string[] = [];
   for (const page of pages)
     page.on("pageerror", (error) => errors.push(error.name));

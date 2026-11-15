@@ -155,6 +155,10 @@ test("live derived comparison and financial scenarios update, persist and honor 
     );
     await expect(contributions().nth(0)).toContainText("$2,000");
     await expect(contributions().nth(1)).toContainText("$1,200");
+    const insights = a.getByRole('region', { name: 'Your Financial Insights' });
+    await insights.getByRole('button', { name: 'Generate Insights' }).click();
+    await expect(insights).toContainText('Your shared monthly plan is $3,200');
+    await expect(insights).toContainText('External AI analysis is not enabled');
     await changed(() =>
       a.getByRole("button", { name: "Equal", exact: true }).click(),
     );

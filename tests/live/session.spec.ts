@@ -24,6 +24,12 @@ test("real A/B identities survive reload and a third context cannot reuse the in
   ]);
   const pages = await Promise.all(contexts.map((context) => context.newPage()));
   const [a, b, c] = pages;
+  for (const page of pages) page.on('response', async response => {
+    if (new URL(response.url()).pathname !== '/auth/v1/signup' || response.status() < 400) return;
+    const data = await response.json().catch(() => null);
+    const code = data?.error_code ?? data?.code;
+    console.log(`Anonymous signup HTTP ${response.status()}; code=${typeof code === 'string' && /^[a-z_]{1,80}$/.test(code) ? code : 'unavailable'}`);
+  });
   let cleanupFailed = false;
   const errors: string[] = [];
   pages.forEach((page) =>
