@@ -3469,3 +3469,191 @@
     display: none;
   }
 }
+
+/* Financial presentation: all amounts come from supplied typed results. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.budget-overview-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-block: 24px;
+}
+.budget-overview-cards > div {
+  border: 1px solid var(--line);
+  background: #faf8fd;
+  border-radius: 12px;
+  padding: 15px;
+  min-width: 0;
+}
+.budget-overview-cards span, .budget-overview-cards small {
+  display: block;
+  font-size: 12px;
+  color: #675c76;
+  line-height: 1.5;
+}
+.budget-overview-cards strong {
+  display: block;
+  font-size: clamp(20px, 2vw, 28px);
+  margin-block: 7px;
+  color: #493466;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.budget-breakdown { padding-block: 20px; border-block: 1px solid var(--line); }
+.budget-breakdown h3, .scenario-comparison h3 { font-size: 17px; color: #493466; }
+.finance-unit { font-size: 11px; color: #706578; }
+.budget-breakdown-body { display: flex; align-items: center; gap: 22px; margin-block: 16px; }
+.budget-donut { position: relative; width: 168px; flex: 0 0 168px; }
+.budget-donut svg { width: 100%; display: block; }
+.budget-donut > div { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+.budget-donut span { font-size: 11px; color: #706578; }
+.budget-donut strong { font-size: 23px; color: #493466; max-width: 110px; overflow-wrap: anywhere; text-align: center; }
+.budget-color-0 { stroke: #6a50b5; background: #6a50b5; }
+.budget-color-1 { stroke: #a28acb; background: #a28acb; }
+.budget-color-2 { stroke: #427668; background: #427668; }
+.budget-color-3 { stroke: #bc873f; background: #bc873f; }
+.budget-color-4 { stroke: #615c91; background: #615c91; }
+.budget-legend { width: 100%; border-collapse: collapse; font-size: 12px; }
+.budget-legend th { text-align: left; font-weight: 400; padding-block: 8px; color: #584e63; }
+.budget-legend td { text-align: right; font-weight: 600; padding-left: 12px; font-variant-numeric: tabular-nums; }
+.budget-legend i { display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 8px; }
+.contribution-comparison { display: grid; gap: 14px; margin-top: 23px; }
+.contribution-row > div:first-child { display: flex; align-items: baseline; flex-wrap: wrap; gap: 5px 10px; font-size: 12px; }
+.contribution-row strong { margin-left: auto; font-variant-numeric: tabular-nums; color: #493466; }
+.contribution-row small { font-weight: 400; color: #706578; }
+.contribution-row > div:first-child > span:last-child { width: 100%; color: #706578; font-size: 11px; }
+.contribution-track { height: 9px; background: #eee9f4; border-radius: 99px; margin-top: 7px; overflow: hidden; }
+.contribution-track i { display: block; height: 100%; border-radius: inherit; background: #6a50b5; }
+.contribution-row-B .contribution-track i { background: #a28acb; }
+.partner-summary { padding: 16px; background: #faf8fd; border: 1px solid #e9e2f0; border-radius: 12px; }
+.partner-summary-B { background: #f8f8fb; }
+.partner-summary .flex > strong { font-size: 13px; color: #59446d; }
+.summary-label { font-size: 12px; color: #675c76; }
+.summary-details { margin-bottom: 0; }
+.summary-details > div { font-size: 12px; color: #675c76; }
+.summary-details dd { margin: 0; font-size: 15px; font-weight: 600; color: #493466; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.summary-details .remaining-balance { border-top: 1px solid #e5dfec; padding-top: 12px; }
+.summary-details .remaining-balance dd { font-size: 21px; }
+.finance-negative, .summary-details dd.finance-negative { color: #a12f3b; }
+p.finance-negative { font-size: 12px; margin-top: 12px; }
+.one-off-detail { display: grid; grid-template-columns: 1fr auto; gap: 8px; border-top: 1px solid var(--line); margin-top: 15px; padding-top: 15px; font-size: 12px; }
+.financial-warnings { display: grid; gap: 10px; margin-top: 18px; }
+.finance-unavailable { font-size: 13px; color: #7f4827; padding: 12px; background: #fff7ea; border-radius: 8px; }
+.model-comparison .comparison-chart { gap: 18px; }
+.model-comparison .contribution-row strong { margin-left: 0; }
+.model-comparison .contribution-row > div:first-child { flex-direction: column; gap: 3px; }
+.model-comparison .contribution-row > div:first-child > span:last-child { font-size: 10px; }
+.scenario-panel { padding: 22px; margin-top: 20px; }
+.scenario-comparison .field-hint { margin-block: 10px 16px; }
+.finance-table-wrap { overflow-x: auto; }
+.finance-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.finance-table th, .finance-table td { padding: 12px 8px; border-bottom: 1px solid var(--line); }
+.finance-table th { text-align: left; font-weight: 500; }
+.finance-table td, .finance-table thead th:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+.finance-table thead { background: #f6f2fa; color: #59446d; }
+
+/* Clearer type and controls, preserving the existing cream/lavender palette. */
+.app-main .field-hint, .app-main .small-copy, .fixture-caption { font-size: 12px; color: #706078; }
+.app-main .notice { font-size: 13px; }
+.demo-notice p { font-size: 12px; line-height: 1.6; }
+.button { min-height: 44px; }
+.simulator-inputs .button { min-height: 40px; font-size: 12px; }
+.model-description .model-total strong { font-size: 32px; }
+.question-card .question-help { font-size: 15px; line-height: 1.7; }
+.consent-option { border-radius: 12px; }
+.consent-option:has(input:checked) { border-color: #8f73bf; background: #f6f1fc; }
+.consent-option:focus-within { outline: 2px solid var(--purple); outline-offset: 3px; }
+.comparison-card p, .group-subtitle { font-size: 13px; }
+.comparison-card .button { font-size: 12px; }
+.hero-actions .button-primary { min-height: 50px; padding-inline: 24px; }
+
+/* Agreement document: readable on screen and useful as a PDF design reference. */
+.document-toolbar .button { font-size: 12px; }
+.agreement-document { border-radius: 14px; color: #403449; }
+.agreement-document h1 { font-size: 38px; }
+.agreement-document .document-intro { font-size: 14px; color: #6f5d7e; }
+.document-top .badge { font-size: 10px; }
+.document-meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; background: #f7f3fb; padding: 17px; margin-top: 23px; border-radius: 10px; }
+.document-meta dt { font-size: 11px; color: #706078; }
+.document-meta dd { font-size: 13px; font-weight: 600; margin: 5px 0 0; }
+.agreement-document section h2 { font-size: 16px; color: #503968; }
+.agreement-document section p { font-size: 14px; color: #61536c; line-height: 1.8; }
+.document-expenses { width: 100%; border-collapse: collapse; }
+.document-expenses th, .document-expenses td { padding: 9px 0; font-size: 13px; border-bottom: 1px solid #eee5f3; }
+.document-expenses th { text-align: left; font-weight: 400; color: #61536c; }
+.document-expenses td { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+.document-expenses tfoot th, .document-expenses tfoot td { font-size: 16px; color: #503968; font-weight: 600; padding-top: 14px; }
+.document-contributions { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.document-contributions > div > span { font-size: 12px; color: #61536c; }
+.document-contributions strong { font-size: 27px; font-variant-numeric: tabular-nums; }
+.document-contributions strong > span { font-size: 11px; }
+.document-approval { gap: 16px; padding-top: 18px; }
+.document-approval > div { border: 1px solid var(--line); border-radius: 10px; padding: 16px; background: #faf8fc; }
+.document-approval strong { font-size: 13px; color: #59446d; border: 0; padding: 0; }
+.document-approval span { font-size: 12px; color: #706078; }
+.agreement-document footer { font-size: 11px; color: #706078; }
+
+@media (max-width: 1200px) and (min-width: 981px) {
+  .budget-overview-cards { grid-template-columns: 1fr; }
+  .budget-breakdown-body { flex-direction: column; }
+  .financial-summary { gap: 12px; }
+  .partner-summary { padding: 12px; }
+}
+@media (max-width: 760px) {
+  .budget-overview-cards { grid-template-columns: 1fr; gap: 8px; }
+  .budget-overview-cards > div { display: grid; grid-template-columns: 1fr auto; gap: 3px 12px; align-items: center; }
+  .budget-overview-cards strong { grid-column: 2; grid-row: 1 / 3; font-size: 23px; margin: 0; }
+  .budget-overview-cards small { grid-column: 1; font-size: 11px; }
+  .budget-breakdown-body { flex-direction: column; gap: 12px; }
+  .budget-donut { width: 180px; flex-basis: auto; }
+  .financial-summary { grid-template-columns: 1fr; gap: 14px; }
+  .model-comparison .comparison-chart { grid-template-columns: 1fr; }
+  .model-comparison .contribution-row > div:first-child { flex-direction: row; }
+  .model-comparison .contribution-row strong { margin-left: auto; }
+  .model-comparison .chart-model { border-bottom: 1px solid var(--line); padding-bottom: 20px; }
+  .finance-table { font-size: 11px; }
+  .finance-table th, .finance-table td { padding: 10px 4px; }
+  .document-meta { grid-template-columns: 1fr; gap: 12px; }
+  .agreement-document { padding: 24px 18px; }
+  .agreement-document h1 { font-size: 31px; }
+  .document-contributions { grid-template-columns: 1fr; gap: 18px; }
+  .document-approval { grid-template-columns: 1fr; }
+  .document-toolbar { flex-wrap: wrap; }
+  .section-title-row { flex-wrap: wrap; }
+}
+
+@media print {
+  @page { size: A4; margin: 16mm; }
+  body:has(.agreement-document) { background: white; min-width: 0; }
+  body:has(.agreement-document) .sidebar,
+  body:has(.agreement-document) .app-topbar,
+  body:has(.agreement-document) .app-footer,
+  body:has(.agreement-document) .document-toolbar,
+  body:has(.agreement-document) .demo-notice,
+  body:has(.agreement-document) .skip-link { display: none !important; }
+  body:has(.agreement-document) .app-layout,
+  body:has(.agreement-document) .app-body { display: block; margin: 0; padding: 0; }
+  body:has(.agreement-document) .app-main { padding: 0; max-width: none; }
+  .document-wrap { max-width: none; }
+  .agreement-document { padding: 0; border: 0; border-radius: 0; box-shadow: none; print-color-adjust: exact; }
+  .agreement-document h1 { font-size: 26pt; }
+  .agreement-document h2 { break-after: avoid; }
+  .agreement-document section { break-inside: auto; padding-block: 15px; }
+  .document-meta, .document-contributions, .document-approval, .document-expenses tr { break-inside: avoid; }
+  .document-expenses thead { display: table-header-group; }
+  .agreement-document p { orphans: 3; widows: 3; }
+  .agreement-document .document-meta { grid-template-columns: repeat(3, 1fr); }
+  .agreement-document .document-contributions, .agreement-document .document-approval { grid-template-columns: 1fr 1fr; }
+}
+.confirmation-hash { overflow-wrap: anywhere; }
+.document-approval time { display: block; font-size: 11px; margin-top: 9px; }

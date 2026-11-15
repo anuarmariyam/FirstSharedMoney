@@ -259,7 +259,7 @@ export function DemoNotice({ children }: { children?: ReactNode }) {
       <Badge>Demo</Badge>
       <p>
         {children ??
-          "Fictional data. This preview stays in memory and resets on refresh. No server is connected."}
+          "Sample Data. Demo drafts stay in this tab and reset on refresh. Nothing is saved to the server."}
       </p>
     </div>
   );

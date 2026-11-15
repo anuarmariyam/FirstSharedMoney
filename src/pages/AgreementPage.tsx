@@ -36,7 +36,7 @@ export default function AgreementPage() {
         title="A shared plan. In your own terms."
         description="Turn a few thoughtful conversations into clear expectations for everyday life."
       >
-        <Badge tone="neutral">Local draft · no server version</Badge>
+        <Badge tone="neutral">Demo draft · unapproved</Badge>
       </PageHeading>
       <DemoNotice>
         This editable draft uses the fixed fictional budget. No proposal,
@@ -50,7 +50,7 @@ export default function AgreementPage() {
         </div>
         <AgreementStatus />
         <p className="field-hint">
-          The later states show the planned process. This local draft has not
+          These steps explain the agreement process. This demo draft has not
           reached Proposed, Under Review, or Approved.
         </p>
       </section>
@@ -98,7 +98,7 @@ export default function AgreementPage() {
                 </span>
               </div>
               <ButtonLink to="/sessions/demo/simulator" variant="ghost">
-                Explore the example budget <Icon name="arrow" size={16} />
+                Explore the example budget
               </ButtonLink>
             </section>
             <section className="surface agreement-section">
@@ -251,8 +251,8 @@ export default function AgreementPage() {
               One shared yes.
             </h2>
             <p>
-              Live approval will require each person to confirm the same
-              server-verified version.
+              In a real session, each person confirms the same server-verified
+              version independently. Demo records no confirmations.
             </p>
             {(["A", "B"] as const).map((slot) => (
               <div className="approval-placeholder" key={slot}>
@@ -264,7 +264,7 @@ export default function AgreementPage() {
                   </span>
                   <div>
                     <strong>Partner {slot}</strong>
-                    <span>Not connected</span>
+                    <span>Not approved · Demo</span>
                   </div>
                 </div>
                 <Button variant="secondary" disabled>
@@ -278,10 +278,10 @@ export default function AgreementPage() {
               an agreement.
             </Notice>
             <Button type="submit" className="w-full">
-              Preview draft document <Icon name="arrow" size={17} />
+              Preview draft document
             </Button>
             <Button className="w-full" variant="ghost" disabled>
-              Propose — not connected
+              Proposals unavailable in Demo
             </Button>
           </aside>
         </div>

@@ -10,7 +10,7 @@ export function PlanPreview() {
       <div className="plan-paper">
         <div className="flex items-center justify-between gap-4">
           <span className="paper-eyebrow">OUR FIRST MONEY PLAN</span>
-          <Badge tone="neutral">Draft</Badge>
+          <Badge tone="neutral">Sample Data</Badge>
         </div>
         <div className="paper-title">
           <div className="small-avatars">
@@ -67,7 +67,7 @@ export function PlanPreview() {
         </div>
         <div className="paper-caption">
           <Icon name="info" size={14} />
-          Fictional proportional example · not calculated live
+          Demo · Proportional split · Sample Data
         </div>
       </div>
       <div className="floating-note">

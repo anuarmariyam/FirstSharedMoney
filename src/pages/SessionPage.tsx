@@ -77,8 +77,8 @@ export function SessionEntryPage() {
           <h2>{isJoin ? "Join your partner" : "Create your shared space"}</h2>
           <p className="muted">
             {isJoin
-              ? "A valid invitation will connect a separate partner identity in the live product."
-              : "Live sessions will give each partner their own private access."}
+              ? "Each partner uses a separate identity and a personal invitation."
+              : "Each partner has their own private access in the connected app."}
           </p>
           <Input
             id="display-name"
@@ -93,10 +93,10 @@ export function SessionEntryPage() {
             hint="Optional. A nickname is fine. Use fictional details."
             error={error}
           />
-          <Notice title="Not connected yet">
+          <Notice title="Standalone demo">
             {isJoin && inviteState !== "unavailable"
               ? `Invitation ${inviteState} — example error state only. No live invitation has been checked.`
-              : "Live session creation, invitations, and secure access will be connected in a later phase. This form does not create an account or save your name."}
+              : "Real sessions are available in the connected app. This standalone frontend does not create a session or save your name. Use Try Demo to explore."}
           </Notice>
           <Button
             disabled={fsmClient.connection === "not_connected"}
@@ -104,8 +104,8 @@ export function SessionEntryPage() {
           >
             <Icon name="lock" size={17} />
             {isJoin
-              ? "Join session — not connected"
-              : "Create session — not connected"}
+              ? "Join session"
+              : "Create session"}
           </Button>
           <div className="entry-divider">
             <span>or take a look around</span>
@@ -121,7 +121,7 @@ export function SessionEntryPage() {
               navigate("/sessions/demo");
             }}
           >
-            Explore the fictional demo <Icon name="arrow" size={17} />
+            Try Demo
           </Button>
           {isJoin && (
             <div className="invite-state-examples">
@@ -129,7 +129,7 @@ export function SessionEntryPage() {
               <button onClick={() => setInviteState("expired")}>Expired</button>
               <button onClick={() => setInviteState("invalid")}>Invalid</button>
               <button onClick={() => setInviteState("unavailable")}>
-                Not connected
+                Unavailable
               </button>
             </div>
           )}
@@ -163,7 +163,7 @@ export default function SessionPage() {
         <section className="surface overview-main">
           <div className="flex items-center justify-between gap-4">
             <p className="eyebrow">THE CONVERSATION AHEAD</p>
-            <Badge tone="neutral">Local preview</Badge>
+            <Badge tone="neutral">Sample Data</Badge>
           </div>
           <h2>
             Make space for
@@ -178,7 +178,6 @@ export default function SessionPage() {
             {demo.questionnaireComplete
               ? "Review my answers"
               : "Start my questionnaire"}
-            <Icon name="arrow" size={18} />
           </ButtonLink>
           <div className="overview-meta">
             <span>
@@ -216,18 +215,18 @@ export default function SessionPage() {
             <span className="avatar avatar-muted">B</span>
             <div>
               <strong>Your partner’s perspective</strong>
-              <p>Waiting for a live connection</p>
+              <p>No second partner in Demo</p>
             </div>
             <Icon name="clock" size={18} />
           </div>
           <div className="invite-placeholder">
             <Icon name="link" size={18} />
             <span>
-              An invitation will appear here after a live session is created.
+              Invitations are available when you create a real session in the connected app.
             </span>
           </div>
           <Button variant="secondary" className="w-full" disabled>
-            Invite partner — not connected
+            Invitations unavailable in Demo
           </Button>
         </section>
       </div>
@@ -270,7 +269,6 @@ export default function SessionPage() {
             </div>
             <span className="journey-link">
               {step.label}
-              <Icon name="arrow" size={18} />
             </span>
           </Link>
         ))}
@@ -286,12 +284,12 @@ export default function SessionPage() {
           onClick={() => {
             demo.reset();
             setResetMessage(
-              "Local preview cleared. No server data was changed.",
+              "Sample Data cleared. No server data was changed.",
             );
           }}
         >
           <Icon name="refresh" size={16} />
-          Reset local preview
+          Reset Demo
         </Button>
       </div>
       {resetMessage && (
@@ -311,7 +309,7 @@ export function NotFoundPage() {
         The address may be incomplete or the page may have moved.
         <div className="mt-6">
           <ButtonLink to="/">
-            Back to the beginning <Icon name="arrow" />
+            Back to the beginning
           </ButtonLink>
         </div>
       </EmptyState>

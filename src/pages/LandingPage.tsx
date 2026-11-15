@@ -11,7 +11,7 @@ export default function LandingPage() {
           <a href="#how-it-works">How it works</a>
           <a href="#made-for-two">Made for two</a>
           <ButtonLink to="/sessions/demo" variant="ghost">
-            Try Demo <Icon name="arrow" size={17} />
+            Try Demo
           </ButtonLink>
         </nav>
       </header>
@@ -37,7 +37,7 @@ export default function LandingPage() {
             </p>
             <div className="hero-actions">
               <ButtonLink to="/create">
-                Create Our Money Plan <Icon name="arrow" size={18} />
+                Create Our Money Plan
               </ButtonLink>
               <ButtonLink to="/sessions/demo" variant="secondary">
                 Try Demo
@@ -45,7 +45,7 @@ export default function LandingPage() {
             </div>
             <div className="hero-footnote">
               <Icon name="info" size={15} />
-              <span>Explore the frontend preview with fictional data.</span>
+              <span>Try Demo uses sample data. Your own plan starts separately.</span>
             </div>
           </div>
           <PlanPreview />
@@ -149,7 +149,7 @@ export default function LandingPage() {
               </li>
             </ul>
             <ButtonLink to="/sessions/demo" variant="ghost">
-              See the example journey <Icon name="arrow" />
+              See the example journey
             </ButtonLink>
           </div>
         </section>
@@ -161,9 +161,9 @@ export default function LandingPage() {
             <p className="eyebrow">YOUR PERSPECTIVE DESERVES CARE.</p>
             <h2>Sharing a life starts with choice.</h2>
             <p>
-              The planned live workflow keeps raw answers private and asks each
-              of you before sharing a comparison or financial summary. Those
-              server protections are not connected in this frontend preview.
+              Each partner chooses separately whether to share a comparison
+              summary and budget inputs. The demo uses fictional data and never
+              shares your answers with another person.
             </p>
           </div>
           <Badge tone="neutral">Built around two voices</Badge>
@@ -190,9 +190,8 @@ export default function LandingPage() {
                 <Icon name="chevron" />
               </summary>
               <p>
-                No. The simulator interface includes equal, proportional, and
-                custom approaches. Current results are labeled fictional
-                fixtures; the calculation engine comes later.
+                No. Compare Equal, Proportional, and Custom ways to share costs.
+                Try Demo shows a fixed sample budget for each approach.
               </p>
             </details>
             <details>
@@ -201,9 +200,9 @@ export default function LandingPage() {
                 <Icon name="chevron" />
               </summary>
               <p>
-                Not in this preview. Local drafts stay in memory and reset when
-                you refresh. Use fictional details; live sessions, storage, and
-                approvals are not connected yet.
+                In Try Demo, drafts stay in this tab and reset on refresh.
+                The connected app saves real sessions and records each partner’s
+                confirmation separately. This standalone demo does not save to the server.
               </p>
             </details>
           </div>
@@ -219,14 +218,14 @@ export default function LandingPage() {
           </h2>
           <p>A little structure for a conversation that matters.</p>
           <ButtonLink to="/create">
-            Create Our Money Plan <Icon name="arrow" />
+            Create Our Money Plan
           </ButtonLink>
         </section>
       </main>
       <footer className="landing-footer content-width">
         <Brand />
         <p>Personal planning, not financial or legal advice.</p>
-        <span>Frontend preview · No live accounts</span>
+        <span>Demo uses sample data</span>
       </footer>
     </div>
   );

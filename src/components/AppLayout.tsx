@@ -90,7 +90,7 @@ export function AppLayout() {
         </div>
         <div className="workspace-label">
           <span className="eyebrow">A little more together</span>
-          <Badge>Demo workspace</Badge>
+          <Badge>Demo</Badge>
         </div>
         <nav aria-label="Your plan">
           {links.map((link) => (
@@ -120,7 +120,7 @@ export function AppLayout() {
           <p>Take it one conversation at a time.</p>
           <div className="connection-label">
             <span />
-            Not connected yet
+            Demo · not saved
           </div>
         </div>
       </aside>
@@ -138,7 +138,7 @@ export function AppLayout() {
           </button>
           <span className="topbar-title">Your first shared plan</span>
           <div className="topbar-right">
-            <Badge tone="neutral">Frontend preview</Badge>
+            <Badge tone="neutral">Sample Data</Badge>
             <span className="avatar">
               A<span className="avatar-dot" />
             </span>
@@ -148,8 +148,8 @@ export function AppLayout() {
           {coupleId === "demo" ? (
             <Outlet />
           ) : (
-            <EmptyState title="Live sessions are not connected yet">
-              This address cannot open a real session in this frontend preview.
+            <EmptyState title="Open a session in the connected app">
+              This standalone demo cannot open real sessions. Use the connected app and your own invitation.
               <div className="mt-6">
                 <ButtonLink to="/sessions/demo">Explore the demo</ButtonLink>
               </div>
