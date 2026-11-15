@@ -5,8 +5,9 @@ English; explanations to the project owner are Russian.
 
 ## Branches and ownership
 
-- main contains the accepted Phase 3 baseline. Do not put unfinished backend
-  work or frontend redesign into main. Use reviewable pull requests.
+- main is the owner-approved integrated release baseline after the authorized
+  fast-forward promotion. Preserve the full Phase 6 and consumer UI history.
+  Further work uses reviewed changes, not whole-folder replacement.
 - backend/fsm-core belongs to the backend owner. Phases 1-6 are complete in the
   verified test-project scope (143 checks at Phase 6). No production website or
   main-app AI/Qwen integration exists. Further feature/cloud scope needs approval.
@@ -36,6 +37,15 @@ English; explanations to the project owner are Russian.
 - Coordinate dependency, lockfile, tooling, API-contract, and architecture changes.
 
 ## Preservation and release
+
+Current owner approval supersedes older publication restrictions below: normal
+fast-forward promotion integration -> backend/fsm-core -> main and ordinary push
+of backend/main are authorized after clean-tree/test/secret checks. Existing Hobby
+Vercel publication is authorized, but requires local account login. Do not change
+repository visibility. Exact-origin Supabase CORS secrets or Edge deployment still
+require a separate explicit approval. Never deploy the unapproved local Insights
+endpoint while adjusting CORS. No real-user external AI processing is authorized.
+
 
 Never discard another contributor's changes. No automatic merge, reset, force
 push, or remote publication. Git push requires the owner's explicit approval.

@@ -1,5 +1,19 @@
 # Three-Developer Workflow
 
+## Latest release authorization
+
+The owner has authorized verified fast-forward promotion of the integrated Phase
+6/consumer UX release to backend/fsm-core and main, then ordinary publication of
+those two branches. No participant branch is changed or deleted. The original
+Phase 3/main snapshots below are historical, not the active release baseline.
+Latest evidence: UI 63 distinct cases after targeted fixes, real browser 4/4,
+backend 44/44 and AI/fallback 11/11. Auth worked in the latest real browser run.
+Vercel Hobby deployment is approved; login to the existing account is required.
+Repo visibility stays Private. CORS/Edge changes and external AI for real data
+still require separate approval. Older audit-only restrictions below are
+superseded only by this explicit release scope.
+
+
 Current owner status: Phase 6 agreement/PDF is verified locally and in the
 separately approved FSM test project; see PHASE6.md (143 passing cases).
 The earlier handoff was published at 4c43ad5. After a separate explicit approval,

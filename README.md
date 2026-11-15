@@ -4,9 +4,11 @@
 
 A web planning product for couples beginning their first shared financial life.
 
-Phases 1-6 are complete for the verified test-project implementation. Phase 6
-passed 143 automated checks; this audit did not rerun them because executable
-code is unchanged. No production website or public submission URL is deployed.
+Phases 1-6 and the reviewed consumer UI are integrated. The latest verification
+passed backend 44/44, AI/fallback 11/11, 63 distinct UI cases after targeted fixes,
+and real A/B/C browser flows 4/4. Earlier security evidence is 68/68.
+Deterministic Insights work in preview and saved plans; Qwen remains a separate
+fictional-only PoC. No production website or public submission URL is deployed.
 
 Current delivery: **Phase 6 — Mutual Agreement & Authorized PDF Export**.
 Immutable agreement versions, independent same-version/hash confirmations and
